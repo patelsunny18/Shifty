@@ -1,0 +1,20 @@
+{
+  "name": "cmpt-370-group-10-project",
+  "version": "1.0.0",
+  "description": "The Project repository for Group 10",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.cs.usask.ca/nwh397/cmpt-370-group-10-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "mongoose": "^6.2.3"
+  }
+}
