@@ -52,19 +52,32 @@ app.get('/removeEmployee', (req, res) => {
 
 
 app.post("/login", function (req, res) {
-    var email = req.body.email;
-    var password = req.body.password;
+    let id = req.body.userID;
+    let password = req.body.password;
+    let role = "";
 
-    Owner.findOne({ email: email, password: password }, function (err, user) {
+    Owner.findOne({ ownerID: id, password: password })
+    .then((result) => {
+        role = result.role;
+        console.log("Owner logged in")
     })
-    
-    Manager.findOne({ email: email, password: password }, function (err, user) {
+    .catch((err) => {
+        Manager.findOne({ managerID: id, password: password })
+        .then((result) => {
+            role = result.role;
+            console.log("Manager logged in")
+        })
+        .catch((err) => {
+            Employee.findOne({ employeeID: id, password: password })
+            .then((result) => {
+                role = result.role;
+                console.log("Employee logged in")
+            })
+            .catch((err) => {
+                console.log("Oops! User doesn't exists!");
+            })
+        })
     })
-
-    Employee.findOne({ email: email, password: password }, function (err, user) {
-        
-    })
-    
 });
 
 
