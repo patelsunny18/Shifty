@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator')
 const Schema = mongoose.Schema;
 
 const employeeSchema = new Schema({
@@ -16,7 +17,8 @@ const employeeSchema = new Schema({
     },
     phoneNumber: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     },
     dob: {
         type: Date,
@@ -24,27 +26,32 @@ const employeeSchema = new Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     bankAccountNumber: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     },
     sin: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     },
     employeeID: {
-        type: String,
-        required: true
+        type: Number,
+        required: true,
+        unique: true
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     // discuss how to store availability
     availability: {
-        type: [String],
+        type: String,
         required: true
     },
     wage: {
@@ -53,5 +60,6 @@ const employeeSchema = new Schema({
     }
 });
 
+employeeSchema.plugin(uniqueValidator)
 const Employee = mongoose.model('Employee', employeeSchema);
 module.exports = Employee;

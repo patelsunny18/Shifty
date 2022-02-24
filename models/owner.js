@@ -11,7 +11,7 @@ const ownerSchema = new Schema({
         requiured: true
     },
     ownerID: {
-        type: String,
+        type: Number,
         required: true
     },
     password: {

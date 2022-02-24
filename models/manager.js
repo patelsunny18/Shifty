@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator')
 const Schema = mongoose.Schema;
 
 const managerSchema = new Schema({
@@ -16,7 +17,8 @@ const managerSchema = new Schema({
     },
     phoneNumber: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     },
     dob: {
         type: Date,
@@ -24,31 +26,37 @@ const managerSchema = new Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     bankAccountNumber: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     },
     sin: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     },
     managerID: {
-        type: String,
-        required: true
+        type: Number,
+        required: true,
+        unique: true
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     // discuss how to store availability
     // should manager have availability?
     availability: {
-        type: [String],
+        type: String,
         required: true
     }
 });
 
+managerSchema.plugin(uniqueValidator)
 const Manager = mongoose.model('Manager', managerSchema);
 module.exports = Manager;
