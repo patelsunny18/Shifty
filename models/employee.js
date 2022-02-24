@@ -38,7 +38,7 @@ const employeeSchema = new Schema({
         required: true,
         unique: true
     },
-    employeeID: {
+    ID: {
         type: Number,
         required: true,
         unique: true
