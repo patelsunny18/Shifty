@@ -70,6 +70,7 @@ app.post("/login", function (req, res) {
 app.post('/addEmployee', function (req, res) {
     const password = getPassword();
     const employeeID = getId();
+    const role = "Employee";
     const insertEmployee = new Employee({
         firstName: req.body.fName,
         lastName: req.body.lName,
@@ -82,7 +83,8 @@ app.post('/addEmployee', function (req, res) {
         employeeID: employeeID,
         password: password,
         availability: req.body.avail,
-        wage: req.body.wage
+        wage: req.body.wage,
+        role: role
     });
     insertEmployee.save()
         .then((res) => {
@@ -105,6 +107,7 @@ app.post('/removeEmployee', function (req, res) {
 app.post('/addManager', function (req, res) {
     const password = getPassword();
     const managerID = getId();
+    const role = "Manager";
     const insertManager = new Manager({
         firstName: req.body.fName,
         lastName: req.body.lName,
@@ -116,7 +119,8 @@ app.post('/addManager', function (req, res) {
         sin: req.body.SinNumber,
         managerID: managerID,
         password: password,
-        availability: req.body.avail
+        availability: req.body.avail,
+        role: role
     });
     insertManager.save()
         .then((res) => {

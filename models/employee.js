@@ -57,6 +57,10 @@ const employeeSchema = new Schema({
     wage: {
         type: Number,
         required: true
+    },
+    role: {
+        type: String,
+        required: true
     }
 });
 

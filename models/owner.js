@@ -18,6 +18,10 @@ const ownerSchema = new Schema({
         type: String,
         required: true
     },
+    role: {
+        type: String,
+        required: true
+    }
 });
 
 const Owner = mongoose.model('Owner', ownerSchema);

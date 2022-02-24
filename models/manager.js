@@ -54,6 +54,10 @@ const managerSchema = new Schema({
     availability: {
         type: String,
         required: true
+    },
+    role: {
+        type: String,
+        required: true
     }
 });
 
