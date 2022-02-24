@@ -38,7 +38,7 @@ const managerSchema = new Schema({
         required: true,
         unique: true
     },
-    ID: {
+    managerID: {
         type: Number,
         required: true,
         unique: true

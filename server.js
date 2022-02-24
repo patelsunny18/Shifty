@@ -62,13 +62,13 @@ app.post("/", function (req, res) {
             console.log("Owner logged in")
         })
         .catch((err) => {
-            Manager.findOne({ ID: id, password: password })
+            Manager.findOne({ managerID: id, password: password })
                 .then((result) => {
                     role = result.role;
                     console.log("Manager logged in")
                 })
                 .catch((err) => {
-                    Employee.findOne({ ID: id, password: password })
+                    Employee.findOne({ employeeID: id, password: password })
                         .then((result) => {
                             role = result.role;
                             console.log("Employee logged in")
@@ -95,13 +95,13 @@ app.post('/addEmployee', function (req, res) {
         email: req.body.emailInput,
         bankAccountNumber: req.body.bankAccount,
         sin: req.body.SinNumber,
-        ID: employeeID,
+        employeeID: employeeID,
         password: password,
         availability: req.body.avail,
         wage: req.body.wage,
         role: role
     });
-    let myquery = { phoneNumber: req.body.phoneInput, email: req.body.emailInput, ID: req.body.id, sin: req.body.SinNumber };
+    let myquery = { phoneNumber: req.body.phoneInput, email: req.body.emailInput, managerID: req.body.id, sin: req.body.SinNumber };
     Manager.findOne(myquery)
         .then((res) => {
             console.log("Already Existing!!!")
@@ -119,7 +119,7 @@ app.post('/addEmployee', function (req, res) {
 })
 
 app.post('/removeEmployee', function (req, res) {
-    var myquery = { firstName: req.body.fName, lastName: req.body.lName, ID: req.body.id };
+    var myquery = { firstName: req.body.fName, lastName: req.body.lName, employeeID: req.body.id };
     Employee.deleteOne(myquery, function (err, obj) {
         if (err) throw err;
         console.log("Employee removed from the system.");
@@ -139,16 +139,16 @@ app.post('/addManager', function (req, res) {
         email: req.body.emailInput,
         bankAccountNumber: req.body.bankAccount,
         sin: req.body.SinNumber,
-        ID: managerID,
+        managerID: managerID,
         password: password,
         availability: req.body.avail,
         role: role
     });
-    let myquery = { phoneNumber: req.body.phoneInput, email: req.body.emailInput, ID: req.body.id, sin: req.body.SinNumber };
+    let myquery = { phoneNumber: req.body.phoneInput, email: req.body.emailInput, managerID: req.body.id, sin: req.body.SinNumber };
     Employee.findOne(myquery)
         .then((res) => {
             console.log("Already Existing!!!")
-            console.log(res);
+            console.log(res)
         })
         .catch((err) => {
             insertManager.save()
@@ -171,7 +171,7 @@ app.post('/addManager', function (req, res) {
 })
 
 app.post('/removeManager', function (req, res) {
-    var myquery = { firstName: req.body.fName, lastName: req.body.lName, ID: req.body.id };
+    var myquery = { firstName: req.body.fName, lastName: req.body.lName, managerID: req.body.id };
     Manager.deleteOne(myquery)
         .then((res) => {
             console.log("Manager removed from the system")
