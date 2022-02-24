@@ -32,7 +32,6 @@ const managerSchema = new Schema({
     bankAccountNumber: {
         type: Number,
         required: true,
-        unique: true
     },
     sin: {
         type: Number,
@@ -47,7 +46,6 @@ const managerSchema = new Schema({
     password: {
         type: String,
         required: true,
-        unique: true
     },
     // discuss how to store availability
     // should manager have availability?

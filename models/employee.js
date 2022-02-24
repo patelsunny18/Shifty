@@ -32,7 +32,6 @@ const employeeSchema = new Schema({
     bankAccountNumber: {
         type: Number,
         required: true,
-        unique: true
     },
     sin: {
         type: Number,

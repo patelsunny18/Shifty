@@ -51,40 +51,40 @@ app.get('/removeEmployee', (req, res) => {
 });
 
 
-app.post("/login", function (req, res) {
+app.post("/", function (req, res) {
     let id = req.body.userID;
     let password = req.body.password;
     let role = "";
 
     Owner.findOne({ ownerID: id, password: password })
-    .then((result) => {
-        role = result.role;
-        console.log("Owner logged in")
-    })
-    .catch((err) => {
-        Manager.findOne({ managerID: id, password: password })
         .then((result) => {
             role = result.role;
-            console.log("Manager logged in")
+            console.log("Owner logged in")
         })
         .catch((err) => {
-            Employee.findOne({ employeeID: id, password: password })
-            .then((result) => {
-                role = result.role;
-                console.log("Employee logged in")
-            })
-            .catch((err) => {
-                console.log("Oops! User doesn't exists!");
-            })
+            Manager.findOne({ managerID: id, password: password })
+                .then((result) => {
+                    role = result.role;
+                    console.log("Manager logged in")
+                })
+                .catch((err) => {
+                    Employee.findOne({ employeeID: id, password: password })
+                        .then((result) => {
+                            role = result.role;
+                            console.log("Employee logged in")
+                        })
+                        .catch((err) => {
+                            console.log("Oops! User doesn't exists!");
+                        })
+                })
         })
-    })
 });
 
 
 
 app.post('/addEmployee', function (req, res) {
     const password = getPassword();
-    const employeeID = getId();
+    const employeeID = getEmployeeId();
     const role = "Employee";
     const insertEmployee = new Employee({
         firstName: req.body.fName,
@@ -101,13 +101,20 @@ app.post('/addEmployee', function (req, res) {
         wage: req.body.wage,
         role: role
     });
-    insertEmployee.save()
+    let myquery = { phoneNumber: req.body.phoneInput, email: req.body.emailInput, managerID: req.body.id, sin: req.body.SinNumber };
+    Manager.findOne(myquery)
         .then((res) => {
-            console.log(employeeID)
-            console.log(password)
+            console.log("Already Existing!!!")
         })
         .catch((err) => {
-            console.log(err)
+            insertManager.save()
+                .then((res) => {
+                    console.log(managerID)
+                    console.log(password)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
         })
 })
 
@@ -121,7 +128,7 @@ app.post('/removeEmployee', function (req, res) {
 
 app.post('/addManager', function (req, res) {
     const password = getPassword();
-    const managerID = getId();
+    const managerID = getManagerId();
     const role = "Manager";
     const insertManager = new Manager({
         firstName: req.body.fName,
@@ -137,14 +144,29 @@ app.post('/addManager', function (req, res) {
         availability: req.body.avail,
         role: role
     });
-    insertManager.save()
+    let myquery = { phoneNumber: req.body.phoneInput, email: req.body.emailInput, managerID: req.body.id, sin: req.body.SinNumber };
+    Employee.findOne(myquery)
         .then((res) => {
-            console.log(managerID)
-            console.log(password)
+            console.log("Already Existing!!!")
         })
         .catch((err) => {
-            console.log(err)
+            insertManager.save()
+                .then((res) => {
+                    console.log(managerID)
+                    console.log(password)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
         })
+    // insertManager.save()
+    //     .then((res) => {
+    //         console.log(managerID)
+    //         console.log(password)
+    //     })
+    //     .catch((err) => {
+    //         console.log(err)
+    //     })
 })
 
 app.post('/removeManager', function (req, res) {
@@ -158,9 +180,21 @@ app.post('/removeManager', function (req, res) {
         })
 })
 
-function getId() {
+function getManagerId() {
     var id = generator.generate({
         length: 7,
+        numbers: true,
+        uppercase: false,
+        lowercase: false,
+        symbols: false,
+        excludeSimilarCharacters: true,
+    });
+    return id;
+}
+
+function getEmployeeId() {
+    var id = generator.generate({
+        length: 6,
         numbers: true,
         uppercase: false,
         lowercase: false,
