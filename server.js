@@ -30,39 +30,41 @@ mongoose.connect(mongoDB)
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get('/login', (req, res) => {
+    res.sendFile('views/logIn.html', { root: __dirname });
+});
+
+app.get('/addManager', (req, res) => {
+    res.sendFile('views/addManager.html', { root: __dirname });
+});
+
+app.get('/addEmployee', (req, res) => {
+    res.sendFile('views/addEmployee.html', { root: __dirname });
+});
+
+app.get('/removeManager', (req, res) => {
+    res.sendFile('views/removeManager.html', { root: __dirname });
+});
+
+app.get('/removeEmployee', (req, res) => {
+    res.sendFile('views/removeEmployee.html', { root: __dirname });
+});
+
 
 app.post("/login", function (req, res) {
     var email = req.body.email;
     var password = req.body.password;
-    var selected = req.body.optradio;
-    console.log(selected);
-    if (selected == "1") {
-        Owner.findOne({ email: email, password: password }, function (err, user) {
-            if (err || !user) {
-                console.log("User not found.")
-            } else {
-                console.log("Log In Successful");
-            }
-        })
-    }
-    if (selected == "2") {
-        Manager.findOne({ email: email, password: password }, function (err, user) {
-            if (err || !user) {
-                console.log("User not found.")
-            } else {
-                console.log("Log In Successful");
-            }
-        })
-    }
-    if (selected == "3") {
-        Employee.findOne({ email: email, password: password }, function (err, user) {
-            if (err || !user) {
-                console.log("User not found.")
-            } else {
-                console.log("Log In Successful");
-            }
-        })
-    }
+
+    Owner.findOne({ email: email, password: password }, function (err, user) {
+    })
+    
+    Manager.findOne({ email: email, password: password }, function (err, user) {
+    })
+
+    Employee.findOne({ email: email, password: password }, function (err, user) {
+        
+    })
+    
 });
 
 
@@ -138,17 +140,9 @@ app.post('/removeManager', function (req, res) {
         .then((res) => {
             console.log("Manager removed from the system")
         })
-        .catch((err) =>{
+        .catch((err) => {
             console.log(err)
         })
-    // Manager.deleteOne(myquery, function (err, obj) {
-    //     if (err) {
-    //         console.log(err)
-    //     }
-    //     else {
-    //         console.log("Manager removed from the system.");
-    //     }
-    // });
 })
 
 function getId() {
