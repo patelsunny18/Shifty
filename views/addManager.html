@@ -1,44 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    <form action="/addManager" method="POST">
-        <div id = "something" style="text-align: center">
+    <form action="/addManager" id="addManagerForm">
+        <div style="text-align: center">
             <h2>Add Manager</h2>
-            <label for="staffFirst">First Name:</label><br>
-            <input type="text" name="fName" placeholder="Manager First Name"><br> <br>
-            
-            <label for="staffLast">Last Name:</label><br>
-            <input type="text" name="lName" placeholder="Manager Last Name"><br> <br>
+            <label for="fName">First Name:</label><br>
+            <input type="text" name="fName" id="fName" placeholder="First Name"><br> <br>
 
-            <label for="staffAdress">Address:</label><br>
-            <input type="text" name="address" placeholder="Manager Address"><br> <br>
-            
-            <label for="staffPhone">Phone Number:</label><br>
-            <input type="tel" name="phoneInput" placeholder="(xxx) xxx-xxxx"><br> <br>
+            <label for="lName">Last Name:</label><br>
+            <input type="text" name="lName" id="lName" placeholder="Last Name"><br> <br>
 
-            <label for="staffDOB">Date of Birth:</label><br>
-            <input type="text" name="date" placeholder="mm/dd/yyyy"><br> <br>
+            <label for="address">Address:</label><br>
+            <input type="text" name="address" id="address" placeholder="Address"><br> <br>
 
-            <label for="staffEmail">Email Address:</label><br>
-            <input type="email" name="emailInput" placeholder="abc@something.xyz"><br> <br>
-            
-            <label for="staffBank">Bank Account:</label><br>
-            <input type="number" name="bankAccount" placeholder="Manager BankAcc. No."><br> <br>
+            <label for="phoneInput">Phone Number:</label><br>
+            <input type="tel" name="phoneInput" id="phoneInput" placeholder="(xxx) xxx-xxxx"><br> <br>
 
-            <label for="staffSin">SIN Number:</label><br>
-            <input type="number" name="SinNumber" placeholder="Manager SIN Number"><br> <br>
+            <label for="dob">Date of Birth:</label><br>
+            <input type="date" name="dob" id="dob" placeholder="mm/dd/yyyy"><br> <br>
 
-            <label for="staffAvailability">Availability:</label><br>
-            <input type="text" name="avail" placeholder="Mon, Sun"><br> <br>
+            <label for="emailInput">Email Address:</label><br>
+            <input type="email" name="emailInput" id="emailInput" placeholder="abc123@email.com"><br> <br>
+
+            <label for="bankAccount">Bank Account:</label><br>
+            <input type="text" name="bankAccount" id="bankAccount" placeholder="BankAcc. No."><br> <br>
+
+            <label for="SinNumber">SIN Number:</label><br>
+            <input type="text" name="SinNumber" id="SinNumber" placeholder="SIN Number"><br> <br>
+
+            <label for="avail">Availability:</label><br>
+            <input type="text" name="avail" id="avail" placeholder="Mon, Sun"><br> <br>
 
             <button type="submit">Add Manager</button>
         </div>
     </form>
+
+    <script>
+        // Add listener to form submit
+        const managerForm = document.querySelector("#addManagerForm");
+        managerForm.addEventListener("submit", handleFormSubmit);
+
+        /**
+         * Event handler for form submit event
+         */
+        async function handleFormSubmit(event) {
+            // Stop form from submitting
+            event.preventDefault();
+
+            const form = event.currentTarget;
+            const url = form.action;
+
+            // try to create a FormData by taking all values from the form's fields
+            // once created send the data  to the server
+            // if success then notify user with the userID and password
+            try {
+                const formData = new FormData(form);
+                const responseData = await sendData({ url, formData });
+                alert(`New manager added!\n\nUserID: ${responseData.userID}\nPassword: ${responseData.password}`);
+            } catch (error) {
+                alert("Oops! Something went wrong. Please try again.")
+            }
+        }
+
+        /**
+         * Helper function which sends the data to the server using Fetch API
+         */
+        async function sendData({ url, formData }) {
+            // get the values from FormData and convert it to JSON
+            const plainFormData = Object.fromEntries(formData.entries());
+            const formDataAsJSONString = JSON.stringify(plainFormData);
+
+            const fetchOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: formDataAsJSONString
+            };
+
+            // send the request
+            const response = await fetch(url, fetchOptions);
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(errorMessage);
+            }
+
+            return response.json();
+        }
+    </script>
 </body>
+
 </html>

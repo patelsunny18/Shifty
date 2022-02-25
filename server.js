@@ -1,4 +1,3 @@
-// Nicholas Heleta, nwh397, 11274059
 'use strict';
 
 const express = require('express');
@@ -29,8 +28,9 @@ mongoose.connect(mongoDB)
     })
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-app.get('/login', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile('views/logIn.html', { root: __dirname });
 });
 
@@ -91,7 +91,7 @@ app.post('/addEmployee', function (req, res) {
         lastName: req.body.lName,
         address: req.body.address,
         phoneNumber: req.body.phoneInput,
-        dob: req.body.date,
+        dob: req.body.dob,
         email: req.body.emailInput,
         bankAccountNumber: req.body.bankAccount,
         sin: req.body.SinNumber,
@@ -101,20 +101,17 @@ app.post('/addEmployee', function (req, res) {
         wage: req.body.wage,
         role: role
     });
-    let myquery = { phoneNumber: req.body.phoneInput, email: req.body.emailInput, managerID: req.body.id, sin: req.body.SinNumber };
-    Manager.findOne(myquery)
-        .then((res) => {
-            console.log("Already Existing!!!")
+
+    insertEmployee.save()
+        .then((result) => {
+            let responseData = {
+                userID: result.employeeID,
+                password: result.password
+            };
+            res.send(responseData)
         })
         .catch((err) => {
-            insertManager.save()
-                .then((res) => {
-                    console.log(managerID)
-                    console.log(password)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+            console.log(err)
         })
 })
 
@@ -135,7 +132,7 @@ app.post('/addManager', function (req, res) {
         lastName: req.body.lName,
         address: req.body.address,
         phoneNumber: req.body.phoneInput,
-        dob: req.body.date,
+        dob: req.body.dob,
         email: req.body.emailInput,
         bankAccountNumber: req.body.bankAccount,
         sin: req.body.SinNumber,
@@ -144,29 +141,17 @@ app.post('/addManager', function (req, res) {
         availability: req.body.avail,
         role: role
     });
-    let myquery = { phoneNumber: req.body.phoneInput, email: req.body.emailInput, managerID: req.body.id, sin: req.body.SinNumber };
-    Employee.findOne(myquery)
-        .then((res) => {
-            console.log("Already Existing!!!")
+    insertManager.save()
+        .then((result) => {
+            let responseData = {
+                userID: result.managerID,
+                password: result.password
+            };
+            res.send(responseData)
         })
         .catch((err) => {
-            insertManager.save()
-                .then((res) => {
-                    console.log(managerID)
-                    console.log(password)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+            console.log(err)
         })
-    // insertManager.save()
-    //     .then((res) => {
-    //         console.log(managerID)
-    //         console.log(password)
-    //     })
-    //     .catch((err) => {
-    //         console.log(err)
-    //     })
 })
 
 app.post('/removeManager', function (req, res) {
@@ -203,7 +188,6 @@ function getEmployeeId() {
     });
     return id;
 }
-// console.log(getEmployeeId());
 
 function getPassword() {
     var min = Math.ceil(6);
@@ -220,8 +204,6 @@ function getPassword() {
     });
     return password;
 }
-// console.log(getPassword());
-
 
 app.use('/', express.static('views'));
 

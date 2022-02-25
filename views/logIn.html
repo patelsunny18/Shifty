@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>Document</title>
+    <title>Document</title>
+    <style>
+        .child {
+            text-align: center;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
+
 <body>
-    <form action="/" method="POST">
-        <div>
-            <h3 class="fw-bold mb-2"> Who are you?</h3>
+    <form action="/" method="POST" id="login-form">
+        <div class="child">
             <h2>Login</h2>
-            <p>Please enter your login and password!</p>
+            <p>Please enter your ID and password!</p>
 
             <div>
-                <input type="text" name="userID" placeholder="Enter your ID number"/>
+                <input type="text" name="userID" placeholder="Enter your ID number" />
             </div>
 
             <div>
-                <input type="password" name="password" placeholder="Enter your Password"/>
+                <input type="password" name="password" placeholder="Enter your Password" />
             </div>
             <p href="#!">Forgot password?</p>
             <button type="submit">Login</button>
         </div>
     </form>
-    <script src="../server.js" defer></script>
 </body>
+
 </html>
