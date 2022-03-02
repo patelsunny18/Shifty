@@ -102,17 +102,45 @@ app.post('/addEmployee', function (req, res) {
         role: role
     });
 
-    insertEmployee.save()
-        .then((result) => {
-            let responseData = {
-                userID: result.employeeID,
-                password: result.password
-            };
-            res.send(responseData)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+    Manager.find({ $or: [{ phoneNumber: req.body.phoneInput }, { email: req.body.emailInput }, { sin: req.body.SinNumber }] }, function (err, result) {
+        if (err) throw err;
+        if (result.length === 0) {
+            insertEmployee.save()
+                .then((result) => {
+                    let responseData = {
+                        userID: result.employeeID,
+                        password: result.password
+                    };
+                    res.send(responseData)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+        else {
+            if (result[0].phoneNumber == req.body.phoneInput && result[0].email == req.body.emailInput && result[0].sin == req.body.SinNumber) {
+                console.log("A manager with similar phone number, email and SIN number already exists in the system.")
+            }
+            else if (result[0].phoneNumber == req.body.phoneInput && result[0].email == req.body.emailInput) {
+                console.log("A manager with similar phone number and email already exists in the system.")
+            }
+            else if (result[0].phoneNumber == req.body.phoneInput && result[0].sin == req.body.SinNumber) {
+                console.log("A manager with similar phone number and SIN number already exists in the system.")
+            }
+            else if (result[0].email == req.body.emailInput && result[0].sin == req.body.SinNumber) {
+                console.log("A manager with similar email and SIN number already exists in the system.")
+            }
+            else if (result[0].phoneNumber == req.body.phoneInput) {
+                console.log("A manager with similar phone number already exists in the system.")
+            }
+            else if (result[0].email == req.body.emailInput) {
+                console.log("A manager with similar email already exists in the system.")
+            }
+            else if (result[0].sin == req.body.SinNumber) {
+                console.log("A manager with similar SIN number already exists in the system.")
+            }
+        }
+    })
 })
 
 app.post('/removeEmployee', function (req, res) {
@@ -141,17 +169,46 @@ app.post('/addManager', function (req, res) {
         availability: req.body.avail,
         role: role
     });
-    insertManager.save()
-        .then((result) => {
-            let responseData = {
-                userID: result.managerID,
-                password: result.password
-            };
-            res.send(responseData)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+
+    Employee.find({ $or: [{ phoneNumber: req.body.phoneInput }, { email: req.body.emailInput }, { sin: req.body.SinNumber }] }, function (err, result) {
+        if (err) throw err;
+        if (result.length === 0) {
+            insertManager.save()
+                .then((result) => {
+                    let responseData = {
+                        userID: result.managerID,
+                        password: result.password
+                    };
+                    res.send(responseData)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+        else {
+            if (result[0].phoneNumber == req.body.phoneInput && result[0].email == req.body.emailInput && result[0].sin == req.body.SinNumber) {
+                console.log("An employee with similar phone number, email and SIN number already exists in the system.")
+            }
+            else if (result[0].phoneNumber == req.body.phoneInput && result[0].email == req.body.emailInput) {
+                console.log("An employee with similar phone number and email already exists in the system.")
+            }
+            else if (result[0].phoneNumber == req.body.phoneInput && result[0].sin == req.body.SinNumber) {
+                console.log("An employee with similar phone number and SIN number already exists in the system.")
+            }
+            else if (result[0].email == req.body.emailInput && result[0].sin == req.body.SinNumber) {
+                console.log("An employee with similar email and SIN number already exists in the system.")
+            }
+            else if (result[0].phoneNumber == req.body.phoneInput) {
+                console.log("An employee with similar phone number already exists in the system.")
+            }
+            else if (result[0].email == req.body.emailInput) {
+                console.log("An employee with similar email already exists in the system.")
+            }
+            else if (result[0].sin == req.body.SinNumber) {
+                console.log("An employee with similar SIN number already exists in the system.")
+            }
+        }
+    })
 })
 
 app.post('/removeManager', function (req, res) {
