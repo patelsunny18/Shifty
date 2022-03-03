@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employee</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- Custom CSS link -->
+    <link rel="stylesheet" type="text/css" href="css/addEmployee.css">
+
+    <!-- Font Awesome link -->
+    <script src="https://kit.fontawesome.com/412f6580aa.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            Add Employee
+        </div>
+        <form action="/addEmployee" method="post" class="form" id="form">
+            <div class="row control">
+                <div class="col">
+                    <label for="fName">First Name</label>
+                    <input type="text" class="form-control" placeholder="First name" id="fName" name="fName">
+                    <i class="fas fa-check-circle odd-col"></i>
+                    <i class="fas fa-exclamation-circle odd-col"></i>
+                    <small class="odd-col">Error message</small>
+                </div>
+                <div class="col">
+                    <label for="lName">Last Name</label>
+                    <input type="text" class="form-control" placeholder="Last name" id="lName" name="lName">
+                    <i class="fas fa-check-circle even-col"></i>
+                    <i class="fas fa-exclamation-circle even-col"></i>
+                    <small class="even-col">Error message</small>
+                </div>
+            </div>
+            <div class="row control">
+                <div class="col">
+                    <label for="Address">Address</label>
+                    <input type="text" class="form-control" name="address" id="address" placeholder="Address">
+                    <i class="fas fa-check-circle odd-col"></i>
+                    <i class="fas fa-exclamation-circle odd-col"></i>
+                    <small class="odd-col">Error message</small>
+                </div>
+                <div class="col">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" class="form-control" name="phone" id="phone" placeholder="(xxx) xxx- xxx">
+                    <i class="fas fa-check-circle even-col"></i>
+                    <i class="fas fa-exclamation-circle even-col"></i>
+                    <small class="even-col">Error message</small>
+                </div>
+            </div>
+            <div class="row control">
+                <div class="col">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" class="form-control" name="dob" id="dob">
+                    <i class="fas fa-check-circle odd-col"></i>
+                    <i class="fas fa-exclamation-circle odd-col"></i>
+                    <small class="odd-col">Error message</small>
+                </div>
+                <div class="col">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="abc123@email.com">
+                    <i class="fas fa-check-circle even-col"></i>
+                    <i class="fas fa-exclamation-circle even-col"></i>
+                    <small class="even-col">Error message</small>
+                </div>
+            </div>
+            <div class="row control">
+                <div class="col">
+                    <label for="bankAccount">Bank Account Number</label>
+                    <input type="text" name="bankAccount" id="bankAccount" class="form-control">
+                    <i class="fas fa-check-circle odd-col"></i>
+                    <i class="fas fa-exclamation-circle odd-col"></i>
+                    <small class="odd-col">Error message</small>
+                </div>
+                <div class="col">
+                    <label for="sinNumber">SIN Number</label>
+                    <input type="text" name="sinNumber" id="sinNumber" class="form-control">
+                    <i class="fas fa-check-circle even-col"></i>
+                    <i class="fas fa-exclamation-circle even-col"></i>
+                    <small class="even-col">Error message</small>
+                </div>
+            </div>
+            <div class="row control">
+                <div class="col">
+                    <label for="avail">Availability</label>
+                    <i class="fas fa-check-circle avail"></i>
+                    <i class="fas fa-exclamation-circle avail"></i>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="monday">
+                                <label for="monday" class="form-check-label">Monday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group">
+                                <input type="radio" class="btn-check" name="mon-options" id="mon-day"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-warning" for="mon-day">Day</label>
+
+                                <input type="radio" class="btn-check" name="mon-options" id="mon-night"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-dark" for="mon-night">Night</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="tuesday">
+                                <label for="tuesday" class="form-check-label">Tuesday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group">
+                                <input type="radio" class="btn-check" name="tue-options" id="tue-day"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-warning" for="tue-day">Day</label>
+
+                                <input type="radio" class="btn-check" name="tue-options" id="tue-night"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-dark" for="tue-night">Night</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="wednesday">
+                                <label for="wednesday" class="form-check-label">Wednesday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group">
+                                <input type="radio" class="btn-check" name="wed-options" id="wed-day"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-warning" for="wed-day">Day</label>
+
+                                <input type="radio" class="btn-check" name="wed-options" id="wed-night"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-dark" for="wed-night">Night</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="thursday">
+                                <label for="thursday" class="form-check-label">Thursday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group">
+                                <input type="radio" class="btn-check" name="thurs-options" id="thurs-day"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-warning" for="thurs-day">Day</label>
+
+                                <input type="radio" class="btn-check" name="thurs-options" id="thurs-night"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-dark" for="thurs-night">Night</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="friday">
+                                <label for="friday" class="form-check-label">Friday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group">
+                                <input type="radio" class="btn-check" name="fri-options" id="fri-day"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-warning" for="fri-day">Day</label>
+
+                                <input type="radio" class="btn-check" name="fri-options" id="fri-night"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-dark" for="fri-night">Night</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="saturday">
+                                <label for="saturday" class="form-check-label">Saturday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group">
+                                <input type="radio" class="btn-check" name="sat-options" id="sat-day"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-warning" for="sat-day">Day</label>
+
+                                <input type="radio" class="btn-check" name="sat-options" id="sat-night"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-dark" for="sat-night">Night</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="sunday">
+                                <label for="sunday" class="form-check-label">Sunday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group">
+                                <input type="radio" class="btn-check" name="sun-options" id="sun-day"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-warning" for="sun-day">Day</label>
+
+                                <input type="radio" class="btn-check" name="sun-options" id="sun-night"
+                                    autocomplete="off" />
+                                <label class="btn btn-outline-dark" for="sun-night">Night</label>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="avail">Error message</small>
+                </div>
+                <div class="col">
+                    <label for="wage">Wage (per hour)</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon">$</span>
+                        </div>
+                        <input type="text" name="wage" id="wage">
+                        <i class="fas fa-check-circle wage"></i>
+                        <i class="fas fa-exclamation-circle wage"></i>
+                        <small class="wage">Error message</small>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script>
+        // Add listener to form submit
+        const employeeForm = document.querySelector("#addEmployeeForm");
+        employeeForm.addEventListener("submit", handleFormSubmit);
+
+        /**
+         * Event handler for form submit event
+         */
+        async function handleFormSubmit(event) {
+            // Stop form from submitting
+            event.preventDefault();
+
+            const form = event.currentTarget;
+            const url = form.action;
+
+            // try to create a FormData by taking all values from the form's fields
+            // once created send the data  to the server
+            // if success then notify user with the userID and password
+            try {
+                const formData = new FormData(form);
+                const responseData = await sendData({ url, formData });
+                alert(`New employee added!\n\nUserID: ${responseData.userID}\nPassword: ${responseData.password}`);
+            } catch (error) {
+                alert("Oops! Something went wrong. Please try again.")
+            }
+        }
+
+        /**
+         * Helper function which sends the data to the server using Fetch API
+         */
+        async function sendData({ url, formData }) {
+            // get the values from FormData and convert it to JSON
+            const plainFormData = Object.fromEntries(formData.entries());
+            const formDataAsJSONString = JSON.stringify(plainFormData);
+
+            const fetchOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: formDataAsJSONString
+            };
+
+            // send the request
+            const response = await fetch(url, fetchOptions);
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(errorMessage);
+            }
+
+            return response.json();
+        }
+    </script>
+</body>
+
+</html>

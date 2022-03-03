@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const generator = require('generate-password');
+const path = require('path');
 
 // make webpage availible
 const PORT = 8080;
@@ -27,27 +28,32 @@ mongoose.connect(mongoDB)
         console.log(err)
     })
 
+// set up ejs
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/public/views'));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/public'))
 
 app.get('/', (req, res) => {
-    res.sendFile('views/logIn.html', { root: __dirname });
+    res.render('login');
 });
 
 app.get('/addManager', (req, res) => {
-    res.sendFile('views/addManager.html', { root: __dirname });
+    res.sendFile('public/views/addManager.html', { root: __dirname });
 });
 
 app.get('/addEmployee', (req, res) => {
-    res.sendFile('views/addEmployee.html', { root: __dirname });
+    res.render('addEmployee');
 });
 
 app.get('/removeManager', (req, res) => {
-    res.sendFile('views/removeManager.html', { root: __dirname });
+    res.sendFile('public/views/removeManager.html', { root: __dirname });
 });
 
 app.get('/removeEmployee', (req, res) => {
-    res.sendFile('views/removeEmployee.html', { root: __dirname });
+    res.sendFile('public/views/removeEmployee.html', { root: __dirname });
 });
 
 

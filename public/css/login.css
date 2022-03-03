@@ -1,0 +1,115 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* fallback for old browsers */
+    background: #6a11cb;
+  
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+  
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 0.8rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    width: 400px;
+    max-width: 100%;
+    padding: 0;
+}
+
+.header {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 20px 40px;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.form {
+    padding: 30px 40px;
+}
+
+.control {
+    margin-bottom: 10px;
+    padding-bottom: 20px;
+    position: relative;
+}
+
+.control label {
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+.control input {
+    border: 2px solid #f0f0f0;
+    border-radius: 4px;
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.control.success input {
+    border-color: #2ecc71;
+}
+
+.control.error input {
+    border-color: #e74c3c;
+}
+
+.control i {
+    position: absolute;
+    top: 45px;
+    right: 10px;
+    visibility: hidden;
+}
+
+.control.success i.fa-check-circle {
+    visibility: visible;
+    color: #2ecc71;
+}
+
+.control.error i.fa-exclamation-circle {
+    visibility: visible;
+    color: #e74c3c;
+}
+
+.control small {
+    visibility: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.control.error small {
+    visibility: visible;
+    color: #e74c3c;
+}
+
+.form button {
+    background-color: rgba(37, 117, 252, 1);
+    border: 2px solid rgba(37, 117, 252, 1);
+    color: white;
+    display: block;
+    padding: 10px;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 4px;
+}
