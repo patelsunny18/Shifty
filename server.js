@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/addManager', (req, res) => {
-    res.sendFile('public/views/addManager.html', { root: __dirname });
+    res.render('addManager');
 });
 
 app.get('/addEmployee', (req, res) => {
@@ -166,21 +166,21 @@ app.post('/addManager', function (req, res) {
     const managerID = getManagerId();
     const role = "Manager";
     const insertManager = new Manager({
-        firstName: req.body.fName,
-        lastName: req.body.lName,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         address: req.body.address,
-        phoneNumber: req.body.phoneInput,
+        phoneNumber: req.body.phoneNumber,
         dob: req.body.dob,
-        email: req.body.emailInput,
+        email: req.body.email,
         bankAccountNumber: req.body.bankAccount,
-        sin: req.body.SinNumber,
+        sin: req.body.sinNumber,
         managerID: managerID,
         password: password,
-        availability: req.body.avail,
+        availability: req.body.availability,
         role: role
     });
 
-    Employee.find({ $or: [{ phoneNumber: req.body.phoneInput }, { email: req.body.emailInput }, { sin: req.body.SinNumber }] }, function (err, result) {
+    Employee.find({ $or: [{ phoneNumber: req.body.phoneNumber }, { email: req.body.email }, { sin: req.body.sinNumber }] }, function (err, result) {
         if (err) throw err;
         if (result.length === 0) {
             insertManager.save()
@@ -196,25 +196,25 @@ app.post('/addManager', function (req, res) {
                 })
         }
         else {
-            if (result[0].phoneNumber == req.body.phoneInput && result[0].email == req.body.emailInput && result[0].sin == req.body.SinNumber) {
+            if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
                 console.log("An employee with similar phone number, email and SIN number already exists in the system.")
             }
-            else if (result[0].phoneNumber == req.body.phoneInput && result[0].email == req.body.emailInput) {
+            else if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email) {
                 console.log("An employee with similar phone number and email already exists in the system.")
             }
-            else if (result[0].phoneNumber == req.body.phoneInput && result[0].sin == req.body.SinNumber) {
+            else if (result[0].phoneNumber == req.body.phoneNumber && result[0].sin == req.body.sinNumber) {
                 console.log("An employee with similar phone number and SIN number already exists in the system.")
             }
-            else if (result[0].email == req.body.emailInput && result[0].sin == req.body.SinNumber) {
+            else if (result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
                 console.log("An employee with similar email and SIN number already exists in the system.")
             }
-            else if (result[0].phoneNumber == req.body.phoneInput) {
+            else if (result[0].phoneNumber == req.body.phoneNumber) {
                 console.log("An employee with similar phone number already exists in the system.")
             }
-            else if (result[0].email == req.body.emailInput) {
+            else if (result[0].email == req.body.email) {
                 console.log("An employee with similar email already exists in the system.")
             }
-            else if (result[0].sin == req.body.SinNumber) {
+            else if (result[0].sin == req.body.sinNumber) {
                 console.log("An employee with similar SIN number already exists in the system.")
             }
         }

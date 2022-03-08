@@ -50,7 +50,7 @@ const managerSchema = new Schema({
     // discuss how to store availability
     // should manager have availability?
     availability: {
-        type: String,
+        type: Object,
         required: true
     },
     role: {
