@@ -50,7 +50,7 @@ const employeeSchema = new Schema({
     },
     // discuss how to store availability
     availability: {
-        type: String,
+        type: Object,
         required: true
     },
     wage: {
