@@ -62,7 +62,7 @@ const employeeSchema = new Schema({
         required: true
     }
 });
-
+// Create a shifts object/class, store it here in the employee
 employeeSchema.plugin(uniqueValidator)
 const Employee = mongoose.model('Employee', employeeSchema);
 module.exports = Employee;

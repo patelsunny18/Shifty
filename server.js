@@ -56,6 +56,9 @@ app.get('/removeEmployee', (req, res) => {
     res.sendFile('public/views/removeEmployee.html', { root: __dirname });
 });
 
+app.get('/viewSchedule', (req, res) => {
+    res.sendFile('public/views/viewSchedule.html', { root: __dirname });
+});
 
 app.post("/", function (req, res) {
     let id = req.body.userID;
