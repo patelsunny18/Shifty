@@ -60,6 +60,10 @@ app.get('/viewSchedule', (req, res) => {
     res.sendFile('public/views/viewSchedule.html', { root: __dirname });
 });
 
+app.get("/createSchedule", (req,res) => {
+    res.sendFile('public/views/createSchedule.html', { root: __dirname });
+});
+
 app.post("/", function (req, res) {
     let id = req.body.userID;
     let password = req.body.password;
