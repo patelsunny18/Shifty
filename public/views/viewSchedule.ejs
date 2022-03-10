@@ -7,50 +7,49 @@
     <title>View Schedule</title>
 </head>
 
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script text="text/javascript">
 
   
-  function test(){
+  function display(){
 
     const schedulediv = document.getElementById("Schedule")
     
+    let shifts = []
+    function wait(){
+      let test = axios.get('/getSchedule')
+      console.log(test.data)
+    }
+    wait()
 
-    var samples = [
-      {name:"Nick", sunday:"12-5", monday:"12-5", tuesday:"11-3", wednesday:"", thursday:"5-8" , friday:"", saturday:""},
-      {name:"Sunny", sunday:"12-5", monday:"12-5", tuesday:"11-3", wednesday:"", thursday:"" , friday:"", saturday:"7-9"},
-      {name:"Ivan", sunday:"12-5", monday:"12-5", tuesday:"11-3", wednesday:"", thursday:"" , friday:"1-8", saturday:""},
-      {name:"Saeed", sunday:"12-5", monday:"12-5", tuesday:"", wednesday:"4-5", thursday:"" , friday:"", saturday:""},
-      {name:"Aifaz", sunday:"12-5", monday:"12-5", tuesday:"11-3", wednesday:"", thursday:"" , friday:"", saturday:""}
-    ]
-
-    for (var i = 0; i < samples.length; i++){
+    for (var i = 0; i < shifts.length; i++){
       var new_row = document.createElement('tr')
     new_row.id = i;
     schedulediv.append(new_row)
 
     var name = document.createElement('td')
-    name.innerText = samples[i].name
+    name.innerText = shifts[i].name
 
     var sunday = document.createElement('td')
-    sunday.innerText = samples[i].sunday
+    sunday.innerText = shifts[i].sunday
 
     var monday = document.createElement('td')
-    monday.innerText = samples[i].monday
+    monday.innerText = shifts[i].monday
 
     var tuesday = document.createElement('td')
-    tuesday.innerText = samples[i].tuesday
+    tuesday.innerText = shifts[i].tuesday
 
     var wednesday = document.createElement('td')
-    wednesday.innerText = samples[i].wednesday
+    wednesday.innerText = shifts[i].wednesday
 
     var thursday = document.createElement('td')
-    thursday.innerText = samples[i].thursday
+    thursday.innerText = shifts[i].thursday
 
     var friday = document.createElement('td')
-    friday.innerText = samples[i].friday
+    friday.innerText = shifts[i].friday
 
     var saturday = document.createElement('td')
-    saturday.innerText = samples[i].saturday
+    saturday.innerText = shifts[i].saturday
 
     var add = document.getElementById(i)
     add.append(name, sunday, monday, tuesday, wednesday, thursday, friday, saturday)
@@ -81,7 +80,7 @@
   }
 </style>
 
-<body onload="test()">
+<body onload="display()">
     <div>
     
     <table id = "Schedule" class="table">

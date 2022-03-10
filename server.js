@@ -16,6 +16,8 @@ const app = express();
 const Employee = require('./models/employee');
 const Manager = require('./models/manager');
 const Owner = require('./models/owner');
+const Schedule = require('./models/schedule');
+const res = require('express/lib/response');
 
 // Access to database
 // DO NOT TOUCH!
@@ -57,11 +59,11 @@ app.get('/removeEmployee', (req, res) => {
 });
 
 app.get('/viewSchedule', (req, res) => {
-    res.sendFile('public/views/viewSchedule.html', { root: __dirname });
+    res.render('viewSchedule');
 });
 
 app.get("/createSchedule", (req,res) => {
-    res.sendFile('public/views/createSchedule.html', { root: __dirname });
+    res.render('createSchedule');
 });
 
 app.post("/", function (req, res) {
@@ -237,6 +239,37 @@ app.post('/removeManager', function (req, res) {
         .catch((err) => {
             console.log(err)
         })
+})
+
+app.post('/createSchedule', async function(req, res) {
+    var currentdate = new Date();
+    var one = new Date(currentdate.getFullYear(),0,1);
+    var numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
+    var weeknum = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);
+    
+    const insertSchedule = new Schedule({schedule: req.body, week_number: weeknum})
+    insertSchedule.save().then((result) => 
+    {
+        console.log("Added successfully")
+    }).catch((err) =>
+    {
+        console.log(err)
+    }
+    );
+})
+
+app.get('/getSchedule', async function(req, res){
+
+    var currentdate = new Date();
+    var one = new Date(currentdate.getFullYear(),0,1);
+    var numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
+    var weeknum = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);
+
+    const schedule = await Schedule.find({week_number: weeknum}).then((result) => {
+        res.send(result[0].schedule)
+        }
+    )
+    
 })
 
 function getManagerId() {
