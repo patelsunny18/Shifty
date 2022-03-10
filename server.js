@@ -55,7 +55,7 @@ app.get('/removeManager', (req, res) => {
 });
 
 app.get('/removeEmployee', (req, res) => {
-    res.sendFile('public/views/removeEmployee.html', { root: __dirname });
+    res.render('removeEmployee');
 });
 
 app.get('/viewSchedule', (req, res) => {
@@ -163,13 +163,23 @@ app.post('/addEmployee', function (req, res) {
 })
 
 app.post('/removeEmployee', function (req, res) {
-    var myquery = { firstName: req.body.fName, lastName: req.body.lName, employeeID: req.body.id };
-    Employee.deleteOne(myquery, function (err, obj) {
-        if (err) throw err;
-        console.log("Employee removed from the system.");
-    });
+    let fName = req.body.firstName;
+    let lName = req.body.lastName;
+    let id = req.body.employeeID;
+    var myquery = { firstName: fName, lastName: lName, employeeID: id };
+    Employee.deleteOne(myquery)
+        .then((result) => {
+            console.log("Employee removed from the system")
+            let responseData = {
+                first: fName,
+                last: lName
+            };
+            res.send(responseData)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
 })
-
 app.post('/addManager', function (req, res) {
     const password = getPassword();
     const managerID = getManagerId();
