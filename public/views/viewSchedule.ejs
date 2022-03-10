@@ -1,67 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Schedule</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Schedule</title>
 </head>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script text="text/javascript">
 
-  
-  function display(){
+
+  function display() {
 
     const schedulediv = document.getElementById("Schedule")
-    
-    let shifts = []
-    function wait(){
-      let test = axios.get('/getSchedule')
-      console.log(test.data)
-    }
-    wait()
 
-    for (var i = 0; i < shifts.length; i++){
-      var new_row = document.createElement('tr')
-    new_row.id = i;
-    schedulediv.append(new_row)
+    let shifts = [];
+    axios.get('/getSchedule')
+      .then((result) => {
+        // console.log(result.data);
+        shifts = result.data;
+        console.log(shifts)
 
-    var name = document.createElement('td')
-    name.innerText = shifts[i].name
+        for (var i = 0; i < shifts.length; i++) {
+          var new_row = document.createElement('tr')
+          new_row.id = i;
+          schedulediv.append(new_row)
 
-    var sunday = document.createElement('td')
-    sunday.innerText = shifts[i].sunday
+          var name = document.createElement('td')
+          name.innerText = shifts[i].name
 
-    var monday = document.createElement('td')
-    monday.innerText = shifts[i].monday
+          var sunday = document.createElement('td')
+          sunday.innerText = shifts[i].sunday
 
-    var tuesday = document.createElement('td')
-    tuesday.innerText = shifts[i].tuesday
+          var monday = document.createElement('td')
+          monday.innerText = shifts[i].monday
 
-    var wednesday = document.createElement('td')
-    wednesday.innerText = shifts[i].wednesday
+          var tuesday = document.createElement('td')
+          tuesday.innerText = shifts[i].tuesday
 
-    var thursday = document.createElement('td')
-    thursday.innerText = shifts[i].thursday
+          var wednesday = document.createElement('td')
+          wednesday.innerText = shifts[i].wednesday
 
-    var friday = document.createElement('td')
-    friday.innerText = shifts[i].friday
+          var thursday = document.createElement('td')
+          thursday.innerText = shifts[i].thursday
 
-    var saturday = document.createElement('td')
-    saturday.innerText = shifts[i].saturday
+          var friday = document.createElement('td')
+          friday.innerText = shifts[i].friday
 
-    var add = document.getElementById(i)
-    add.append(name, sunday, monday, tuesday, wednesday, thursday, friday, saturday)
-    }
-    
+          var saturday = document.createElement('td')
+          saturday.innerText = shifts[i].saturday
+
+          var add = document.getElementById(i)
+          add.append(name, sunday, monday, tuesday, wednesday, thursday, friday, saturday)
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // console.log(shifts);
+
+
+
 
   };
-  
+
 </script>
 
 <style>
-  table,th,tr {
+  table,
+  th,
+  tr {
     border: 1px solid;
     border-collapse: collapse;
     padding: 15px;
@@ -75,30 +86,31 @@
     text-align: left;
   }
 
-  td:hover{
+  td:hover {
     background-color: rgba(0, 153, 255, 0.863);
   }
 </style>
 
 <body onload="display()">
-    <div>
-    
-    <table id = "Schedule" class="table">
-  <thead>
-    <tr>
-      <th scope="col">Employees</th>
-      <th scope="col">Sunday</th>
-      <th scope="col">Monday</th>
-      <th scope="col">Tuesday</th>
-      <th scope="col">Wednesday</th>
-      <th scope="col">Thursday</th>
-      <th scope="col">Friday</th>
-      <th scope="col">Sunday</th>
-    </tr>
-  </thead>
-  <tbody>
-  </tbody>
-</table>
-</div>
+  <div>
+
+    <table id="Schedule" class="table">
+      <thead>
+        <tr>
+          <th scope="col">Employees</th>
+          <th scope="col">Sunday</th>
+          <th scope="col">Monday</th>
+          <th scope="col">Tuesday</th>
+          <th scope="col">Wednesday</th>
+          <th scope="col">Thursday</th>
+          <th scope="col">Friday</th>
+          <th scope="col">Saturday</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
 </body>
+
 </html>

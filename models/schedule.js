@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const scheduleSchema = new Schema({
     schedule: {
-        type: Object,
+        type: Array,
         required: true
     },
     week_number: {
