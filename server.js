@@ -55,14 +55,14 @@ app.get('/removeManager', (req, res) => {
 });
 
 app.get('/removeEmployee', (req, res) => {
-    res.render('removeEmployee');
+    res.sendFile('public/views/removeEmployee.html', { root: __dirname });
 });
 
 app.get('/viewSchedule', (req, res) => {
     res.render('viewSchedule');
 });
 
-app.get("/createSchedule", (req,res) => {
+app.get("/createSchedule", (req, res) => {
     res.render('createSchedule');
 });
 
@@ -163,23 +163,13 @@ app.post('/addEmployee', function (req, res) {
 })
 
 app.post('/removeEmployee', function (req, res) {
-    let fName = req.body.firstName;
-    let lName = req.body.lastName;
-    let id = req.body.employeeID;
-    var myquery = { firstName: fName, lastName: lName, employeeID: id };
-    Employee.deleteOne(myquery)
-        .then((result) => {
-            console.log("Employee removed from the system")
-            let responseData = {
-                first: fName,
-                last: lName
-            };
-            res.send(responseData)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+    var myquery = { firstName: req.body.fName, lastName: req.body.lName, employeeID: req.body.id };
+    Employee.deleteOne(myquery, function (err, obj) {
+        if (err) throw err;
+        console.log("Employee removed from the system.");
+    });
 })
+
 app.post('/addManager', function (req, res) {
     const password = getPassword();
     const managerID = getManagerId();
@@ -251,35 +241,34 @@ app.post('/removeManager', function (req, res) {
         })
 })
 
-app.post('/createSchedule', async function(req, res) {
+app.post('/createSchedule', async function (req, res) {
     var currentdate = new Date();
-    var one = new Date(currentdate.getFullYear(),0,1);
+    var one = new Date(currentdate.getFullYear(), 0, 1);
     var numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
-    var weeknum = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);
-    
-    const insertSchedule = new Schedule({schedule: req.body, week_number: weeknum})
-    insertSchedule.save().then((result) => 
-    {
+    var weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
+
+    const insertSchedule = new Schedule({ schedule: req.body, week_number: weeknum })
+    insertSchedule.save().then((result) => {
         console.log("Added successfully")
-    }).catch((err) =>
-    {
+    }).catch((err) => {
         console.log(err)
     }
     );
 })
 
-app.get('/getSchedule', async function(req, res){
+app.get('/getSchedule', async function (req, res) {
 
     var currentdate = new Date();
-    var one = new Date(currentdate.getFullYear(),0,1);
+    var one = new Date(currentdate.getFullYear(), 0, 1);
     var numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
-    var weeknum = Math.ceil(( currentdate.getDay() + 1 + numberOfDays) / 7);
+    var weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
 
-    const schedule = await Schedule.find({week_number: weeknum}).then((result) => {
-        res.send(result[0].schedule)
-        }
+    const schedule = await Schedule.find({ week_number: weeknum }).then((result) => {
+        console.log(result[0].schedule);
+        res.send(result[0].schedule);
+    }
     )
-    
+
 })
 
 function getManagerId() {
