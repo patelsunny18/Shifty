@@ -1,41 +1,43 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <style>
-    table,th,tr {
-      border: 1px solid;
-      border-collapse: collapse;
-      padding: 15px;
-      text-align: left;
-    }
-  
-    td {
-      border-left: 1px solid;
-      border-right: 1px solid;
-      padding: 15px;
-      text-align: left;
-    }
-  </style>
+  table,
+  th,
+  tr {
+    border: 1px solid;
+    border-collapse: collapse;
+    padding: 15px;
+    text-align: left;
+  }
+
+  td {
+    border-left: 1px solid;
+    border-right: 1px solid;
+    padding: 15px;
+    text-align: left;
+  }
+</style>
 
 <body>
-    <div>
-        <label for="input">Name to add to schedule</label>
-        <input type="text" id="name">
-        
-        
-        <button onclick="add()">Add to Schedule</button>
-        
-        <button onclick="finish()">Finalize Schedule</button>
-    </div>
-    
-<br>
-<table class="table">
+  <div>
+    <label for="input">Name to add to schedule</label>
+    <input type="text" id="name">
+
+
+    <button onclick="add()">Add to Schedule</button>
+
+    <button onclick="finish()">Finalize Schedule</button>
+  </div>
+
+  <br>
+  <table class="table">
     <thead>
       <tr>
         <th scope="col">Sunday</th>
@@ -44,136 +46,136 @@
         <th scope="col">Wednesday</th>
         <th scope="col">Thursday</th>
         <th scope="col">Friday</th>
-        <th scope="col">Sunday</th>
+        <th scope="col">Saturday</th>
       </tr>
     </thead>
     <tbody>
-        <tr>
-          <tr>
-              <td><input type="text" id="sunday"></td>
-              <td><input type="text" id="monday"></td>
-              <td><input type="text" id="tuesday"></td>
-              <td><input type="text" id="wednesday"></td>
-              <td><input type="text" id="thursday"></td>
-              <td><input type="text" id="friday"></td>
-              <td><input type="text" id="saturday"></td>
-          </tr>
-        </tr>
+      <tr>
+      <tr>
+        <td><input type="text" id="sunday"></td>
+        <td><input type="text" id="monday"></td>
+        <td><input type="text" id="tuesday"></td>
+        <td><input type="text" id="wednesday"></td>
+        <td><input type="text" id="thursday"></td>
+        <td><input type="text" id="friday"></td>
+        <td><input type="text" id="saturday"></td>
+      </tr>
+      </tr>
     </tbody>
   </table>
 
   <br>
   <p>Preview of Schedule</p>
   <div>
-    
-  <table id = "Schedule" class="table">
-  <thead>
-    <tr>
-      <th scope="col">Employees</th>
-      <th scope="col">Sunday</th>
-      <th scope="col">Monday</th>
-      <th scope="col">Tuesday</th>
-      <th scope="col">Wednesday</th>
-      <th scope="col">Thursday</th>
-      <th scope="col">Friday</th>
-      <th scope="col">Sunday</th>
-    </tr>
-  </thead>
-  <tbody>
-  </tbody>
-</table>
-</div>
+
+    <table id="Schedule" class="table">
+      <thead>
+        <tr>
+          <th scope="col">Employees</th>
+          <th scope="col">Sunday</th>
+          <th scope="col">Monday</th>
+          <th scope="col">Tuesday</th>
+          <th scope="col">Wednesday</th>
+          <th scope="col">Thursday</th>
+          <th scope="col">Friday</th>
+          <th scope="col">Saturday</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
 
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-    
-
-    function add(){
-        const schedulediv = document.getElementById("Schedule")
-
-        let elementExists = !!document.getElementById(document.getElementById('name').value)
-        if (elementExists == false){
-            var new_row = document.createElement('tr')
-        new_row.id = document.getElementById('name').value;
-        schedulediv.append(new_row)
-        
-        }
-        else if (elementExists == true){
-            alert('This employee is already in the schedule')
-            return
-        }
-        console.log(elementExists)
 
 
-        var name = document.createElement('td')
-        name.innerText = document.getElementById('name').value
+  function add() {
+    const schedulediv = document.getElementById("Schedule")
 
-        var sunday = document.createElement('td')
-        sunday.innerText = document.getElementById('sunday').value
-
-        var monday = document.createElement('td')
-        monday.innerText = document.getElementById('monday').value
-
-        var tuesday = document.createElement('td')
-        tuesday.innerText = document.getElementById('tuesday').value
-        
-
-        var wednesday = document.createElement('td')
-        wednesday.innerText = document.getElementById('wednesday').value
-
-        var thursday = document.createElement('td')
-        thursday.innerText = document.getElementById('thursday').value
-
-        var friday = document.createElement('td')
-        friday.innerText = document.getElementById('friday').value
-
-        var saturday = document.createElement('td')
-        saturday.innerText = document.getElementById('saturday').value
-
-        
-        var add = document.getElementById(document.getElementById('name').value)
-        add.append(name, sunday, monday, tuesday, wednesday, thursday, friday, saturday)
-
-        document.getElementById('sunday').value = ''
-        document.getElementById('monday').value = ''
-        document.getElementById('tuesday').value = ''
-        document.getElementById('wednesday').value = ''
-        document.getElementById('thursday').value = ''
-        document.getElementById('friday').value = ''
-        document.getElementById('saturday').value = ''
-    }
-
-    function finish(){
-        let schedule = document.getElementById('Schedule').rows.length  
-        
-        let shifts = []
-        for(let i = 1; i < schedule;i++){
-
-            let new_shift = {
-                name: document.getElementById('Schedule').rows[i].cells.item(0).innerText,
-                sunday:document.getElementById('Schedule').rows[i].cells.item(1).innerText ,
-                monday: document.getElementById('Schedule').rows[i].cells.item(2).innerText,
-                tuesday: document.getElementById('Schedule').rows[i].cells.item(3).innerText,
-                wendesday: document.getElementById('Schedule').rows[i].cells.item(4).innerText,
-                thursday: document.getElementById('Schedule').rows[i].cells.item(5).innerText,
-                friday: document.getElementById('Schedule').rows[i].cells.item(6).innerText,
-                saturday: document.getElementById('Schedule').rows[i].cells.item(7).innerText
-            }
-            
-            shifts.push(new_shift)
-        }
-
-
-        axios.post('/createSchedule', shifts).then((res) => {
-            alert("Successfully Submitted Schedule")
-        }).catch((err) =>
-        {
-            console.log(err)
-        })
-
+    let elementExists = !!document.getElementById(document.getElementById('name').value)
+    if (elementExists == false) {
+      var new_row = document.createElement('tr')
+      new_row.id = document.getElementById('name').value;
+      schedulediv.append(new_row)
 
     }
+    else if (elementExists == true) {
+      alert('This employee is already in the schedule')
+      return
+    }
+    console.log(elementExists)
+
+
+    var name = document.createElement('td')
+    name.innerText = document.getElementById('name').value
+
+    var sunday = document.createElement('td')
+    sunday.innerText = document.getElementById('sunday').value
+
+    var monday = document.createElement('td')
+    monday.innerText = document.getElementById('monday').value
+
+    var tuesday = document.createElement('td')
+    tuesday.innerText = document.getElementById('tuesday').value
+
+
+    var wednesday = document.createElement('td')
+    wednesday.innerText = document.getElementById('wednesday').value
+
+    var thursday = document.createElement('td')
+    thursday.innerText = document.getElementById('thursday').value
+
+    var friday = document.createElement('td')
+    friday.innerText = document.getElementById('friday').value
+
+    var saturday = document.createElement('td')
+    saturday.innerText = document.getElementById('saturday').value
+
+
+    var add = document.getElementById(document.getElementById('name').value)
+    add.append(name, sunday, monday, tuesday, wednesday, thursday, friday, saturday)
+
+    document.getElementById('sunday').value = ''
+    document.getElementById('monday').value = ''
+    document.getElementById('tuesday').value = ''
+    document.getElementById('wednesday').value = ''
+    document.getElementById('thursday').value = ''
+    document.getElementById('friday').value = ''
+    document.getElementById('saturday').value = ''
+  }
+
+  function finish() {
+    let schedule = document.getElementById('Schedule').rows.length
+
+    let shifts = []
+    for (let i = 1; i < schedule; i++) {
+
+      let new_shift = {
+        name: document.getElementById('Schedule').rows[i].cells.item(0).innerText,
+        sunday: document.getElementById('Schedule').rows[i].cells.item(1).innerText,
+        monday: document.getElementById('Schedule').rows[i].cells.item(2).innerText,
+        tuesday: document.getElementById('Schedule').rows[i].cells.item(3).innerText,
+        wednesday: document.getElementById('Schedule').rows[i].cells.item(4).innerText,
+        thursday: document.getElementById('Schedule').rows[i].cells.item(5).innerText,
+        friday: document.getElementById('Schedule').rows[i].cells.item(6).innerText,
+        saturday: document.getElementById('Schedule').rows[i].cells.item(7).innerText
+      }
+
+      shifts.push(new_shift)
+    }
+
+    console.log(shifts);
+    axios.post('/createSchedule', shifts).then((res) => {
+      alert("Successfully Submitted Schedule")
+    }).catch((err) => {
+      console.log(err)
+    })
+
+
+  }
 </script>
-</html>  
+
+</html>
