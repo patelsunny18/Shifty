@@ -93,7 +93,15 @@
 
             axios.post('/', data)
                 .then((response) => {
-                    console.log(response.data);
+                    console.log(response);
+                    switch (response.data.role) {
+                        case "Owner": {
+                            window.location = `/owner/:${response.data.id}`;
+                        }
+                        case "Manager": {
+                            window.location = `/manager/:${response.data.id}`;
+                        }
+                    }
                 })
                 .catch((error) => {
                     form.reset();

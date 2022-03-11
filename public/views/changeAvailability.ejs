@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Availability</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- Custom CSS link -->
+    <link rel="stylesheet" type="text/css" href="/css/changeAvailability.css">
+</head>
+
+<body>
+    <div class="content">
+        <div class="header">
+            <h1>Change your current availabilty</h1>
+        </div>
+        <form action="/changeAvailability" method="POST" class="form" id="form">
+            <div class="row control">
+                <div class="col">
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="monday">
+                                <label for="monday" class="form-check-label">Monday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <select name="mon-options" id="monday-options" class="form-select" disabled>
+                                <option value="day">Day</option>
+                                <option value="night">Night</option>
+                                <option value="allDay">All Day</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="tuesday">
+                                <label for="tuesday" class="form-check-label">Tuesday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <select name="tue-options" id="tuesday-options" class="form-select" disabled>
+                                <option value="day">Day</option>
+                                <option value="night">Night</option>
+                                <option value="allDay">All Day</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="wednesday">
+                                <label for="wednesday" class="form-check-label">Wednesday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <select name="wed-options" id="wednesday-options" class="form-select" disabled>
+                                <option value="day">Day</option>
+                                <option value="night">Night</option>
+                                <option value="allDay">All Day</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="thursday">
+                                <label for="thursday" class="form-check-label">Thursday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <select name="thurs-options" id="thursday-options" class="form-select" disabled>
+                                <option value="day">Day</option>
+                                <option value="night">Night</option>
+                                <option value="allDay">All Day</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="friday">
+                                <label for="friday" class="form-check-label">Friday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <select name="fri-options" id="friday-options" class="form-select" disabled>
+                                <option value="day">Day</option>
+                                <option value="night">Night</option>
+                                <option value="allDay">All Day</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="saturday">
+                                <label for="saturday" class="form-check-label">Saturday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <select name="sat-options" id="saturday-options" class="form-select" disabled>
+                                <option value="day">Day</option>
+                                <option value="night">Night</option>
+                                <option value="allDay">All Day</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row control">
+                        <div class="col">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="sunday" value="sunday">
+                                <label for="sunday" class="form-check-label">Sunday</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <select name="sun-options" id="sunday-options" class="form-select" disabled>
+                                <option value="day">Day</option>
+                                <option value="night">Night</option>
+                                <option value="allDay">All Day</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit">Update Availability</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- Link for using Axios to send requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        const form = document.querySelector("#form");
+        const monday = document.querySelector("#monday");
+        const tuesday = document.querySelector("#tuesday");
+        const wednesday = document.querySelector("#wednesday");
+        const thursday = document.querySelector("#thursday");
+        const friday = document.querySelector("#friday");
+        const saturday = document.querySelector("#saturday");
+        const sunday = document.querySelector("#sunday");
+        const monday_choice = document.querySelector("#monday-options");
+        const tuesday_choice = document.querySelector("#tuesday-options");
+        const wednesday_choice = document.querySelector("#wednesday-options");
+        const thursday_choice = document.querySelector("#thursday-options");
+        const friday_choice = document.querySelector("#friday-options");
+        const saturday_choice = document.querySelector("#saturday-options");
+        const sunday_choice = document.querySelector("#sunday-options");
+
+
+        function getCurrentAvailability() {
+            let currentAvailability = '<%- availability %>';
+            currentAvailability = JSON.parse(currentAvailability);
+
+            Object.entries(currentAvailability).forEach(entry => {
+                const [key, value] = entry;
+                const checkbox = document.querySelector(`#${key}`);
+                const select = document.querySelector(`#${key}-options`);
+
+                checkbox.checked = true;
+                select.disabled = false;
+
+                select.value = value;
+            })
+        }
+
+        getCurrentAvailability();
+
+
+        monday.addEventListener('change', function () {
+            if (monday.checked) {
+                monday_choice.disabled = false;
+            } else if (!monday.checked) {
+                monday_choice.disabled = true;
+            }
+        })
+
+        tuesday.addEventListener('change', function () {
+            if (tuesday.checked) {
+                tuesday_choice.disabled = false;
+            } else if (!tuesday.checked) {
+                tuesday_choice.disabled = true;
+            }
+        })
+
+        wednesday.addEventListener('change', function () {
+            if (wednesday.checked) {
+                wednesday_choice.disabled = false;
+            } else if (!wednesday.checked) {
+                wednesday_choice.disabled = true;
+            }
+        })
+
+        thursday.addEventListener('change', function () {
+            if (thursday.checked) {
+                thursday_choice.disabled = false;
+            } else if (!thursday.checked) {
+                thursday_choice.disabled = true;
+            }
+        })
+
+        friday.addEventListener('change', function () {
+            if (friday.checked) {
+                friday_choice.disabled = false;
+            } else if (!friday.checked) {
+                friday_choice.disabled = true;
+            }
+        })
+
+        saturday.addEventListener('change', function () {
+            if (saturday.checked) {
+                saturday_choice.disabled = false;
+            } else if (!saturday.checked) {
+                saturday_choice.disabled = true;
+            }
+        })
+
+        sunday.addEventListener('change', function () {
+            if (sunday.checked) {
+                sunday_choice.disabled = false;
+            } else if (!sunday.checked) {
+                sunday_choice.disabled = true;
+            }
+        })
+
+        form.addEventListener("submit", sendData);
+
+        function sendData(event) {
+            event.preventDefault();
+
+            const newAvailability = {}
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const periods = document.querySelectorAll('select:enabled');
+            for (let i = 0; i < periods.length; i++) {
+                newAvailability[checkboxes[i].id] = periods[i].value;
+            }
+            
+            const data = {
+                availability: newAvailability
+            };
+
+            axios.put(`/changeAvailability/<%= id %>`, data)
+                .then((result) => {
+                    if (result.status === 200) {
+                        alert("Your availability has been updated!");
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+    </script>
+</body>
+
+</html>
