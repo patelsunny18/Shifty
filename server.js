@@ -66,6 +66,10 @@ app.get("/createSchedule", (req, res) => {
     res.render('createSchedule');
 });
 
+app.get("/editSchedule", (req, res) =>{
+    res.render('editSchedule')
+})
+
 app.post("/", function (req, res) {
     let id = req.body.userID;
     let password = req.body.password;
@@ -258,10 +262,10 @@ app.post('/createSchedule', async function (req, res) {
 
 app.get('/getSchedule', async function (req, res) {
 
-    var currentdate = new Date();
-    var one = new Date(currentdate.getFullYear(), 0, 1);
-    var numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
-    var weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
+    let currentdate = new Date();
+    let one = new Date(currentdate.getFullYear(), 0, 1);
+    let numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
+    let weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
 
     const schedule = await Schedule.find({ week_number: weeknum }).then((result) => {
         console.log(result[0].schedule);
@@ -271,6 +275,18 @@ app.get('/getSchedule', async function (req, res) {
 
 })
 
+app.put('/editSchedule', async function(req, res){
+    let currentdate = new Date();
+    let one = new Date(currentdate.getFullYear(), 0, 1);
+    let numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
+    let weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
+
+    const schedule = await Schedule.findOneAndUpdate({ week_number: weeknum }, {schedule: req.body}).then((result) => {
+        res.status(200).send('Sucess')
+    })
+
+
+})
 function getManagerId() {
     var id = generator.generate({
         length: 7,
