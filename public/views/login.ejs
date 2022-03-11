@@ -93,13 +93,19 @@
 
             axios.post('/', data)
                 .then((response) => {
-                    console.log(response);
                     switch (response.data.role) {
                         case "Owner": {
-                            window.location = `/owner/:${response.data.id}`;
+                            console.log(response.data.id);
+                            window.location = `/owner/${response.data.id}`;
+                            break;
                         }
                         case "Manager": {
-                            window.location = `/manager/:${response.data.id}`;
+                            window.location = `/manager/${response.data.id}`;
+                            break;
+                        }
+                        case "Employee": {
+                            window.location = `/employee/${response.data.id}`;
+                            break;
                         }
                     }
                 })

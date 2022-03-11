@@ -66,13 +66,31 @@ app.get("/createSchedule", (req, res) => {
     res.render('createSchedule');
 });
 
-app.get('/owner/:id', (req, res) => {
+app.get('/owner/:id', async (req, res) => {
     const { id } = req.params;
-    res.render('owner', { id: id });
+    const owner = await Owner.findById({ _id: id });
+    res.render('owner', { 
+        id: id,
+        name: `${owner.firstName} ${owner.lastName}`
+    });
 })
 
-app.get('/manager', (req, res) => {
-    res.render('manager');
+app.get('/manager/:id', async (req, res) => {
+    const { id } = req.params;
+    const manager = await Manager.findById({ _id: id });
+    res.render('manager', { 
+        id: id,
+        name: `${manager.firstName} ${manager.lastName}`
+    });
+})
+
+app.get('/employee/:id', async (req, res) => {
+    const { id } = req.params;
+    const employee = await Employee.findById({ _id: id });
+    res.render('employee', { 
+        id: id,
+        name: `${employee.firstName} ${employee.lastName}`
+    });
 })
 
 app.get('/changeAvailability/:id', async (req, res) => {
