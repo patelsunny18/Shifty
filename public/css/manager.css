@@ -1,0 +1,23 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+}
+
+.nav {
+    float: left;
+    height: 100%;
+    width: 20%;
+    background: rgba(0, 0, 0, 0.637);
+}
+
+.content {
+    float: right;
+    height: 100%;
+    width: 80%;
+    background: rgba(255, 0, 0, 0.616);
+}

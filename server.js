@@ -66,7 +66,48 @@ app.get("/createSchedule", (req, res) => {
     res.render('createSchedule');
 });
 
-app.get("/editSchedule", (req, res) =>{
+app.get('/owner/:id', async (req, res) => {
+    const { id } = req.params;
+    const owner = await Owner.findById({ _id: id });
+    res.render('owner', { 
+        id: id,
+        name: `${owner.firstName} ${owner.lastName}`
+    });
+})
+
+app.get('/manager/:id', async (req, res) => {
+    const { id } = req.params;
+    const manager = await Manager.findById({ _id: id });
+    res.render('manager', { 
+        id: id,
+        name: `${manager.firstName} ${manager.lastName}`
+    });
+})
+
+app.get('/employee/:id', async (req, res) => {
+    const { id } = req.params;
+    const employee = await Employee.findById({ _id: id });
+    res.render('employee', { 
+        id: id,
+        name: `${employee.firstName} ${employee.lastName}`
+    });
+})
+
+app.get('/changeAvailability/:id', async (req, res) => {
+    const { id } = req.params;
+    const employee = await Employee.findOne({ _id: id });
+
+    let availability = {};
+    if (employee) {
+        availability = employee.availability;
+    }
+    res.render('changeAvailability', {
+        availability: JSON.stringify(availability),
+        id: id
+    });
+})
+
+app.get("/editSchedule", (req, res) => {
     res.render('editSchedule')
 })
 
@@ -79,21 +120,33 @@ app.post("/", function (req, res) {
         .then((result) => {
             role = result.role;
             console.log("Owner logged in");
-            res.send("Owner logged in");
+            const data = {
+                role: role,
+                id: result._id
+            };
+            res.send(data);
         })
         .catch((err) => {
             Manager.findOne({ managerID: id, password: password })
                 .then((result) => {
                     role = result.role;
                     console.log("Manager logged in");
-                    res.send("Manager logged in");
+                    const data = {
+                        role: role,
+                        id: result._id
+                    };
+                    res.send(data);
                 })
                 .catch((err) => {
                     Employee.findOne({ employeeID: id, password: password })
                         .then((result) => {
                             role = result.role;
                             console.log("Employee logged in");
-                            res.send("Employee logged in");
+                            const data = {
+                                role: role,
+                                id: result._id
+                            };
+                            res.send(data);
                         })
                         .catch((err) => {
                             console.log("Oops! User doesn't exists!");
@@ -278,15 +331,22 @@ app.get('/getSchedule', async function (req, res) {
     }
     )
 
+});
+
+app.put('/changeAvailability/:id', async (req, res) => {
+    const { id } = req.params;
+    const newAvailability = req.body.availability;
+    const employee = await Employee.findByIdAndUpdate({ _id: `${id}` }, { availability: newAvailability });
+    res.status(200).send("updated");
 })
 
-app.put('/editSchedule', async function(req, res){
+app.put('/editSchedule', async function (req, res) {
     let currentdate = new Date();
     let one = new Date(currentdate.getFullYear(), 0, 1);
     let numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
     let weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
 
-    const schedule = await Schedule.findOneAndUpdate({ week_number: weeknum }, {schedule: req.body}).then((result) => {
+    const schedule = await Schedule.findOneAndUpdate({ week_number: weeknum }, { schedule: req.body }).then((result) => {
         res.status(200).send('Sucess')
     })
 
@@ -331,8 +391,6 @@ function getPassword() {
     });
     return password;
 }
-
-app.use('/', express.static('views'));
 
 app.listen(PORT, HOST);
 
