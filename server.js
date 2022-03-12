@@ -268,8 +268,13 @@ app.get('/getSchedule', async function (req, res) {
     let weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
 
     const schedule = await Schedule.find({ week_number: weeknum }).then((result) => {
-        console.log(result[0].schedule);
-        res.send(result[0].schedule);
+        if(result[0].schedule == undefined){
+            console.log('No Schedule')
+        }
+        else{
+            console.log(result[0].schedule);
+            res.status(200).send(result[0].schedule);
+        }   
     }
     )
 
