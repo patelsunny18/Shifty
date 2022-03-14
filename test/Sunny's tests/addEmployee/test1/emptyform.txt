@@ -1,0 +1,5 @@
+Test Case:
+	- Clicking on submit without filling any input fields.
+
+Test Data:
+	- None

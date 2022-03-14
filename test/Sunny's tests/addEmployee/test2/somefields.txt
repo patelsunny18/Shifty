@@ -1,0 +1,7 @@
+Test Case:
+	- Filling in some input fields and leaving some empty.
+
+Test Data:
+	- First Name: Sunny
+	- Email: sdk438@usask.ca
+	- Sin Number: 1234567890

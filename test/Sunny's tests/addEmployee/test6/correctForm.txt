@@ -1,0 +1,16 @@
+Test Case:
+	- Filling out the entire form with correct input value and submitting the form.
+
+Test Data:
+	- First name: Sunny
+	- Last name: KaPatel
+	- Address: 21 Baker St
+	- Phone number: 1234567890
+	- DOB: 01/01/2001
+	- Email: sdk438@usask.ca
+	- Bank Account Number: 123456
+	- SIN Number: 987654321
+	- Availability:	Monday - Night
+			Saturday - All Day
+			Sunday - Night
+	- Wage: 12

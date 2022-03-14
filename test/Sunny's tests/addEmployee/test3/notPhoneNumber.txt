@@ -1,0 +1,5 @@
+Test Case:
+	- Phone number is anything but a 10 digits only.
+
+Test Data:
+	- Phone: jkashdjjaskdh

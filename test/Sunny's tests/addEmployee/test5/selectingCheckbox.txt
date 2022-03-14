@@ -1,0 +1,5 @@
+Test Case:
+	- Checking any of the availability checkboxes enables the respective dropdown box.
+
+Test Data:
+	- Availability: Saturday, Sunday

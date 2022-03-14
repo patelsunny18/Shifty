@@ -1,0 +1,5 @@
+Test Case:
+	- Email input isn't in the correct email format
+
+Test Data:
+	- Email: sdk438usask.ca
