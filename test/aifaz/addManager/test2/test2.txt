@@ -1,0 +1,5 @@
+Filling all the input fields and submitting the form. 
+Should receive an userID and password after submitting.
+
+Adding screenshot od the database to show that the manager was added
+to the system

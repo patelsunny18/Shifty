@@ -1,0 +1,7 @@
+test1:
+
+Testing by keeping all fields blank, and also each field blank and clicking 
+on submit. It should ask the user to fill that field before submitting.
+
+Also to confirm adding screenshot of the database to confirm the manager
+wasn't added to the system.

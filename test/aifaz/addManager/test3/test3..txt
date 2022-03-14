@@ -1,0 +1,4 @@
+The manager should be able to log in to the system.
+
+After entering manager credentials and hitting loggin and after verification
+manager is redirected to a page

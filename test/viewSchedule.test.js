@@ -114,4 +114,3 @@ describe('Check names for given database', function(){
     })
 })
 
-mongoose.connection.close()

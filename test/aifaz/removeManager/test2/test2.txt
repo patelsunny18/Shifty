@@ -1,0 +1,2 @@
+Adding correct details and when modal pop ups click cancel to terminate
+Manager shouldn't be removed from the system

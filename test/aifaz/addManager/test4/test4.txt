@@ -1,0 +1,4 @@
+When manager is added to the system the randomly generated password should
+be encrypted when stored in the database but should display the actual
+password when manager is just added.
+

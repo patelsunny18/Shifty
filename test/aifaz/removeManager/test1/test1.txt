@@ -1,0 +1,2 @@
+Removing the manager with correct information.
+Should get a confirmation to remove
