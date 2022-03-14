@@ -1,0 +1,2 @@
+Interface should fit a mobile device screen. i.e. 
+on resizing fields should relocate for user experience.

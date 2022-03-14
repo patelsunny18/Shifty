@@ -1,0 +1,2 @@
+Adding manager having same phone number, sin number, email as an 
+existing EMPLOYEE in the system. Manager shouldn't be added.
