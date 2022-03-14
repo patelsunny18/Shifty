@@ -51,11 +51,11 @@ app.get('/addEmployee', (req, res) => {
 });
 
 app.get('/removeManager', (req, res) => {
-    res.sendFile('public/views/removeManager.html', { root: __dirname });
+    res.sendFile('removeManager');
 });
 
 app.get('/removeEmployee', (req, res) => {
-    res.sendFile('public/views/removeEmployee.html', { root: __dirname });
+    res.render('removeEmployee');
 });
 
 app.get('/viewSchedule', (req, res) => {
