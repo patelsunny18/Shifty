@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const generator = require('generate-password');
+const Bcrypt = require("bcryptjs");
 const path = require('path');
 
 // make webpage availible
@@ -344,7 +345,8 @@ app.post('/addManager', function (req, res) {
         })
     }
     catch (error) {
-        response.status(500).send(error);
+        console.log(error)
+        res.status(500).send(error);
     }
 })
 

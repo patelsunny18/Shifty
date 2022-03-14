@@ -14,6 +14,12 @@ Run the following commands prior to running the server:
 
     npm install generate-password --save
 
+    npm install body-parser --save
+
+    npm install ejs --save
+
+    npm install bcryptjs --save
+
 
     $ node server.js
 
