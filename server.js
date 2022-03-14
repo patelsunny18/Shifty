@@ -69,7 +69,7 @@ app.get("/createSchedule", (req, res) => {
 app.get('/owner/:id', async (req, res) => {
     const { id } = req.params;
     const owner = await Owner.findById({ _id: id });
-    res.render('owner', { 
+    res.render('owner', {
         id: id,
         name: `${owner.firstName} ${owner.lastName}`
     });
@@ -78,7 +78,7 @@ app.get('/owner/:id', async (req, res) => {
 app.get('/manager/:id', async (req, res) => {
     const { id } = req.params;
     const manager = await Manager.findById({ _id: id });
-    res.render('manager', { 
+    res.render('manager', {
         id: id,
         name: `${manager.firstName} ${manager.lastName}`
     });
@@ -87,7 +87,7 @@ app.get('/manager/:id', async (req, res) => {
 app.get('/employee/:id', async (req, res) => {
     const { id } = req.params;
     const employee = await Employee.findById({ _id: id });
-    res.render('employee', { 
+    res.render('employee', {
         id: id,
         name: `${employee.firstName} ${employee.lastName}`
     });
@@ -111,191 +111,241 @@ app.get("/editSchedule", (req, res) => {
     res.render('editSchedule')
 })
 
-app.post("/", function (req, res) {
-    let id = req.body.userID;
-    let password = req.body.password;
-    let role = "";
 
-    Owner.findOne({ ownerID: id, password: password })
-        .then((result) => {
-            role = result.role;
-            console.log("Owner logged in");
-            const data = {
-                role: role,
-                id: result._id
-            };
-            res.send(data);
-        })
-        .catch((err) => {
-            Manager.findOne({ managerID: id, password: password })
-                .then((result) => {
-                    role = result.role;
-                    console.log("Manager logged in");
-                    const data = {
-                        role: role,
-                        id: result._id
-                    };
-                    res.send(data);
-                })
-                .catch((err) => {
-                    Employee.findOne({ employeeID: id, password: password })
-                        .then((result) => {
-                            role = result.role;
-                            console.log("Employee logged in");
-                            const data = {
-                                role: role,
-                                id: result._id
-                            };
-                            res.send(data);
+app.post("/", function (req, res) {
+    try {
+        let id = req.body.userID;
+        let password = req.body.password;
+        // let password = Bcrypt.hashSync(pass, 10);
+        let role = "";
+
+        Owner.findOne({ ownerID: id, password: password })
+            .then((result) => {
+                role = result.role;
+                res.send(role);
+                console.log("Owner logged in");
+            })
+            .catch((err) => {
+                Manager.findOne({ managerID: id })
+                    .then((result) => {
+                        const hash = result.password
+                        Bcrypt.compare(password, hash, function (err, isMatch) {
+                            if (err) {
+                                throw err;
+                            }
+                            else if (!isMatch) {
+                                console.log("Password doesn't match")
+                            }
+                            else if (isMatch) {
+                                role = result.role;
+                                res.send(role);
+                                console.log("Manager logged in");
+                            }
                         })
-                        .catch((err) => {
-                            console.log("Oops! User doesn't exists!");
-                            res.sendStatus(404);
-                        })
-                })
-        })
+                    })
+                    .catch((err) => {
+                        Employee.findOne({ employeeID: id })
+                            .then((result) => {
+                                const hash = result.password
+                                Bcrypt.compare(password, hash, function (err, isMatch) {
+                                    if (err) {
+                                        throw err;
+                                    }
+                                    else if (!isMatch) {
+                                        console.log("Password doesn't match")
+                                    }
+                                    else if (isMatch) {
+                                        role = result.role;
+                                        res.send(role);
+                                        console.log("Employee logged in");
+                                    }
+                                })
+                            })
+                            .catch((err) => {
+                                console.log("Oops! User doesn't exists!");
+                                res.sendStatus(404);
+                            })
+                    })
+            })
+    }
+    catch (error) {
+        response.status(500).send(error);
+    }
 });
 
-
-
 app.post('/addEmployee', function (req, res) {
-    const password = getPassword();
-    const employeeID = getEmployeeId();
-    const role = "Employee";
-    const insertEmployee = new Employee({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        address: req.body.address,
-        phoneNumber: req.body.phoneNumber,
-        dob: req.body.dob,
-        email: req.body.email,
-        bankAccountNumber: req.body.bankAccount,
-        sin: req.body.sinNumber,
-        employeeID: employeeID,
-        password: password,
-        availability: req.body.availability,
-        wage: req.body.wage,
-        role: role
-    });
+    try {
+        const password = getPassword();
+        const hashedPass = Bcrypt.hashSync(password, 10);
+        const employeeID = getEmployeeId();
+        const role = "Employee";
+        const sin = req.body.sinNumber;
+        var cipher = CryptoJS.AES.encrypt("PASSWORD", key);
+        cipher = cipher.toString();
+        console.log(cipher);
+        const insertEmployee = new Employee({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            address: req.body.address,
+            phoneNumber: req.body.phoneNumber,
+            dob: req.body.dob,
+            email: req.body.email,
+            bankAccountNumber: req.body.bankAccount,
+            sin: req.body.sinNumber,
+            employeeID: employeeID,
+            password: hashedPass,
+            availability: req.body.availability,
+            wage: req.body.wage,
+            role: role
+        });
 
-    Manager.find({ $or: [{ phoneNumber: req.body.phoneNumber }, { email: req.body.email }, { sin: req.body.sinNumber }] }, function (err, result) {
-        if (err) throw err;
-        if (result.length === 0) {
-            insertEmployee.save()
-                .then((result) => {
-                    let responseData = {
-                        userID: result.employeeID,
-                        password: result.password
-                    };
-                    res.send(responseData)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
-        else {
-            if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
-                console.log("A manager with similar phone number, email and SIN number already exists in the system.")
+        Manager.find({ $or: [{ phoneNumber: req.body.phoneNumber }, { email: req.body.email }, { sin: req.body.sinNumber }] }, function (err, result) {
+            if (err) throw err;
+            if (result.length === 0) {
+                insertEmployee.save()
+                    .then((result) => {
+                        let responseData = {
+                            userID: employeeID,
+                            password: password
+                        };
+                        res.send(responseData)
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             }
-            else if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email) {
-                console.log("A manager with similar phone number and email already exists in the system.")
+            else {
+                if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
+                    console.log("A manager with similar phone number, email and SIN number already exists in the system.")
+                }
+                else if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email) {
+                    console.log("A manager with similar phone number and email already exists in the system.")
+                }
+                else if (result[0].phoneNumber == req.body.phoneNumber && result[0].sin == req.body.sinNumber) {
+                    console.log("A manager with similar phone number and SIN number already exists in the system.")
+                }
+                else if (result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
+                    console.log("A manager with similar email and SIN number already exists in the system.")
+                }
+                else if (result[0].phoneNumber == req.body.phoneNumber) {
+                    console.log("A manager with similar phone number already exists in the system.")
+                }
+                else if (result[0].email == req.body.email) {
+                    console.log("A manager with similar email already exists in the system.")
+                }
+                else if (result[0].sin == req.body.sinNumber) {
+                    console.log("A manager with similar SIN number already exists in the system.")
+                }
             }
-            else if (result[0].phoneNumber == req.body.phoneNumber && result[0].sin == req.body.sinNumber) {
-                console.log("A manager with similar phone number and SIN number already exists in the system.")
-            }
-            else if (result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
-                console.log("A manager with similar email and SIN number already exists in the system.")
-            }
-            else if (result[0].phoneNumber == req.body.phoneNumber) {
-                console.log("A manager with similar phone number already exists in the system.")
-            }
-            else if (result[0].email == req.body.email) {
-                console.log("A manager with similar email already exists in the system.")
-            }
-            else if (result[0].sin == req.body.sinNumber) {
-                console.log("A manager with similar SIN number already exists in the system.")
-            }
-        }
-    })
+        })
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
 })
 
 app.post('/removeEmployee', function (req, res) {
-    var myquery = { firstName: req.body.fName, lastName: req.body.lName, employeeID: req.body.id };
-    Employee.deleteOne(myquery, function (err, obj) {
-        if (err) throw err;
-        console.log("Employee removed from the system.");
-    });
-})
-
-app.post('/addManager', function (req, res) {
-    const password = getPassword();
-    const managerID = getManagerId();
-    const role = "Manager";
-    const insertManager = new Manager({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        address: req.body.address,
-        phoneNumber: req.body.phoneNumber,
-        dob: req.body.dob,
-        email: req.body.email,
-        bankAccountNumber: req.body.bankAccount,
-        sin: req.body.sinNumber,
-        managerID: managerID,
-        password: password,
-        availability: req.body.availability,
-        role: role
-    });
-
-    Employee.find({ $or: [{ phoneNumber: req.body.phoneNumber }, { email: req.body.email }, { sin: req.body.sinNumber }] }, function (err, result) {
-        if (err) throw err;
-        if (result.length === 0) {
-            insertManager.save()
-                .then((result) => {
-                    let responseData = {
-                        userID: result.managerID,
-                        password: result.password
-                    };
-                    res.send(responseData)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
-        else {
-            if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
-                console.log("An employee with similar phone number, email and SIN number already exists in the system.")
-            }
-            else if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email) {
-                console.log("An employee with similar phone number and email already exists in the system.")
-            }
-            else if (result[0].phoneNumber == req.body.phoneNumber && result[0].sin == req.body.sinNumber) {
-                console.log("An employee with similar phone number and SIN number already exists in the system.")
-            }
-            else if (result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
-                console.log("An employee with similar email and SIN number already exists in the system.")
-            }
-            else if (result[0].phoneNumber == req.body.phoneNumber) {
-                console.log("An employee with similar phone number already exists in the system.")
-            }
-            else if (result[0].email == req.body.email) {
-                console.log("An employee with similar email already exists in the system.")
-            }
-            else if (result[0].sin == req.body.sinNumber) {
-                console.log("An employee with similar SIN number already exists in the system.")
-            }
-        }
-    })
-})
-
-app.post('/removeManager', function (req, res) {
-    var myquery = { firstName: req.body.fName, lastName: req.body.lName, managerID: req.body.id };
-    Manager.deleteOne(myquery)
-        .then((res) => {
-            console.log("Manager removed from the system")
+    let fName = req.body.firstName;
+    let lName = req.body.lastName;
+    let id = req.body.employeeID;
+    var myquery = { firstName: fName, lastName: lName, employeeID: id };
+    Employee.deleteOne(myquery)
+        .then((result) => {
+            console.log("Employee removed from the system")
+            let responseData = {
+                first: fName,
+                last: lName
+            };
+            res.send(responseData)
         })
         .catch((err) => {
             console.log(err)
         })
+})
+
+app.post('/removeManager', function (req, res) {
+    let fName = req.body.firstName;
+    let lName = req.body.lastName;
+    let id = req.body.managerID;
+    var myquery = { firstName: fName, lastName: lName, managerID: id };
+    Manager.deleteOne(myquery)
+        .then((result) => {
+            console.log("Manager removed from the system")
+            let responseData = {
+                first: fName,
+                last: lName
+            };
+            res.send(responseData)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+})
+
+app.post('/addManager', function (req, res) {
+    try {
+        const password = getPassword();
+        const hashedPass = Bcrypt.hashSync(password, 10);
+        const managerID = getManagerId();
+        const role = "Manager";
+        const insertManager = new Manager({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            address: req.body.address,
+            phoneNumber: req.body.phoneNumber,
+            dob: req.body.dob,
+            email: req.body.email,
+            bankAccountNumber: req.body.bankAccount,
+            sin: req.body.sinNumber,
+            managerID: managerID,
+            password: hashedPass,
+            availability: req.body.availability,
+            role: role
+        });
+
+        Employee.find({ $or: [{ phoneNumber: req.body.phoneNumber }, { email: req.body.email }, { sin: req.body.sinNumber }] }, function (err, result) {
+            if (err) throw err;
+            if (result.length === 0) {
+                insertManager.save()
+                    .then((result) => {
+                        let responseData = {
+                            userID: result.managerID,
+                            password: password
+                        };
+                        res.send(responseData)
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            }
+            else {
+                if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
+                    console.log("An employee with similar phone number, email and SIN number already exists in the system.")
+                }
+                else if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email) {
+                    console.log("An employee with similar phone number and email already exists in the system.")
+                }
+                else if (result[0].phoneNumber == req.body.phoneNumber && result[0].sin == req.body.sinNumber) {
+                    console.log("An employee with similar phone number and SIN number already exists in the system.")
+                }
+                else if (result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
+                    console.log("An employee with similar email and SIN number already exists in the system.")
+                }
+                else if (result[0].phoneNumber == req.body.phoneNumber) {
+                    console.log("An employee with similar phone number already exists in the system.")
+                }
+                else if (result[0].email == req.body.email) {
+                    console.log("An employee with similar email already exists in the system.")
+                }
+                else if (result[0].sin == req.body.sinNumber) {
+                    console.log("An employee with similar SIN number already exists in the system.")
+                }
+            }
+        })
+    }
+    catch (error) {
+        response.status(500).send(error);
+    }
 })
 
 app.post('/createSchedule', async function (req, res) {
@@ -321,13 +371,13 @@ app.get('/getSchedule', async function (req, res) {
     let weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
 
     const schedule = await Schedule.find({ week_number: weeknum }).then((result) => {
-        if(result[0].schedule == undefined){
+        if (result[0].schedule == undefined) {
             console.log('No Schedule')
         }
-        else{
+        else {
             console.log(result[0].schedule);
             res.status(200).send(result[0].schedule);
-        }   
+        }
     }
     )
 
