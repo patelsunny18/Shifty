@@ -51,7 +51,7 @@
   .control {
     margin-bottom: 10px;
     padding-bottom: 20px;
-    position: relative;
+    /* position: relative; */
   }
   
   .control label {
@@ -67,7 +67,7 @@
     border-color: #e74c3c;
   }
   
-  .control i.even-col {
+  /* .control i.even-col {
     position: absolute;
     top: 2.5em;
     right: 1.25em;
@@ -93,38 +93,7 @@
     position: absolute;
     top: 0.625em;
     left: 13.125em;
-  }
-  
-  .control.success i.fa-check-circle {
-    visibility: visible;
-    color: #2ecc71;
-  }
-  
-  .control.error i.fa-exclamation-circle {
-    visibility: visible;
-    color: #e74c3c;
-  }
-  
-  .control small.odd-col {
-    visibility: hidden;
-    position: absolute;
-    bottom: 0;
-    left: 0.938em;
-  }
-  
-  .control small.even-col {
-    visibility: hidden;
-    position: absolute;
-    bottom: 0;
-    right: 26.1em;
-  }
-  
-  .control small.avail {
-    visibility: hidden;
-    position: absolute;
-    bottom: 0;
-    left: 0.938em;
-  }
+  } */
   
   .fa {
     font-size: 24px;
@@ -135,13 +104,10 @@
   .fa-regular{
     font-size: 24px;
   }
-  
-  .control small.wage {
+
+  .control small {
     visibility: hidden;
-    position: absolute;
-    top: 2.7em;
-    left: 0;
-  }
+}
   
   .control.error small {
     visibility: visible;

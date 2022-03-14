@@ -23,8 +23,8 @@
             Add Employee
         </div>
         <form action="/addEmployee" method="post" class="form" id="form">
-            <div class="row control">
-                <div class="col">
+            <div class="row">
+                <div class="col control">
                     <label for="fName">First Name</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -34,8 +34,9 @@
                         </div>
                         <input type="text" class="form-control" placeholder="First name" id="fName" name="fName">
                     </div>
+                    <small>Error message</small>
                 </div>
-                <div class="col">
+                <div class="col control">
                     <label for="lName">Last Name</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -45,10 +46,11 @@
                         </div>
                         <input type="text" class="form-control" placeholder="Last name" id="lName" name="lName">
                     </div>
+                    <small>Error message</small>
                 </div>
             </div>
-            <div class="row control">
-                <div class="col">
+            <div class="row">
+                <div class="col control">
                     <label for="Address">Address</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -58,8 +60,9 @@
                         </div>
                         <input type="text" class="form-control" name="address" id="address" placeholder="Address">
                     </div>
+                    <small>Error message</small>
                 </div>
-                <div class="col">
+                <div class="col control">
                     <label for="phone">Phone Number</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -69,10 +72,11 @@
                         </div>
                         <input type="tel" class="form-control" name="phone" id="phone" placeholder="(xxx) xxx- xxx">
                     </div>
+                    <small>Error message</small>
                 </div>
             </div>
-            <div class="row control">
-                <div class="col">
+            <div class="row">
+                <div class="col control">
                     <label for="dob">Date of Birth</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -82,8 +86,9 @@
                         </div>
                         <input type="date" class="form-control" name="dob" id="dob">
                     </div>
+                    <small>Error message</small>
                 </div>
-                <div class="col">
+                <div class="col control">
                     <label for="email">Email</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -93,10 +98,11 @@
                         </div>
                         <input type="email" name="email" id="email" class="form-control" placeholder="abc123@email.com">
                     </div>
+                    <small>Error message</small>
                 </div>
             </div>
-            <div class="row control">
-                <div class="col">
+            <div class="row">
+                <div class="col control">
                     <label for="bankAccount">Bank Account Number</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -106,8 +112,9 @@
                         </div>
                         <input type="text" name="bankAccount" id="bankAccount" class="form-control">
                     </div>
+                    <small>Error message</small>
                 </div>
-                <div class="col">
+                <div class="col control">
                     <label for="sinNumber">SIN Number</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -117,13 +124,12 @@
                         </div>
                         <input type="text" name="sinNumber" id="sinNumber" class="form-control">
                     </div>
+                    <small>Error message</small>
                 </div>
             </div>
             <div class="row control">
-                <div class="col">
+                <div class="col control">
                     <label for="avail" id="avail">Availability</label>
-                    <i class="fas fa-check-circle avail"></i>
-                    <i class="fas fa-exclamation-circle avail"></i>
                     <div class="row control">
                         <div class="col">
                             <div class="form-check">
@@ -231,7 +237,7 @@
                     </div>
                     <small class="avail">Error message</small>
                 </div>
-                <div class="col">
+                <div class="col control">
                     <label for="wage">Wage (per hour)</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -241,8 +247,6 @@
                         </div>
                         <input type="text" name="wage" id="wage">
                     </div>
-                    <i class="fas fa-check-circle wage"></i>
-                    <i class="fas fa-exclamation-circle wage"></i>
                     <small class="wage">Error message</small>
                 </div>
             </div>
@@ -343,7 +347,203 @@
             }
         })
 
-        form.addEventListener("submit", sendData);
+        fName.addEventListener("input", function (event) {
+            if (this.value === '') {
+                setErrorFor(fName, "First name can't be blank");
+            } else {
+                setSuccessFor(fName);
+            }
+        })
+
+        lName.addEventListener("input", function (event) {
+            if (this.value === '') {
+                setErrorFor(lName, "Last name can't be blank");
+            } else {
+                setSuccessFor(lName);
+            }
+        })
+
+        address.addEventListener("input", function (event) {
+            if (this.value === '') {
+                setErrorFor(address, "Address can't be blank");
+            } else {
+                setSuccessFor(address);
+            }
+        })
+
+        phone.addEventListener("input", function (event) {
+            if (this.value === '') {
+                setErrorFor(phone, "Phone can't be blank");
+            } else if (!phoneValue.match(/^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/)) {
+                setErrorFor(phone, "Phone number has to be just numbers")
+            } else {
+                setSuccessFor(phone);
+            }
+        })
+
+        dob.addEventListener("input", function (event) {
+            if (this.value === '') {
+                setErrorFor(dob, "Date of birth can't be blank");
+            } else {
+                setSuccessFor(dob);
+            }
+        })
+
+        email.addEventListener("input", function (event) {
+            if (this.value === '') {
+                setErrorFor(email, "Email can't be blank");
+            } else {
+                setSuccessFor(email);
+            }
+        })
+
+        bankAccount.addEventListener("input", function (event) {
+            if (this.value === '') {
+                setErrorFor(bankAccount, "Bank account can't be blank");
+            } else {
+                setSuccessFor(bankAccount);
+            }
+        })
+
+        sinNumber.addEventListener("input", function (event) {
+            if (this.value === '') {
+                setErrorFor(sinNumber, "SIN number can't be blank");
+            } else {
+                setSuccessFor(sinNumber);
+            }
+        })
+
+        wage.addEventListener("input", function (event) {
+            if (this.value === '') {
+                setErrorFor(wage, "Wage can't be blank");
+            } else {
+                setSuccessFor(wage);
+            }
+        })
+
+        function checkInputs() {
+            const fNameValue = fName.value.trim();
+            const lNameValue = lName.value.trim();
+            const addressValue = address.value.trim();
+            const phoneValue = phone.value.trim();
+            const dobValue = dob.value.trim();
+            const emailValue = email.value.trim();
+            const bankAccountValue = bankAccount.value.trim();
+            const sinNumberValue = sinNumber.value.trim();
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const wageValue = wage.value.trim();
+
+            let success = false;
+
+            if (fNameValue === '') {
+                setErrorFor(fName, "First name can't be blank");
+                success = false;
+            } else {
+                setSuccessFor(fName);
+                success = true;
+            }
+
+            if (lNameValue === '') {
+                setErrorFor(lName, "Last name can't be blank");
+                success = false;
+            } else {
+                setSuccessFor(lName);
+                success = true;
+            }
+
+            if (addressValue === '') {
+                setErrorFor(address, "Address can't be blank");
+                success = false;
+            } else {
+                setSuccessFor(address);
+                success = true;
+            }
+
+            if (phoneValue === '') {
+                setErrorFor(phone, "Phone number can't be blank");
+                success = false;
+            } else if (!phoneValue.match(/^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/)) {
+                setErrorFor(phone, "Phone number has to be just numbers")
+            } else {
+                setSuccessFor(phone);
+                success = true;
+            }
+
+            if (dobValue === '') {
+                setErrorFor(dob, "Date of birth can't be blank");
+                success = false;
+            } else {
+                setSuccessFor(dob);
+                success = true;
+            }
+
+            if (emailValue === '') {
+                setErrorFor(email, "Email can't be blank");
+                success = false;
+            } else {
+                setSuccessFor(email);
+                success = true;
+            }
+
+            if (bankAccountValue === '') {
+                setErrorFor(bankAccount, "Bank account number can't be blank");
+                success = false;
+            } else {
+                setSuccessFor(bankAccount);
+                success = true;
+            }
+
+            if (sinNumberValue === '') {
+                setErrorFor(sinNumber, "SIN number can't be blank");
+                success = false;
+            } else {
+                setSuccessFor(sinNumber);
+                success = true;
+            }
+
+            if (checkboxes.length === 0) {
+                const control = avail.parentElement;
+                const small = control.querySelector("small");
+                small.innerText = "Availability can't be blank";
+                control.className = 'col control error';
+                success = false;
+            } else if (checkboxes.length !== 0) {
+                const control = avail.parentElement;
+                control.className = 'col control success';
+                success = true;
+            }
+
+            if (wageValue === '') {
+                setErrorFor(wage, "Wage can't be blank");
+                success = false;
+            } else {
+                setSuccessFor(wage);
+                success = true;
+            }
+            return success;
+        }
+
+        function setErrorFor(input, message) {
+            const control = input.parentElement.parentElement;
+            const small = control.querySelector("small");
+            small.innerText = message;
+            control.className = 'col control error';
+        }
+
+        function setSuccessFor(input) {
+            const control = input.parentElement.parentElement;
+            control.className = 'col control success';
+        }
+
+        form.addEventListener("submit", handleFormSubmit);
+
+        function handleFormSubmit(event) {
+            if (!checkInputs()) {
+                event.preventDefault();
+            } else {
+                sendData(event);
+            }
+        }
 
         function sendData(event) {
             event.preventDefault();
