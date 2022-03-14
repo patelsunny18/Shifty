@@ -37,7 +37,7 @@ describe('login page', function() {
 describe('Login employee page', () => {
     it('should navigate to employee page',() => {
         return chai.request('http://localhost:8080')
-            .get('/employee/622a99dc810eeae6c9050dc4')
+            .get('/employee/622d96a9c6b90d7ac27bf842')
             .send()
             .then((res) => {
                 res.should.have.status(200);
