@@ -54,6 +54,11 @@
     /* position: relative; */
   }
   
+  label{
+      font-weight: bold;
+      font-size: 16px;
+  }
+
   .control label {
     display: inline-block;
     margin-bottom: 5px;
@@ -66,13 +71,15 @@
   .control.error input {
     border-color: #e74c3c;
   }
-  
+
   .fa {
     font-size: 24px;
   }
+
   .fa-solid{
     font-size: 24px;
   }
+
   .fa-regular{
     font-size: 24px;
   }

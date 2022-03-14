@@ -51,9 +51,15 @@
   .control {
     margin-bottom: 10px;
     padding-bottom: 20px;
+    border-color: black;
     /* position: relative; */
   }
   
+  label{
+    font-weight: bold;
+    font-size: 16px;
+  }
+
   .control label {
     display: inline-block;
     margin-bottom: 5px;
@@ -66,34 +72,6 @@
   .control.error input {
     border-color: #e74c3c;
   }
-  
-  /* .control i.even-col {
-    position: absolute;
-    top: 2.5em;
-    right: 1.25em;
-    visibility: hidden;
-  }
-  
-  .control i.odd-col {
-    position: absolute;
-    top: 2.5em;
-    left: 27em;
-    visibility: hidden;
-  }
-  
-  .control i.avail {
-    position: absolute;
-    top: 0.25em;
-    left: 6.25em;
-    visibility: hidden;
-  }
-  
-  .control i.wage {
-    visibility: hidden;
-    position: absolute;
-    top: 0.625em;
-    left: 13.125em;
-  } */
   
   .fa {
     font-size: 24px;
