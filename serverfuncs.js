@@ -1,5 +1,9 @@
 'use strict';
 
+const Employee = require('./models/employee');
+const Manager = require('./models/manager');
+const Owner = require('./models/owner');
+
 const generator = require('generate-password');
 
 function getManagerId() {
@@ -42,6 +46,110 @@ function getPassword() {
     return password;
 }
 
+function validateEmployeeId(id) {
+    if (id.length === 6) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function validateManagerId(id) {
+    if (id.length === 7) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function validateOwnerId(id) {
+    if (id.length === 5) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function validatePassword(password) {
+    if (password.length >= 6) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function checkEmployeeLogin(id, password) {
+    return new Promise((resolve, reject) => {
+        Employee.findOne({
+            employeeID: id,
+            password: password
+        }, (err, employee) => {
+            if (err) {
+                reject(err);
+            } else if (employee) {
+                if (employee.password === password) {
+                    resolve(employee);
+                } else {
+                    reject('Wrong password or id');
+                }
+            } else {
+                reject('Employee not found');
+            }
+        });
+    });
+}
+
+function checkManagerLogin(id, password) {
+    return new Promise((resolve, reject) => {
+        Manager.findOne({
+            managerID: id,
+            password: password
+        }, (err, manager) => {
+            if (err) {
+                reject(err);
+            } else if (manager) {
+                if (manager.password === password) {
+                    resolve(manager);
+                } else {
+                    reject('Wrong password or id');
+                }
+            } else {
+                reject('Manager not found');
+            }
+        });
+    });
+}
+
+function checkOwnerLogin(id, password) {
+    return new Promise((resolve, reject) => {
+        Owner.findOne({
+            ownerID: id,
+            password: password
+        }, (err, owner) => {
+            if (err) {
+                reject(err);
+            } else if (owner) {
+                if (owner.password === password) {
+                    resolve(owner);
+                } else {
+                    reject('Wrong password or id');
+                }
+            } else {
+                reject('Owner not found');
+            }
+        });
+    });
+}
+
 exports = module.exports = {
-    getEmployeeId, getManagerId, getPassword
+    getEmployeeId, 
+    getManagerId, 
+    getPassword, 
+    validateEmployeeId, 
+    validateManagerId, 
+    validateOwnerId, 
+    validatePassword, 
+    checkEmployeeLogin, 
+    checkManagerLogin, 
+    checkOwnerLogin
 }
