@@ -98,7 +98,9 @@ app.get('/changeAvailability/:id', async (req, res) => {
     const employee = await Employee.findOne({ _id: id });
 
     let availability = {};
-    if (employee) {
+    if (employee === null) {
+        console.log("User not found!");
+    } else {
         availability = employee.availability;
     }
     res.render('changeAvailability', {

@@ -19,7 +19,7 @@
         <div class="header">
             <h1>Change your current availabilty</h1>
         </div>
-        <form action="/changeAvailability" method="POST" class="form" id="form">
+        <form action="/changeAvailability" class="form" id="form">
             <div class="row control">
                 <div class="col">
                     <div class="row control">
@@ -127,6 +127,7 @@
                             </select>
                         </div>
                     </div>
+                    <small>Error message</small>
                 </div>
             </div>
 
@@ -234,7 +235,15 @@
             }
         })
 
-        form.addEventListener("submit", sendData);
+        form.addEventListener("submit", handleFormSubmit);
+
+        function handleFormSubmit(event) {
+            if (!checkInputs()) {
+                event.preventDefault();
+            } else {
+                sendData(event);
+            }
+        }
 
         function sendData(event) {
             event.preventDefault();
@@ -245,7 +254,7 @@
             for (let i = 0; i < periods.length; i++) {
                 newAvailability[checkboxes[i].id] = periods[i].value;
             }
-            
+
             const data = {
                 availability: newAvailability
             };
@@ -259,6 +268,30 @@
                 .catch((error) => {
                     console.log(error);
                 })
+        }
+
+        function checkInputs() {
+            let success = false;
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            if (checkboxes.length === 0) {
+                setErrorFor("Availability can't be blank");
+                success = false;
+            } else if (checkboxes.length !== 0) {
+                setSuccessFor();
+                success = true;
+            }
+            return success;
+        }
+
+        function setErrorFor(message) {
+            const small = document.querySelector("small");
+            small.innerText = message;
+            small.parentElement.className = 'col control error';
+        }
+
+        function setSuccessFor() {
+            const small = document.querySelector("small");
+            small.parentElement.className = 'col control success';
         }
     </script>
 </body>
