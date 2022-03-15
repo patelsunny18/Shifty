@@ -117,7 +117,6 @@ app.post("/", function (req, res) {
     try {
         let id = req.body.userID;
         let password = req.body.password;
-        // let password = Bcrypt.hashSync(pass, 10);
         let role = "";
 
         Owner.findOne({ ownerID: id, password: password })
@@ -181,9 +180,6 @@ app.post('/addEmployee', function (req, res) {
         const employeeID = getEmployeeId();
         const role = "Employee";
         const sin = req.body.sinNumber;
-        var cipher = CryptoJS.AES.encrypt("PASSWORD", key);
-        cipher = cipher.toString();
-        console.log(cipher);
         const insertEmployee = new Employee({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
