@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const generator = require('generate-password');
+const Bcrypt = require("bcryptjs");
 const path = require('path');
 
 // make webpage availible
@@ -118,7 +119,6 @@ app.post("/", function (req, res) {
     try {
         let id = req.body.userID;
         let password = req.body.password;
-        // let password = Bcrypt.hashSync(pass, 10);
         let role = "";
 
         Owner.findOne({ ownerID: id, password: password })
@@ -182,9 +182,6 @@ app.post('/addEmployee', function (req, res) {
         const employeeID = getEmployeeId();
         const role = "Employee";
         const sin = req.body.sinNumber;
-        var cipher = CryptoJS.AES.encrypt("PASSWORD", key);
-        cipher = cipher.toString();
-        console.log(cipher);
         const insertEmployee = new Employee({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
@@ -346,7 +343,8 @@ app.post('/addManager', function (req, res) {
         })
     }
     catch (error) {
-        response.status(500).send(error);
+        console.log(error)
+        res.status(500).send(error);
     }
 })
 
