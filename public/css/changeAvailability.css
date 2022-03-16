@@ -62,30 +62,8 @@ max-height: 50%;
 #cur {
 color: white !important;
 font-weight: bold;
-border-left: #ff8389 solid;
-border-left-width: 5px;
-}
-
-#curNei1, #curNei2, #curNei3{
-color: white !important;
-border-left: #343A40 5px solid;
-border-left-width: 5px;
-}
-
-#curNei1:hover {
-color: white !important;
-border-left: #fa4d56 5px solid;
-border-left-width: 5px;
-}
-#curNei2:hover {
-color: white !important;
-border-left: #da1e28 5px solid;
-border-left-width: 5px;
-}
-#curNei3:hover {
-color: white !important;
-border-left: #a2191f 5px solid;
-border-left-width: 5px;
+border-bottom: #a2191f solid;
+border-bottom-width: 4px;
 }
 
 #container2 {
