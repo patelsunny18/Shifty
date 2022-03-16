@@ -62,30 +62,8 @@ max-height: 50%;
 #cur {
 color: white !important;
 font-weight: bold;
-border-left: #ff8389 solid;
-border-left-width: 5px;
-}
-
-#curNei1, #curNei2, #curNei3{
-color: white !important;
-border-left: #343A40 5px solid;
-border-left-width: 5px;
-}
-
-#curNei1:hover {
-color: white !important;
-border-left: #fa4d56 5px solid;
-border-left-width: 5px;
-}
-#curNei2:hover {
-color: white !important;
-border-left: #da1e28 5px solid;
-border-left-width: 5px;
-}
-#curNei3:hover {
-color: white !important;
-border-left: #a2191f 5px solid;
-border-left-width: 5px;
+border-bottom: #a2191f solid;
+border-bottom-width: 4px;
 }
 
 #container2 {
@@ -98,17 +76,17 @@ padding: 0;
 }
 
 #subBut{
-width: 30%;
-background-color: #333;
-border-color: #333;
-font-size: large;
-}
-
-#subBut:hover{
-width: 32%;
-background-color: #666;
-font-weight: bold;
-}
+  width: 30%;
+  background-color: #333;
+  border-color: #333;
+  font-size: large;
+  }
+  
+  #subBut:hover{
+  width: 32%;
+  background-color: #666;
+  font-weight: bold;
+  }
 
 .cen {
   display: flex;
@@ -175,8 +153,7 @@ font-weight: bold;
   font-size: 16px;
   width: 100%;
   border-radius: 4px;
-}
-
+  }  
 
 .dropdown-menu li:first-child:hover {
   background-color: #ff8389;   

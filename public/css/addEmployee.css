@@ -49,8 +49,8 @@ display: block !important;
 }
 
 .navbar .nav-item.current {
-border-left: #750e13 5px solid;
-border-left-width: 5px;
+border-bottom: #750e13 4px solid;
+border-bottom-width: 5px;
 color:white;
 font-weight: bold;
 }
@@ -63,7 +63,7 @@ max-height: 50%;
 color: white !important;
 font-weight: bold;
 border-left: #ff8389 solid;
-border-left-width: 5px;
+border-left-width: 4px;
 }
 
 #curNei1, #curNei2, #curNei3{
@@ -75,17 +75,17 @@ border-left-width: 5px;
 #curNei1:hover {
 color: white !important;
 border-left: #fa4d56 5px solid;
-border-left-width: 5px;
+border-left-width: 4px;
 }
 #curNei2:hover {
 color: white !important;
 border-left: #da1e28 5px solid;
-border-left-width: 5px;
+border-left-width: 4px;
 }
 #curNei3:hover {
 color: white !important;
 border-left: #a2191f 5px solid;
-border-left-width: 5px;
+border-left-width: 4px;
 }
 
 #container2 {
