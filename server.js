@@ -37,7 +37,11 @@ app.set('views', path.join(__dirname, '/public/views'));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// make /public directory available for ejs
 app.use(express.static(__dirname + '/public'))
+// make /public/css directory available for external CSS
+app.use(express.static(__dirname + '/public/css/'));
 
 app.get('/', (req, res) => {
     res.render('login');
