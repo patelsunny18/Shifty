@@ -43,15 +43,15 @@ function sendData(e) {
             switch (response.data.role) {
                 case "Owner": {
                     console.log(response.data.id);
-                    window.location = `/owner/${response.data.id}`;
+                    window.location = `/owner/home/${response.data.id}`;
                     break;
                 }
                 case "Manager": {
-                    window.location = `/manager/${response.data.id}`;
+                    window.location = `/manager/home/${response.data.id}`;
                     break;
                 }
                 case "Employee": {
-                    window.location = `/employee/${response.data.id}`;
+                    window.location = `/employee/home/${response.data.id}`;
                     break;
                 }
             }

@@ -52,7 +52,7 @@ app.get('/addEmployee', (req, res) => {
 });
 
 app.get('/removeManager', (req, res) => {
-    res.sendFile('removeManager');
+    res.render('removeManager');
 });
 
 app.get('/removeEmployee', (req, res) => {
@@ -67,36 +67,36 @@ app.get("/createSchedule", (req, res) => {
     res.render('createSchedule');
 });
 
-app.get('/owner/:id', async (req, res) => {
+app.get('/owner/home/:id', async (req, res) => {
     const { id } = req.params;
     const owner = await Owner.findById({ _id: id });
-    res.render('owner', {
+    res.render('ownerHome', {
         id: id,
         name: `${owner.firstName} ${owner.lastName}`
     });
 })
 
-app.get('/manager/:id', async (req, res) => {
+app.get('/manager/home/:id', async (req, res) => {
     const { id } = req.params;
     const manager = await Manager.findById({ _id: id });
-    res.render('manager', {
+    res.render('managerHome', {
         id: id,
         name: `${manager.firstName} ${manager.lastName}`
     });
 })
 
-app.get('/employee/:id', async (req, res) => {
+app.get('/employee/home/:id', async (req, res) => {
     const { id } = req.params;
     const employee = await Employee.findById({ _id: id });
-    res.render('employee', {
+    res.render('employeeHome', {
         id: id,
         name: `${employee.firstName} ${employee.lastName}`
     });
 })
 
-app.get('/changeAvailability/:id', async (req, res) => {
+app.get('/employee/changeAvailability/:id', async (req, res) => {
     const { id } = req.params;
-    const employee = await Employee.findOne({ _id: id });
+    const employee = await Employee.findById({ _id: id });
 
     let availability = {};
     if (employee === null) {
@@ -108,7 +108,29 @@ app.get('/changeAvailability/:id', async (req, res) => {
         availability: JSON.stringify(availability),
         id: id
     });
-})
+});
+
+app.get('/employee/viewSchedule/:id', async (req, res) => {
+    const { id } = req.params;
+    const employee = await Employee.findById({ _id: id });
+
+    if (employee === null) {
+        console.log("User not found");
+    } else {
+        res.render('employeeViewSchedule', {
+            id: id
+        });
+    }
+});
+
+app.get('/employee/requestTimeoff/:id', async (req, res) => {
+    const { id } = req.params;
+    const employee = await Employee.findById({ _id: id });
+
+    res.render('requestTimeoff', {
+        id: id
+    });
+});
 
 app.get("/editSchedule", (req, res) => {
     res.render('editSchedule')
@@ -116,63 +138,66 @@ app.get("/editSchedule", (req, res) => {
 
 
 app.post("/", function (req, res) {
-    try {
-        let id = req.body.userID;
-        let password = req.body.password;
-        let role = "";
+    let id = req.body.userID;
+    let password = req.body.password;
 
-        Owner.findOne({ ownerID: id, password: password })
-            .then((result) => {
-                role = result.role;
-                res.send(role);
-                console.log("Owner logged in");
-            })
-            .catch((err) => {
-                Manager.findOne({ managerID: id })
-                    .then((result) => {
-                        const hash = result.password
-                        Bcrypt.compare(password, hash, function (err, isMatch) {
-                            if (err) {
-                                throw err;
+    Owner.findOne({ ownerID: id, password: password })
+        .then((result) => {
+            const data = {
+                id: result._id,
+                role: result.role
+            }
+            res.send(data);
+            console.log("Owner logged in");
+        })
+        .catch((err) => {
+            Manager.findOne({ managerID: id })
+                .then((result) => {
+                    const hash = result.password
+                    Bcrypt.compare(password, hash, function (err, isMatch) {
+                        if (err) {
+                            throw err;
+                        }
+                        else if (!isMatch) {
+                            console.log("Password doesn't match")
+                        }
+                        else if (isMatch) {
+                            const data = {
+                                id: result._id,
+                                role: result.role
                             }
-                            else if (!isMatch) {
-                                console.log("Password doesn't match")
-                            }
-                            else if (isMatch) {
-                                role = result.role;
-                                res.send(role);
-                                console.log("Manager logged in");
-                            }
+                            res.send(data);
+                            console.log("Manager logged in");
+                        }
+                    })
+                })
+                .catch((err) => {
+                    Employee.findOne({ employeeID: id })
+                        .then((result) => {
+                            const hash = result.password
+                            Bcrypt.compare(password, hash, function (err, isMatch) {
+                                if (err) {
+                                    throw err;
+                                }
+                                else if (!isMatch) {
+                                    console.log("Password doesn't match")
+                                }
+                                else if (isMatch) {
+                                    const data = {
+                                        id: result._id,
+                                        role: result.role
+                                    }
+                                    res.send(data);
+                                    console.log("Employee logged in");
+                                }
+                            })
                         })
-                    })
-                    .catch((err) => {
-                        Employee.findOne({ employeeID: id })
-                            .then((result) => {
-                                const hash = result.password
-                                Bcrypt.compare(password, hash, function (err, isMatch) {
-                                    if (err) {
-                                        throw err;
-                                    }
-                                    else if (!isMatch) {
-                                        console.log("Password doesn't match")
-                                    }
-                                    else if (isMatch) {
-                                        role = result.role;
-                                        res.send(role);
-                                        console.log("Employee logged in");
-                                    }
-                                })
-                            })
-                            .catch((err) => {
-                                console.log("Oops! User doesn't exists!");
-                                res.sendStatus(404);
-                            })
-                    })
-            })
-    }
-    catch (error) {
-        response.status(500).send(error);
-    }
+                        .catch((err) => {
+                            console.log("Oops! User doesn't exists!");
+                            res.sendStatus(404);
+                        })
+                })
+        })
 });
 
 app.post('/addEmployee', function (req, res) {
