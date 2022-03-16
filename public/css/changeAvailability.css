@@ -76,17 +76,17 @@ padding: 0;
 }
 
 #subBut{
-width: 30%;
-background-color: #333;
-border-color: #333;
-font-size: large;
-}
-
-#subBut:hover{
-width: 32%;
-background-color: #666;
-font-weight: bold;
-}
+  width: 30%;
+  background-color: #333;
+  border-color: #333;
+  font-size: large;
+  }
+  
+  #subBut:hover{
+  width: 32%;
+  background-color: #666;
+  font-weight: bold;
+  }
 
 .cen {
   display: flex;
@@ -153,8 +153,7 @@ font-weight: bold;
   font-size: 16px;
   width: 100%;
   border-radius: 4px;
-}
-
+  }  
 
 .dropdown-menu li:first-child:hover {
   background-color: #ff8389;   
