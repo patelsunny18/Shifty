@@ -43,7 +43,6 @@ app.use(express.static(__dirname + '/public'))
 // make /public/css directory available for external CSS
 app.use(express.static(__dirname + '/public/css/'));
 
-
 app.get('/', (req, res) => {
     res.render('login');
 });
@@ -72,36 +71,36 @@ app.get("/createSchedule", (req, res) => {
     res.render('createSchedule');
 });
 
-app.get('/owner/:id', async (req, res) => {
+app.get('/owner/home/:id', async (req, res) => {
     const { id } = req.params;
     const owner = await Owner.findById({ _id: id });
-    res.render('owner', {
+    res.render('ownerHome', {
         id: id,
         name: `${owner.firstName} ${owner.lastName}`
     });
 })
 
-app.get('/manager/:id', async (req, res) => {
+app.get('/manager/home/:id', async (req, res) => {
     const { id } = req.params;
     const manager = await Manager.findById({ _id: id });
-    res.render('manager', {
+    res.render('managerHome', {
         id: id,
         name: `${manager.firstName} ${manager.lastName}`
     });
 })
 
-app.get('/employee/:id', async (req, res) => {
+app.get('/employee/home/:id', async (req, res) => {
     const { id } = req.params;
     const employee = await Employee.findById({ _id: id });
-    res.render('employee', {
+    res.render('employeeHome', {
         id: id,
         name: `${employee.firstName} ${employee.lastName}`
     });
 })
 
-app.get('/changeAvailability/:id', async (req, res) => {
+app.get('/employee/changeAvailability/:id', async (req, res) => {
     const { id } = req.params;
-    const employee = await Employee.findOne({ _id: id });
+    const employee = await Employee.findById({ _id: id });
 
     let availability = {};
     if (employee === null) {
@@ -113,7 +112,29 @@ app.get('/changeAvailability/:id', async (req, res) => {
         availability: JSON.stringify(availability),
         id: id
     });
-})
+});
+
+app.get('/employee/viewSchedule/:id', async (req, res) => {
+    const { id } = req.params;
+    const employee = await Employee.findById({ _id: id });
+
+    if (employee === null) {
+        console.log("User not found");
+    } else {
+        res.render('employeeViewSchedule', {
+            id: id
+        });
+    }
+});
+
+app.get('/employee/requestTimeoff/:id', async (req, res) => {
+    const { id } = req.params;
+    const employee = await Employee.findById({ _id: id });
+
+    res.render('requestTimeoff', {
+        id: id
+    });
+});
 
 app.get("/editSchedule", (req, res) => {
     res.render('editSchedule')
