@@ -311,9 +311,15 @@ function sendData(event) {
 
     axios.post('/addEmployee', data)
         .then((result) => {
-            alert(`New employee added successfully!\n\nUserID: ${result.data.userID}\nPassword: ${result.data.password}`);
+            if (result.data.statusCode === 409) {
+                alert(result.data.message);
+            }
+            else {
+                alert(`New employee added successfully!\n\nUserID: ${result.data.userID}\nPassword: ${result.data.password}`);
+            }
         })
         .catch((error) => {
+            console.log(error);
             alert("Oops! Something went wrong. Please, try again.");
         })
 }

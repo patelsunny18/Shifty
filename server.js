@@ -37,7 +37,12 @@ app.set('views', path.join(__dirname, '/public/views'));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// make /public directory available for ejs
 app.use(express.static(__dirname + '/public'))
+// make /public/css directory available for external CSS
+app.use(express.static(__dirname + '/public/css/'));
+
 
 app.get('/', (req, res) => {
     res.render('login');
@@ -52,7 +57,7 @@ app.get('/addEmployee', (req, res) => {
 });
 
 app.get('/removeManager', (req, res) => {
-    res.sendFile('removeManager');
+    res.render('removeManager');
 });
 
 app.get('/removeEmployee', (req, res) => {
@@ -116,66 +121,70 @@ app.get("/editSchedule", (req, res) => {
 
 
 app.post("/", function (req, res) {
-    try {
-        let id = req.body.userID;
-        let password = req.body.password;
-        let role = "";
+    let id = req.body.userID;
+    let password = req.body.password;
 
-        Owner.findOne({ ownerID: id, password: password })
-            .then((result) => {
-                role = result.role;
-                res.send(role);
-                console.log("Owner logged in");
-            })
-            .catch((err) => {
-                Manager.findOne({ managerID: id })
-                    .then((result) => {
-                        const hash = result.password
-                        Bcrypt.compare(password, hash, function (err, isMatch) {
-                            if (err) {
-                                throw err;
+    Owner.findOne({ ownerID: id, password: password })
+        .then((result) => {
+            const data = {
+                id: result._id,
+                role: result.role
+            }
+            res.send(data);
+            console.log("Owner logged in");
+        })
+        .catch((err) => {
+            Manager.findOne({ managerID: id })
+                .then((result) => {
+                    const hash = result.password
+                    Bcrypt.compare(password, hash, function (err, isMatch) {
+                        if (err) {
+                            throw err;
+                        }
+                        else if (!isMatch) {
+                            console.log("Password doesn't match")
+                        }
+                        else if (isMatch) {
+                            const data = {
+                                id: result._id,
+                                role: result.role
                             }
-                            else if (!isMatch) {
-                                console.log("Password doesn't match")
-                            }
-                            else if (isMatch) {
-                                role = result.role;
-                                res.send(role);
-                                console.log("Manager logged in");
-                            }
+                            res.send(data);
+                            console.log("Manager logged in");
+                        }
+                    })
+                })
+                .catch((err) => {
+                    Employee.findOne({ employeeID: id })
+                        .then((result) => {
+                            const hash = result.password
+                            Bcrypt.compare(password, hash, function (err, isMatch) {
+                                if (err) {
+                                    throw err;
+                                }
+                                else if (!isMatch) {
+                                    console.log("Password doesn't match")
+                                }
+                                else if (isMatch) {
+                                    const data = {
+                                        id: result._id,
+                                        role: result.role
+                                    }
+                                    res.send(data);
+                                    console.log("Employee logged in");
+                                }
+                            })
                         })
-                    })
-                    .catch((err) => {
-                        Employee.findOne({ employeeID: id })
-                            .then((result) => {
-                                const hash = result.password
-                                Bcrypt.compare(password, hash, function (err, isMatch) {
-                                    if (err) {
-                                        throw err;
-                                    }
-                                    else if (!isMatch) {
-                                        console.log("Password doesn't match")
-                                    }
-                                    else if (isMatch) {
-                                        role = result.role;
-                                        res.send(role);
-                                        console.log("Employee logged in");
-                                    }
-                                })
-                            })
-                            .catch((err) => {
-                                console.log("Oops! User doesn't exists!");
-                                res.sendStatus(404);
-                            })
-                    })
-            })
-    }
-    catch (error) {
-        response.status(500).send(error);
-    }
+                        .catch((err) => {
+                            console.log("Oops! User doesn't exists!");
+                            res.sendStatus(404);
+                        })
+                })
+        })
 });
 
-app.post('/addEmployee', function (req, res) {
+
+app.post('/addEmployee', (req, res) => {
     try {
         const password = getPassword();
         const hashedPass = Bcrypt.hashSync(password, 10);
@@ -199,7 +208,9 @@ app.post('/addEmployee', function (req, res) {
         });
 
         Manager.find({ $or: [{ phoneNumber: req.body.phoneNumber }, { email: req.body.email }, { sin: req.body.sinNumber }] }, function (err, result) {
+            console.log(result)
             if (err) throw err;
+            console.log(result.length);
             if (result.length === 0) {
                 insertEmployee.save()
                     .then((result) => {
@@ -214,28 +225,35 @@ app.post('/addEmployee', function (req, res) {
                     })
             }
             else {
-                if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
-                    console.log("A manager with similar phone number, email and SIN number already exists in the system.")
+                let sentence = "";
+                if (result[0].phoneNumber === req.body.phoneNumber && result[0].email === req.body.email && result[0].sin === req.body.sinNumber) {
+                    let sentence = "A manager with similar phone number, email and SIN number already exists in the system."
                 }
-                else if (result[0].phoneNumber == req.body.phoneNumber && result[0].email == req.body.email) {
-                    console.log("A manager with similar phone number and email already exists in the system.")
+                else if (result[0].phoneNumber === req.body.phoneNumber && result[0].email === req.body.email) {
+                    sentence = "A manager with similar phone number and email already exists in the system."
                 }
-                else if (result[0].phoneNumber == req.body.phoneNumber && result[0].sin == req.body.sinNumber) {
-                    console.log("A manager with similar phone number and SIN number already exists in the system.")
+                else if (result[0].phoneNumber === req.body.phoneNumber && result[0].sin === req.body.sinNumber) {
+                    sentence = "A manager with similar phone number and SIN number already exists in the system."
                 }
-                else if (result[0].email == req.body.email && result[0].sin == req.body.sinNumber) {
-                    console.log("A manager with similar email and SIN number already exists in the system.")
+                else if (result[0].email === req.body.email && result[0].sin === req.body.sinNumber) {
+                    sentence = "A manager with similar email and SIN number already exists in the system."
                 }
-                else if (result[0].phoneNumber == req.body.phoneNumber) {
-                    console.log("A manager with similar phone number already exists in the system.")
+                else if (result[0].phoneNumber === req.body.phoneNumber) {
+                    let sentence = "A manager with similar phone number already exists in the system."
                 }
-                else if (result[0].email == req.body.email) {
-                    console.log("A manager with similar email already exists in the system.")
+                else if (result[0].email === req.body.email) {
+                    sentence = "A manager with similar email already exists in the system."
                 }
-                else if (result[0].sin == req.body.sinNumber) {
-                    console.log("A manager with similar SIN number already exists in the system.")
+                else if (result[0].sin === req.body.sinNumber) {
+                    sentence = "A manager with similar SIN number already exists in the system."
                 }
+                let responseData = {
+                    statusCode: 409,
+                    message: sentence
+                }
+                res.send(responseData);
             }
+
         })
     }
     catch (err) {
@@ -244,42 +262,69 @@ app.post('/addEmployee', function (req, res) {
 })
 
 app.post('/removeEmployee', function (req, res) {
-    let fName = req.body.firstName;
-    let lName = req.body.lastName;
-    let id = req.body.employeeID;
-    var myquery = { firstName: fName, lastName: lName, employeeID: id };
-    Employee.deleteOne(myquery)
-        .then((result) => {
-            console.log("Employee removed from the system")
-            let responseData = {
-                first: fName,
-                last: lName
-            };
-            res.send(responseData)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+    try {
+        let fName = req.body.firstName;
+        let lName = req.body.lastName;
+        let id = req.body.employeeID;
+        var myquery = { firstName: fName, lastName: lName, employeeID: id };
+        Employee.deleteOne(myquery)
+            .then((result) => {
+                console.log(result.deletedCount);
+                if (result.deletedCount == 1) {
+                    console.log("Employee removed from the system")
+                    let responseData = {
+                        first: fName,
+                        last: lName
+                    };
+                    res.send(responseData)
+                }
+                else {
+                    console.log("Employee doesn't exist in the system.")
+                }
+            })
+            .catch((err) => {
+                res.send(err)
+            })
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).send(error)
+    }
 })
 
+
 app.post('/removeManager', function (req, res) {
-    let fName = req.body.firstName;
-    let lName = req.body.lastName;
-    let id = req.body.managerID;
-    var myquery = { firstName: fName, lastName: lName, managerID: id };
-    Manager.deleteOne(myquery)
-        .then((result) => {
-            console.log("Manager removed from the system")
-            let responseData = {
-                first: fName,
-                last: lName
-            };
-            res.send(responseData)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+    try {
+        let fName = req.body.firstName;
+        let lName = req.body.lastName;
+        let id = req.body.managerID;
+        var myquery = { firstName: fName, lastName: lName, managerID: id };
+        Manager.deleteOne(myquery)
+            .then((result) => {
+                console.log(result.deletedCount);
+                if (result.deletedCount == 1) {
+                    console.log("Manager removed from the system")
+                    let responseData = {
+                        first: fName,
+                        last: lName
+                    };
+                    res.send(responseData)
+                }
+                else {
+                    console.log("Manager doesn't exist in the system.")
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                res.send(err)
+            })
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).send(error);
+    }
 })
+
 
 app.post('/addManager', function (req, res) {
     try {
@@ -302,7 +347,7 @@ app.post('/addManager', function (req, res) {
             role: role
         });
 
-        Employee.find({ $or: [{ phoneNumber: req.body.phoneNumber }, { email: req.body.email }, { sin: req.body.sinNumber }] }, function (err, result) {
+        Employee.find({ $or: [{ phoneNumber: req.body.phoneNumber }, { email: req.body.email }, { sin: req.body.sinNumber }] }, async (err, result) => {
             if (err) throw err;
             if (result.length === 0) {
                 insertManager.save()
