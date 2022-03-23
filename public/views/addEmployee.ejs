@@ -320,27 +320,28 @@
     </div>
 
     <div id="myModal" class="modal fade">
-        <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-                <div class="modal-header justify-content-center">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-circle-check" id="checkMark"></i>
+        <div id="myModal" class="modal fade">
+            <div class="modal-dialog modal-confirm">
+                <div class="modal-content">
+                    <div class="modal-header justify-content-center">
+                        <div class="icon-box">
+                            <i class="fa-solid fa-circle-check" id="checkMark"></i>
+                        </div>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn" onclick="location.reload();"><i class="fa-solid fa-xmark"></i></button>
                     </div>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn" onclick="location.reload();"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <div class="modal-body text-center">
-                    <h4>Successful!</h4>	
-                    <p class="text-center" id="test"></p>
-                    <p class="text-center" id="test1"></p>
-                    <p class="text-center" id="test2"></p>
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-success" id="copy-btn"><span>Copy</span><i class="fa-solid fa-copy"></i></button>
-                    <button type="button" class="btn btn-success btn-block" data-bs-dismiss="modal" onclick="location.reload();"><span>Ok</span><i class="fa-solid fa-check" id="okIcon"></i></button>
+                    <div class="modal-body text-center">
+                        <h4>Successful!</h4>	
+                        <p class="text-center" id="test"></p>
+                        <p class="text-center" id="test1"></p>
+                        <p class="text-center" id="test2"></p>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-success" id="copy-btn" onclick="copy()"><span id="copyTxt">Copy</span><i class="fa-solid fa-copy"></i></button>
+                        <button type="button" class="btn btn-success btn-block" data-bs-dismiss="modal" onclick="location.reload();"><span>Ok</span><i class="fa-solid fa-check" id="okIcon"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     
     <!-- Link for using Axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

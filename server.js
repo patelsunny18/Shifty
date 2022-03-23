@@ -101,13 +101,29 @@ app.get('/employee/home/:id', async (req, res) => {
     });
 })
 
+app.get('/employee/edit/:id', async(req, res) => {
+    const { id } = req.params;
+    const employee = await Employee.findById({ _id: id });
+
+    let data = {};
+    if (employee === null) {
+        console.log("User not found!");
+    } else {
+        data = employee;
+    }
+    res.render('edit', {
+        data: JSON.stringify(data),
+        id: id
+    });
+});
+
 app.get('/employee/changeAvailability/:id', async (req, res) => {
     const { id } = req.params;
     const employee = await Employee.findById({ _id: id });
 
     let availability = {};
     if (employee === null) {
-        console.log("User not found!");
+        console.log("User not fou nd!");
     } else {
         availability = employee.availability;
     }
@@ -115,7 +131,7 @@ app.get('/employee/changeAvailability/:id', async (req, res) => {
         availability: JSON.stringify(availability),
         id: id
     });
-});
+})
 
 app.get('/employee/viewSchedule/:id', async (req, res) => {
     const { id } = req.params;
@@ -487,6 +503,13 @@ app.post('/getAvailability', async function (req, res) {
         res.send(result);
     })
 })
+
+// app.put('/edit/:id', async (req, res) => {
+//     const { id } = req.params;
+//     const newAvailability = req.body.availability;
+//     const employee = await Employee.findByIdAndUpdate({ _id: `${id}` }, { availability: newAvailability });
+//     res.status(200).send("updated");
+// })
 
 app.put('/changeAvailability/:id', async (req, res) => {
     const { id } = req.params;

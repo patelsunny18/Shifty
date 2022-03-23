@@ -128,7 +128,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 control">
+                <div class="col-md-6 col-sm-12 control">
                     <label for="Address">Address</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -140,7 +140,7 @@
                     </div>
                     <small>Error message</small>
                 </div>
-                <div class="col-md-6 control">
+                <div class="col-md-6 col-sm-12 control">
                     <label for="phone">Phone Number</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -315,6 +315,18 @@
                     </div>
                     <small class="avail">Error message</small>
                 </div>
+                <div class="col-md-6 control">
+                    <!-- <label for="wage">Wage (per hour)</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">
+                                <i class="fa-solid fa-money-bill-1"></i>
+                            </div>
+                        </div>
+                        <input type="text" name="wage" id="wage">
+                    </div>
+                    <small class="wage">Error message</small> -->
+                </div>
             </div>
             <div class="cen">
                 <button type="submit" id="subBut">Submit</button>
@@ -338,7 +350,7 @@
                     <p class="text-center" id="test2"></p>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-success" id="copy-btn"><span>Copy</span><i class="fa-solid fa-copy"></i></button>
+                    <button type="button" class="btn btn-success" id="copy-btn" onclick="copy()"><span id="copyTxt">Copy</span><i class="fa-solid fa-copy"></i></button>
                     <button type="button" class="btn btn-success btn-block" data-bs-dismiss="modal" onclick="location.reload();"><span>Ok</span><i class="fa-solid fa-check" id="okIcon"></i></button>
                 </div>
             </div>
