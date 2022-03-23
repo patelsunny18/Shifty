@@ -15,7 +15,7 @@
         <link rel="stylesheet" type="text/css" href="../css/editSchedule.css">
 </head>
 
-<body onload="display()">
+<body onload="schedules()">
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
         <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
@@ -71,9 +71,14 @@
   </nav>
 
   <div>
-    <label for="input">Name to add to schedule</label>
-    <input type="text" id="AName">
 
+    <label for="calendar">Select which week you would like to view a schedule for:</label>
+    <select name="calendar" id="calendar"></select>
+    <button onclick="display()">Submit</button>
+    <br>
+    <label for="nameslist">Name to add to schedule</label>
+    <select name="nameslist" id="nameslist"></select>
+    <button onclick="getAvailiblity()">Select to Add</button>
 
     <button onclick="add()">Add to Schedule</button>
 
@@ -95,25 +100,41 @@
     <tbody>
       <tr>
       <tr>
-        <td><input type="text" id="sunday"></td>
-        <td><input type="text" id="monday"></td>
-        <td><input type="text" id="tuesday"></td>
-        <td><input type="text" id="wednesday"></td>
-        <td><input type="text" id="thursday"></td>
-        <td><input type="text" id="friday"></td>
-        <td><input type="text" id="saturday"></td>
+        <td><select  id="sunday"></td>
+        <td><select  id="monday"></td>
+        <td><select  id="tuesday"></td>
+        <td><select  id="wednesday"></td>
+        <td><select  id="thursday"></td>
+        <td><select  id="friday"></td>
+        <td><select  id="saturday"></td>
       </tr>
       </tr>
     </tbody>
   </table>
   <br>
 
-  <label for="input">Name</label>
-    <input type="text" id="name">
-  <label for="input">Day</label>
-    <input type="text" id="day">
-  <label for="input">Shift time</label>
-    <input type="text" id="time">
+  <label for="name">Name</label>
+  <select name="name" id="name"></select>
+    
+
+  <label for="day">Day</label>
+  <select id="day">
+    <option value="sunday">Sunday</option>
+    <option value="monday">Monday</option>
+    <option value="tuesday">Tuesday</option>
+    <option value="wednesday">Wednesday</option>
+    <option value="thursday">Thursday</option>
+    <option value="friday">Friday</option>
+    <option value="saturday">Saturday</option>
+  </select>
+    
+  <label for="shift">Shift</label>
+  <select id="shift">
+    <option value="day">Day</option>
+    <option value="night">Night</option>
+    <option value="">No Shift</option>
+  </select>
+    
   
   <button onclick="edit()">Edit</button>
   <button onclick="finializeChanges()">Submit Changes</button>
@@ -151,10 +172,10 @@
   function add() {
     const schedulediv = document.getElementById("Schedule")
 
-    let elementExists = !!document.getElementById(document.getElementById('AName').value)
+    let elementExists = !!document.getElementById(document.getElementById('nameslist').value)
     if (elementExists == false) {
       var new_row = document.createElement('tr')
-      new_row.id = document.getElementById('AName').value;
+      new_row.id = document.getElementById('nameslist').value;
       schedulediv.append(new_row)
 
     }
@@ -166,38 +187,38 @@
 
 
     let name = document.createElement('td')
-    name.innerText = document.getElementById('AName').value
+    name.innerText = document.getElementById('nameslist').value
 
     let sunday = document.createElement('td')
     sunday.innerText = document.getElementById('sunday').value
-    sunday.id = 'Sunday' + document.getElementById('AName').value
+    sunday.id = 'Sunday' + document.getElementById('nameslist').value
 
     let monday = document.createElement('td')
     monday.innerText = document.getElementById('monday').value
-    monday.id = 'Monday' + document.getElementById('AName').value
+    monday.id = 'Monday' + document.getElementById('nameslist').value
 
     let tuesday = document.createElement('td')
     tuesday.innerText = document.getElementById('tuesday').value
-    tuesday.id = 'Tuesday'+ document.getElementById('AName').value
+    tuesday.id = 'Tuesday'+ document.getElementById('nameslist').value
 
     let wednesday = document.createElement('td')
     wednesday.innerText = document.getElementById('wednesday').value
-    wednesday.id = 'Wednesday'+ document.getElementById('AName').value
+    wednesday.id = 'Wednesday'+ document.getElementById('nameslist').value
 
     let thursday = document.createElement('td')
     thursday.innerText = document.getElementById('thursday').value
-    thursday.id = 'Thursday'+ document.getElementById('AName').value
+    thursday.id = 'Thursday'+ document.getElementById('nameslist').value
 
     let friday = document.createElement('td')
     friday.innerText = document.getElementById('friday').value
-    friday.id = 'Friday'+ document.getElementById('AName').value
+    friday.id = 'Friday'+ document.getElementById('nameslist').value
 
     let saturday = document.createElement('td')
     saturday.innerText = document.getElementById('saturday').value
-    saturday.id = 'Saturday'+ document.getElementById('AName').value
+    saturday.id = 'Saturday'+ document.getElementById('nameslist').value
 
 
-    let add = document.getElementById(document.getElementById('AName').value)
+    let add = document.getElementById(document.getElementById('nameslist').value)
     add.append(name, sunday, monday, tuesday, wednesday, thursday, friday, saturday)
 
     document.getElementById('sunday').value = ''
@@ -209,61 +230,81 @@
     document.getElementById('saturday').value = ''
   }
 
-    function display() {
+  function display() {
+  
+  const schedulediv = document.getElementById("Schedule")
+  let selected_date = document.getElementById("calendar").value
+  let names_on_schedule = document.getElementById("name")
+  console.log(selected_date)
 
-    const schedulediv = document.getElementById("Schedule")
 
-    let shifts = [];
-    axios.get('/getSchedule')
-      .then((result) => {
-        
-        shifts = result.data;
-        
+  let shifts = [];
+  axios.post('/getSchedule', {date:selected_date})
+    .then((result) => {
+      // console.log(result.data);
+      shifts = result.data;
+      console.log(shifts)
 
-        for (let i = 0; i < shifts.length; i++) {
-          let new_row = document.createElement('tr')
-          new_row.id = i;
-          schedulediv.append(new_row)
+      for (var i = 0; i < shifts.length; i++) {
+        var new_row = document.createElement('tr')
+        new_row.id = i;
+        schedulediv.append(new_row)
 
-          let name = document.createElement('td')
-              name.innerText = shifts[i].name
+        var name = document.createElement('td')
+        name.innerText = shifts[i].name
 
-              let sunday = document.createElement('td')
-              sunday.innerText = shifts[i].sunday
-              sunday.id = 'Sunday' + shifts[i].name
+        var select_list = document.createElement('option')
+        select_list.innerText = shifts[i].name
+        select_list.value = shifts[i].name
+        names_on_schedule.append(select_list)
 
-              let monday = document.createElement('td')
-              monday.innerText = shifts[i].monday
-              monday.id = 'Monday' + shifts[i].name
+        var sunday = document.createElement('td')
+        sunday.innerText = shifts[i].sunday
 
-              let tuesday = document.createElement('td')
-              tuesday.innerText = shifts[i].tuesday
-              tuesday.id = 'Tuesday'+ shifts[i].name
+        var monday = document.createElement('td')
+        monday.innerText = shifts[i].monday
 
-              let wednesday = document.createElement('td')
-              wednesday.innerText = shifts[i].wednesday
-              wednesday.id = 'Wednesday'+ shifts[i].name
+        var tuesday = document.createElement('td')
+        tuesday.innerText = shifts[i].tuesday
 
-              let thursday = document.createElement('td')
-              thursday.innerText = shifts[i].thursday
-              thursday.id = 'Thursday'+ shifts[i].name
+        var wednesday = document.createElement('td')
+        wednesday.innerText = shifts[i].wednesday
 
-              let friday = document.createElement('td')
-              friday.innerText = shifts[i].friday
-              friday.id = 'Friday'+ shifts[i].name
+        var thursday = document.createElement('td')
+        thursday.innerText = shifts[i].thursday
 
-              let saturday = document.createElement('td')
-              saturday.innerText = shifts[i].saturday
-              saturday.id = 'Saturday'+ shifts[i].name
+        var friday = document.createElement('td')
+        friday.innerText = shifts[i].friday
 
-              let add = document.getElementById(i)
-              add.append(name, sunday, monday, tuesday, wednesday, thursday, friday, saturday)
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        var saturday = document.createElement('td')
+        saturday.innerText = shifts[i].saturday
+
+        var add = document.getElementById(i)
+        add.append(name, sunday, monday, tuesday, wednesday, thursday, friday, saturday)
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+
+function schedules(){
+const nlist = document.getElementById("calendar")
+
+axios.get('/getWeeks').then(
+  (result) => {
+    
+    for(let i = 0; i < result.data.length; i++){
+      var option = document.createElement('option')
+      option.innerText = result.data[i].week
+      option.value = result.data[i].week
+      nlist.append(option)
     }
+    employees()
+  } 
+)
+}
 
     function finializeChanges(){
       let schedule = document.getElementById('Schedule').rows.length
@@ -305,6 +346,302 @@
       document.getElementById(lookup).innerText = document.getElementById('time').value
     }
 
+    function employees(){
+    const nlist = document.getElementById("nameslist")
+
+    axios.get('/getNames').then(
+      (result) => {
+        for(let i = 0; i < result.data.length; i++){
+          var option = document.createElement('option')
+          option.innerText = result.data[i].firstName
+          option.value = result.data[i].firstName
+          nlist.append(option)
+        }
+      }
+    )
+  }
+  
+  function getAvailiblity(){
+    clearshifts()
+    const name = document.getElementById('nameslist').value
+    axios.post('/getAvailability', {name: name}).then(
+      (result) => {
+        console.log(result.data[0].availability)
+        if (result.data[0].availability.sunday != undefined){
+          if(result.data[0].availability.sunday == 'allDay'){
+            var option = document.createElement('option')
+          option.innerText = "day"
+          option.value = "day"
+          option.id = "day"
+          option.className = "shift"
+          document.getElementById("sunday").append(option)
+          var option = document.createElement('option')
+          option.innerText = "night"
+          option.value = "night"
+          option.id = "night"
+          option.className = "shift"
+          document.getElementById("sunday").append(option)
+          }
+          else{
+            var option = document.createElement('option')
+          option.innerText = result.data[0].availability.sunday
+          option.value = result.data[0].availability.sunday
+          option.id = result.data[0].availability.sunday
+          option.className = "shift"
+          document.getElementById("sunday").append(option)
+          }
+        }
+        
+          var option = document.createElement('option')
+          option.innerText = "No shift"
+          option.value = ""
+          option.className = "shift"
+          document.getElementById("sunday").append(option)
+        
+
+        if (result.data[0].availability.monday != undefined){
+
+          if(result.data[0].availability.monday == 'allDay'){
+            var option = document.createElement('option')
+          option.innerText = "day"
+          option.value = "day"
+          option.id = "day"
+          option.className = "shift"
+          document.getElementById("monday").append(option)
+          var option = document.createElement('option')
+          option.innerText = "night"
+          option.value = "night"
+          option.id = "night"
+          option.className = "shift"
+          document.getElementById("monday").append(option)
+          }
+          else{
+            var option = document.createElement('option')
+          option.innerText = result.data[0].availability.monday
+          option.value = result.data[0].availability.monday
+          option.id = result.data[0].availability.monday
+          option.className = "shift"
+          document.getElementById("monday").append(option)
+          }
+        }
+        
+          var option = document.createElement('option')
+          option.innerText = "No shift"
+          option.value = ""
+          option.className = "shift"
+          document.getElementById("monday").append(option)
+        
+
+        if (result.data[0].availability.tuesday != undefined){
+          if(result.data[0].availability.tuesday == 'allDay'){
+            var option = document.createElement('option')
+          option.innerText = "day"
+          option.value = "day"
+          option.id = "day"
+          option.className = "shift"
+          document.getElementById("tuesday").append(option)
+          var option = document.createElement('option')
+          option.innerText = "night"
+          option.value = "night"
+          option.id = "night"
+          option.className = "shift"
+          document.getElementById("tuesday").append(option)
+          }
+          else{
+            var option = document.createElement('option')
+          option.innerText = result.data[0].availability.tuesday
+          option.value = result.data[0].availability.tuesday
+          option.id = result.data[0].availability.tuesday
+          option.className = "shift"
+          document.getElementById("tuesday").append(option)
+          }
+        }
+        
+          var option = document.createElement('option')
+          option.innerText = "No shift"
+          option.value = ""
+          option.className = "shift"
+          document.getElementById("tuesday").append(option)
+        
+
+        if (result.data[0].availability.wednesday != undefined){
+          if(result.data[0].availability.wednesday == 'allDay'){
+            var option = document.createElement('option')
+          option.innerText = "day"
+          option.value = "day"
+          option.id = "day"
+          option.className = "shift"
+          document.getElementById("wednesday").append(option)
+          var option = document.createElement('option')
+          option.innerText = "night"
+          option.value = "night"
+          option.id = "night"
+          option.className = "shift"
+          document.getElementById("wednesday").append(option)
+          }
+          else{
+            var option = document.createElement('option')
+          option.innerText = result.data[0].availability.wednesday
+          option.value = result.data[0].availability.wednesday
+          option.id = result.data[0].availability.wednesday
+          option.className = "shift"
+          document.getElementById("wednesday").append(option)
+          }
+        }
+        
+          var option = document.createElement('option')
+          option.innerText = "No shift"
+          option.value = ""
+          option.className = "shift"
+          document.getElementById("wednesday").append(option)
+        
+
+        if (result.data[0].availability.thursday != undefined){
+          if(result.data[0].availability.thursday == 'allDay'){
+            var option = document.createElement('option')
+          option.innerText = "day"
+          option.value = "day"
+          option.id = "day"
+          option.className = "shift"
+          document.getElementById("thursday").append(option)
+          var option = document.createElement('option')
+          option.innerText = "night"
+          option.value = "night"
+          option.id = "night"
+          option.className = "shift"
+          document.getElementById("thursday").append(option)
+          }
+          else{
+            var option = document.createElement('option')
+          option.innerText = result.data[0].availability.thursday
+          option.value = result.data[0].availability.thursday
+          option.id = result.data[0].availability.thursday
+          option.className = "shift"
+          document.getElementById("thursday").append(option)
+          }
+        }
+        
+          var option = document.createElement('option')
+          option.innerText = "No shift"
+          option.value = ""
+          option.className = "shift"
+          document.getElementById("thursday").append(option)
+        
+
+        if (result.data[0].availability.friday != undefined){
+          if(result.data[0].availability.friday == 'allDay'){
+            var option = document.createElement('option')
+          option.innerText = "day"
+          option.value = "day"
+          option.id = "day"
+          option.className = "shift"
+          document.getElementById("friday").append(option)
+          var option = document.createElement('option')
+          option.innerText = "night"
+          option.value = "night"
+          option.id = "night"
+          option.className = "shift"
+          document.getElementById("friday").append(option)
+          }
+          else{
+            var option = document.createElement('option')
+          option.innerText = result.data[0].availability.friday
+          option.value = result.data[0].availability.friday
+          option.id = result.data[0].availability.friday
+          option.className = "shift"
+          document.getElementById("friday").append(option)
+          }
+        }
+        
+          var option = document.createElement('option')
+          option.innerText = "No shift"
+          option.value = ""
+          option.className = "shift"
+          document.getElementById("friday").append(option)
+        
+
+        if (result.data[0].availability.saturday != undefined){
+          if(result.data[0].availability.saturday == 'allDay'){
+            var option = document.createElement('option')
+          option.innerText = "day"
+          option.value = "day"
+          option.id = "day"
+          option.className = "shift"
+          document.getElementById("saturday").append(option)
+          var option = document.createElement('option')
+          option.innerText = "night"
+          option.value = "night"
+          option.id = "night"
+          option.className = "shift"
+          document.getElementById("saturday").append(option)
+          }
+          else{
+            var option = document.createElement('option')
+          option.innerText = result.data[0].availability.saturday
+          option.value = result.data[0].availability.saturday
+          option.id = result.data[0].availability.saturday
+          option.className = "shift"
+          document.getElementById("saturday").append(option)
+          }
+        }
+        
+          var option = document.createElement('option')
+          option.innerText = "No shift"
+          option.value = ""
+          option.className = "shift"
+          document.getElementById("saturday").append(option)
+        
+      }
+    )
+  }
+  
+  function clearshifts(){
+    
+    let selectbox1 = document.getElementById('sunday')
+    var x;
+  	for(x=selectbox1.options.length-1;x>=0;x--)
+	  {
+		  selectbox1.remove(x);
+	  }
+    
+    let selectbox2 = document.getElementById('monday')
+    var x1;
+  	for(x1=selectbox2.options.length-1;x1>=0;x1--)
+	  {
+		  selectbox2.remove(x1);
+	  }
+    let selectbox3 = document.getElementById('tuesday')
+    var x2;
+  	for(x2=selectbox3.options.length-1;x2>=0;x2--)
+	  {
+		  selectbox3.remove(x2);
+	  }
+    let selectbox4 = document.getElementById('wednesday')
+    var x3;
+  	for(x3=selectbox4.options.length-1;x3>=0;x3--)
+	  {
+		  selectbox4.remove(x3);
+	  }
+
+    let selectbox5 = document.getElementById('thursday')
+    var x4;
+  	for(x4=selectbox5.options.length-1;x4>=0;x4--)
+	  {
+		  selectbox5.remove(x4);
+	  }
+    let selectbox6 = document.getElementById('friday')
+    var x5;
+  	for(x5=selectbox6.options.length-1;x5>=0;x5--)
+	  {
+		  selectbox6.remove(x5);
+	  }
+    let selectbox7 = document.getElementById('saturday')
+    var x6;
+  	for(x6=selectbox7.options.length-1;x6>=0;x6--)
+	  {
+		  selectbox7.remove(x6);
+	  }
+  }
   </script>
       
 </body>

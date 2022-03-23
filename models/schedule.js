@@ -6,8 +6,8 @@ const scheduleSchema = new Schema({
         type: Array,
         required: true
     },
-    week_number: {
-        type: Number,
+    week: {
+        type: String,
         required: true
     }
 });

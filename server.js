@@ -6,6 +6,9 @@ const mongoose = require('mongoose');
 const generator = require('generate-password');
 const Bcrypt = require("bcryptjs");
 const path = require('path');
+const startOfWeek = require('date-fns/startOfWeek')
+const endOfWeek = require('date-fns/endOfWeek')
+const format = require('date-fns/format')
 
 // make webpage availible
 const PORT = 8080;
@@ -415,39 +418,70 @@ app.post('/addManager', function (req, res) {
 })
 
 app.post('/createSchedule', async function (req, res) {
-    var currentdate = new Date();
-    var one = new Date(currentdate.getFullYear(), 0, 1);
-    var numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
-    var weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
+    
+    let day = new Date(req.body.date)
+    let start = startOfWeek(day)
+    let end = endOfWeek(day)
 
-    const insertSchedule = new Schedule({ schedule: req.body, week_number: weeknum })
-    insertSchedule.save().then((result) => {
-        console.log("Added successfully")
-    }).catch((err) => {
-        console.log(err)
+    let week = format(start, "yyyy-MM-dd") +" "+ format(end, "yyyy-MM-dd")
+
+    const schedule = await Schedule.find({ week: week }).then((result) => {
+        if (result.length > 0) {
+            console.log('existing Schedule')
+            res.status(406).send()
+        }
+        else{
+            // Make this in the else of the function above, have it send res code 200
+        const insertSchedule = new Schedule({ schedule: req.body.shifts, week: week})
+        insertSchedule.save().then((result_s) => {
+            console.log("Added successfully")
+            res.status(200).send()
+        }).catch((err) => {
+            console.log(err)
     }
     );
+        }
+        
+    })
+    
 })
 
-app.get('/getSchedule', async function (req, res) {
+app.post('/getSchedule', async function (req, res) {
 
-    let currentdate = new Date();
-    let one = new Date(currentdate.getFullYear(), 0, 1);
-    let numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
-    let weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
 
-    const schedule = await Schedule.find({ week_number: weeknum }).then((result) => {
-        if (result[0].schedule == undefined) {
+    let day = req.body.date
+    
+
+    const schedule = await Schedule.find({week: day}).then((result) => {
+        if (result.length == 0) {
             console.log('No Schedule')
         }
         else {
-            console.log(result[0].schedule);
             res.status(200).send(result[0].schedule);
         }
     }
     )
 
 });
+
+app.get('/getNames', async function (req, res){
+    const names = await Employee.find({}).select('firstName -_id').then((result) =>{
+        res.status(200).send(result);
+    })
+})
+
+app.get('/getWeeks', async function (req, res){
+    const weeks = await Schedule.find({}).select('week -_id').then((result) =>{
+        res.status(200).send(result);
+    })
+})
+
+app.post('/getAvailability', async function (req, res){
+
+    const name = await Employee.find({firstName: req.body.name}).select('availability -_id').then((result) =>{
+        res.send(result);
+    })
+})
 
 app.put('/changeAvailability/:id', async (req, res) => {
     const { id } = req.params;

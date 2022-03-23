@@ -16,7 +16,7 @@
       <link rel="stylesheet" type="text/css" href="../css/viewSchedule.css">
 </head>
 
-<body onload="display()">
+<body onload="schedules()">
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
         <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
@@ -72,6 +72,11 @@
   </nav>
 
   <div>
+
+    <label for="calendar">Select which week you would like to view a schedule for:</label>
+    <select name="calendar" id="calendar"></select>
+    <button onclick="display()">Submit</button>
+    <br>
     <table id="Schedule" class="table">
       <thead>
         <tr>
@@ -103,9 +108,12 @@
     function display() {
   
       const schedulediv = document.getElementById("Schedule")
-  
+      let selected_date = document.getElementById("calendar").value
+      console.log(selected_date)
+
+
       let shifts = [];
-      axios.get('/getSchedule')
+      axios.post('/getSchedule', {date:selected_date})
         .then((result) => {
           // console.log(result.data);
           shifts = result.data;
@@ -148,6 +156,23 @@
           console.log(error);
         });
     };
+
+
+    function schedules(){
+    const nlist = document.getElementById("calendar")
+
+    axios.get('/getWeeks').then(
+      (result) => {
+        
+        for(let i = 0; i < result.data.length; i++){
+          var option = document.createElement('option')
+          option.innerText = result.data[i].week
+          option.value = result.data[i].week
+          nlist.append(option)
+        }
+      }
+    )
+  }
   </script>
 </body>
 
