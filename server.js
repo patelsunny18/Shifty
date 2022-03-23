@@ -239,6 +239,8 @@ app.post('/addEmployee', (req, res) => {
                 insertEmployee.save()
                     .then((result) => {
                         let responseData = {
+                            fName: result.firstName,
+                            lName: result.lastName,
                             userID: employeeID,
                             password: password
                         };
@@ -376,7 +378,10 @@ app.post('/addManager', function (req, res) {
             if (result.length === 0) {
                 insertManager.save()
                     .then((result) => {
+                        console.log(result);
                         let responseData = {
+                            fName: result.firstName,
+                            lName: result.lastName,
                             userID: result.managerID,
                             password: password
                         };
@@ -418,41 +423,41 @@ app.post('/addManager', function (req, res) {
 })
 
 app.post('/createSchedule', async function (req, res) {
-    
+
     let day = new Date(req.body.date)
     let start = startOfWeek(day)
     let end = endOfWeek(day)
 
-    let week = format(start, "yyyy-MM-dd") +" "+ format(end, "yyyy-MM-dd")
+    let week = format(start, "yyyy-MM-dd") + " " + format(end, "yyyy-MM-dd")
 
     const schedule = await Schedule.find({ week: week }).then((result) => {
         if (result.length > 0) {
             console.log('existing Schedule')
             res.status(406).send()
         }
-        else{
+        else {
             // Make this in the else of the function above, have it send res code 200
-        const insertSchedule = new Schedule({ schedule: req.body.shifts, week: week})
-        insertSchedule.save().then((result_s) => {
-            console.log("Added successfully")
-            res.status(200).send()
-        }).catch((err) => {
-            console.log(err)
-    }
-    );
+            const insertSchedule = new Schedule({ schedule: req.body.shifts, week: week })
+            insertSchedule.save().then((result_s) => {
+                console.log("Added successfully")
+                res.status(200).send()
+            }).catch((err) => {
+                console.log(err)
+            }
+            );
         }
-        
+
     })
-    
+
 })
 
 app.post('/getSchedule', async function (req, res) {
 
 
     let day = req.body.date
-    
 
-    const schedule = await Schedule.find({week: day}).then((result) => {
+
+    const schedule = await Schedule.find({ week: day }).then((result) => {
         if (result.length == 0) {
             console.log('No Schedule')
         }
@@ -464,21 +469,21 @@ app.post('/getSchedule', async function (req, res) {
 
 });
 
-app.get('/getNames', async function (req, res){
-    const names = await Employee.find({}).select('firstName -_id').then((result) =>{
+app.get('/getNames', async function (req, res) {
+    const names = await Employee.find({}).select('firstName -_id').then((result) => {
         res.status(200).send(result);
     })
 })
 
-app.get('/getWeeks', async function (req, res){
-    const weeks = await Schedule.find({}).select('week -_id').then((result) =>{
+app.get('/getWeeks', async function (req, res) {
+    const weeks = await Schedule.find({}).select('week -_id').then((result) => {
         res.status(200).send(result);
     })
 })
 
-app.post('/getAvailability', async function (req, res){
+app.post('/getAvailability', async function (req, res) {
 
-    const name = await Employee.find({firstName: req.body.name}).select('availability -_id').then((result) =>{
+    const name = await Employee.find({ firstName: req.body.name }).select('availability -_id').then((result) => {
         res.send(result);
     })
 })

@@ -261,6 +261,27 @@ function handleFormSubmit(event) {
     }
 }
 
+// Will only run once the page Document Object Model (DOM) is ready for JavaScript code to execute.
+$(document).ready(function () {
+    // Attaching an event handler function for the copy button
+    $(document).on('click', '#copy-btn', function () {
+        let userID = document.getElementById("test1").innerText;
+        let password = document.getElementById("test2").innerText;
+        // call the function giving it a string argument (userID and password combined)
+        copyToClipboard(`${userID}  ${password}`);
+    })
+});
+
+function copyToClipboard(text) {
+    const inputArea = document.createElement('textarea'); // create a temp textArea which will be removed
+    inputArea.innerText = text; // Put the text received as argument in the temp textArea
+    document.body.appendChild(inputArea); // Add the textArea to the document(webpage) 
+    inputArea.select(); // Select the text to be copied
+    inputArea.focus(); // Focus on the textArea i.e making it the active element on the webPage
+    document.execCommand('copy');
+    inputArea.remove(); // remove the textArea from the document
+}
+
 function sendData(event) {
     event.preventDefault();
 
@@ -293,7 +314,10 @@ function sendData(event) {
 
     axios.post('/addManager', data)
         .then((result) => {
-            alert(`New manager added successfully!\n\nUserID: ${result.data.userID}\nPassword: ${result.data.password}`);
+            document.getElementById("test").innerText = `${result.data.fName} ${result.data.lName} has been added to the system!`;
+            document.getElementById("test1").innerText = `UserID: ${result.data.userID}`;
+            document.getElementById("test2").innerText = `Password: ${result.data.password}`;
+            $("#myModal").modal('show');
         })
         .catch((error) => {
             alert("Oops! Something went wrong. Please, try again.");
