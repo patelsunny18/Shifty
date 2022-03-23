@@ -12,11 +12,65 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+    <!-- Font Awesome link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <!-- Custom CSS link -->
-    <link rel="stylesheet" type="text/css" href="css/manager.css">
+    <link rel="stylesheet" type="text/css" href="/css/employeeHome.css">
+    <!-- Custom CSS link -->
+    <!-- <link rel="stylesheet" type="text/css" href="css/manager.css"> -->
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse"
+                data-bs-target=".dual-collapse2">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="http://localhost:8080/employee/home/<%= id %>" id="cur"><i class="fa fa-house icon"></i> Home</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="http://localhost:8080/employee/viewSchedule/<%= id %>"><i class="fa fa-eye icon"></i> View Schedule</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="http://localhost:8080/editSchedule"><i class="fa fa-eye icon"></i> Edit Schedule</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://localhost:8080/addEmployee"><i class="fas fa-arrow-right-arrow-left icon"></i> Add Employee
+                            </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://localhost:8080/removeEmployee"><i class="fa-solid fa-pen-to-square icon"></i> Change/
+                            Remove Employee</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
+                <ul class="navbar-nav ms-auto buttons">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <button class="btn btn-sm btn-primary prof-btn" type="submit">My Profile</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <button class="btn btn-sm btn-primary log-btn" type="submit" onclick="location.href='/'">Log
+                                Out</button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
     <h1>Hello from Manager <%= name %>!</h1>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
