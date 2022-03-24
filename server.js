@@ -154,6 +154,26 @@ app.get('/manager/createSchedule/:id', async (req, res) => {
     }
 });
 
+// GET route to ApproveTimeoff for Manager
+app.get('/manager/approveTimeoff/:id', async (req, res) => {
+    const { id } = req.params;
+    let manager = null;
+
+    // try to find the manager with the given ID
+    try {
+        manager = await Manager.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (manager) {
+        res.render('managerApproveTimeoff', {
+            id: id
+        });
+    }
+});
+
 // GET route to editSchedule for Owner
 app.get('/owner/editSchedule/:id', async (req, res) => {
     const { id } = req.params;
