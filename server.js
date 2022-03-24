@@ -358,7 +358,7 @@ app.get('/employee/edit/:id', async (req, res) => {
     const { id } = req.params;
     const employee = await Employee.findById({ _id: id });
     let date = employee.dob;
-    let stringDate = (date.toLocaleDateString('pt-BR', { timeZone: "GMT", month: "numeric", day: "numeric", year: "numeric" }));    res.render('edit', {
+    let stringDate = (date.toLocaleDateString('pt-BR', { timeZone: "GMT", month: "numeric", day: "numeric", year: "numeric" })); res.render('edit', {
         id: id,
         name: `${employee.firstName} ${employee.lastName}`,
         fName: employee.firstName,
@@ -369,6 +369,8 @@ app.get('/employee/edit/:id', async (req, res) => {
         email: employee.email,
         bank: employee.bankAccountNumber,
         sin: employee.sin,
+        wage: employee.wage,
+        availability: employee.availability,
         employeeID: employee.employeeID,
         password: "*********"
     });

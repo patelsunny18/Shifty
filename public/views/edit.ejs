@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Employee</title>
+    <title>My Profile</title>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
@@ -83,8 +83,11 @@
     <div class="container" id="container2">
         <div class="header">
             <%= name %>
+            <div class="btn">
+                <button onclick="edit()">Edit Details</button>
+            </div>
         </div>
-        <form action="/addEmployee" method="post" class="form" id="form">
+        <form action="/edit" class="form" id="form">
             <div class="row">
                 <div class="col-md-6 control">
                     <label for="fName">First Name</label>
@@ -216,7 +219,7 @@
                 </div>
             </div>
             <div class="cen">
-                <button type="submit" id="subBut">Edit Details</button>
+                <button type="submit" id="subBut" disabled>Submit</button>
             </div>
         </form>
     </div>
@@ -224,6 +227,10 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script>
+    
+    let editMode = false;
+
+    function getCurrentData(){
         let dateStr = '<%= dob %>';
         let date = dateStr.split("/").reverse().join("-");
         document.getElementById("fName").value = '<%= fName %>';
@@ -236,7 +243,40 @@
         document.getElementById("sinNumber").value = '<%= sin %>';
         document.getElementById("employeeID").value = '<%= employeeID %>';
         document.getElementById("password").value = '<%= password %>';
-    </script>
+    }
 
+    getCurrentData();
+
+    function edit(){
+        if(editMode == false){
+            editMode = true;
+            document.getElementById("fName").disabled = false;
+            document.getElementById("lName").disabled = false;
+            document.getElementById("address").disabled = false;
+            document.getElementById("phone").disabled = false;
+            document.getElementById("dob").disabled = false;
+            document.getElementById("email").disabled = false;
+            document.getElementById("bankAccount").disabled = false;
+            document.getElementById("sinNumber").disabled = true;
+            document.getElementById("employeeID").disabled = true;
+            document.getElementById("password").disabled = true;
+            document.getElementById("subBut").disabled = false;
+        }
+        else if(editMode == true){
+            editMode = false;
+            document.getElementById("fName").disabled = true;
+            document.getElementById("lName").disabled = true;
+            document.getElementById("address").disabled = true;
+            document.getElementById("phone").disabled = true;
+            document.getElementById("dob").disabled = true;
+            document.getElementById("email").disabled = true;
+            document.getElementById("bankAccount").disabled = true;
+            document.getElementById("sinNumber").disabled = true;
+            document.getElementById("employeeID").disabled = true;
+            document.getElementById("password").disabled = true;
+            document.getElementById("subBut").disabled = true;
+        }
+    }
+    </script>
 </body>
 </html>

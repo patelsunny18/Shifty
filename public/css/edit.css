@@ -95,7 +95,6 @@
   }
   
   #subBut:hover{
-    width: 32%;
     background-color: #666;
     font-weight: bold;
   }
