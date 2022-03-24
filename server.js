@@ -21,6 +21,7 @@ const Employee = require('./models/employee');
 const Manager = require('./models/manager');
 const Owner = require('./models/owner');
 const Schedule = require('./models/schedule');
+const Timeoff = require('./models/timeoff');
 
 // Access to database
 // DO NOT TOUCH!
@@ -148,6 +149,26 @@ app.get('/manager/createSchedule/:id', async (req, res) => {
     // if found
     if (manager) {
         res.render('managerCreateSchedule', {
+            id: id
+        });
+    }
+});
+
+// GET route to ApproveTimeoff for Manager
+app.get('/manager/approveTimeoff/:id', async (req, res) => {
+    const { id } = req.params;
+    let manager = null;
+
+    // try to find the manager with the given ID
+    try {
+        manager = await Manager.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (manager) {
+        res.render('managerApproveTimeoff', {
             id: id
         });
     }
@@ -750,7 +771,6 @@ app.post('/createSchedule', async function (req, res) {
             res.status(406).send()
         }
         else {
-            // Make this in the else of the function above, have it send res code 200
             const insertSchedule = new Schedule({ schedule: req.body.shifts, week: week })
             insertSchedule.save().then((result_s) => {
                 console.log("Added successfully")
@@ -831,6 +851,28 @@ app.put('/editSchedule', async function (req, res) {
 
     const schedule = await Schedule.findOneAndUpdate({ week_number: weeknum }, { schedule: req.body }).then((result) => {
         res.status(200).send('Sucess')
+    })
+})
+
+app.post('/createTimeoff', async function (req, res){
+    
+
+    const name_from_id = await Employee.findById({_id: req.body.id})
+
+    const check = await Timeoff.find({ date: req.body.date}).then((result) => {
+        if (result.length > 0) {
+            console.log('existing')
+            res.status(208).send('existing')
+        }
+        else{
+            const time_off = new Timeoff({name: name_from_id.firstName, date: req.body.date, approve: false})
+            time_off.save().then((result_s) => {
+                console.log("Added successfully")
+                res.status(200).send('Sucess')
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
     })
 })
 

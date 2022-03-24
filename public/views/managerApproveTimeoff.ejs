@@ -67,12 +67,9 @@
     </nav>
 
     <div id="content">
-        <h1>Time off Request</h1>
+        <button onclick="requests_timeoff()">Silly</button>
+        <h1>Time off Requests</h1>
 
-        <label for="input">Select the day you want off</label>
-        <input type="date" id="date">
-        <button onclick="submitRequest()">Submit</button>
-        <br>
     </div>
 
     <!-- Bootstrap Bundle with Popper -->
@@ -87,29 +84,9 @@
 
 
 <script>
-    function submitRequest(){
-
-    let currentId = '<%- id %>';
-    
-    let date_schedule = new Date(document.getElementById("date").value + 'T00:00:00')
-
-    axios.post('/createTimeoff', {date: date_schedule, id: currentId}).then(
-        (result) =>{
-            if(result.status == 208){
-            alert("There exists a request for that day already!")
-            }
-            else if (result.status == 200){
-            alert("Successfully Submitted Time off Request")
-            }
-        }
-    ).catch(
-        (err) =>{
-         alert("There exists a request for that day already!")
-        }
+    function requests_timeoff(){
         
-    )
-    
-    
-}
+            
+    }
 </script>
 </html>
