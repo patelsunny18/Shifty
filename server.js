@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const generator = require('generate-password');
 const Bcrypt = require("bcryptjs");
 const path = require('path');
+const session = require('express-session');
+const MongoDBSession = require('connect-mongodb-session')(session);
 const startOfWeek = require('date-fns/startOfWeek')
 const endOfWeek = require('date-fns/endOfWeek')
 const format = require('date-fns/format')
@@ -34,9 +36,24 @@ mongoose.connect(mongoDB)
         console.log(err)
     })
 
+const store = new MongoDBSession({
+    uri: mongoDB,
+    collection: 'sessions'
+});
+
 // set up ejs
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/public/views'));
+
+// set up session
+app.use(
+    session({
+        secret: 'keyboard cat',
+        resave: false,
+        saveUninitialized: false,
+        store: store
+    })
+);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -46,13 +63,40 @@ app.use(express.static(__dirname + '/public'))
 // make /public/css directory available for external CSS
 app.use(express.static(__dirname + '/public/css/'));
 
+// check if owner is logged in
+const isOwner = (req, res, next) => {
+    if (req.session.isOwner) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+}
+
+// check if manager is logged in
+const isManager = (req, res, next) => {
+    if (req.session.isManager) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+}
+
+// check if employee is logged in
+const isEmployee = (req, res, next) => {
+    if (req.session.isEmployee) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+}
+
 // GET route to login page
 app.get('/', (req, res) => {
     res.render('login');
 });
 
 // GET route to Owner home
-app.get('/owner/home/:id', async (req, res) => {
+app.get('/owner/home/:id', isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -73,7 +117,7 @@ app.get('/owner/home/:id', async (req, res) => {
 });
 
 // GEt route to Manager home
-app.get('/manager/home/:id', async (req, res) => {
+app.get('/manager/home/:id', isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -94,7 +138,7 @@ app.get('/manager/home/:id', async (req, res) => {
 });
 
 // GET route to Employee home
-app.get('/employee/home/:id', async (req, res) => {
+app.get('/employee/home/:id',isEmployee,async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -115,7 +159,7 @@ app.get('/employee/home/:id', async (req, res) => {
 });
 
 // GET route to createSchedule for Owner
-app.get('/owner/createSchedule/:id', async (req, res) => {
+app.get('/owner/createSchedule/:id', isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -135,7 +179,7 @@ app.get('/owner/createSchedule/:id', async (req, res) => {
 });
 
 // GET route to createSchedule for Manager
-app.get('/manager/createSchedule/:id', async (req, res) => {
+app.get('/manager/createSchedule/:id',isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -155,7 +199,7 @@ app.get('/manager/createSchedule/:id', async (req, res) => {
 });
 
 // GET route to ApproveTimeoff for Manager
-app.get('/manager/approveTimeoff/:id', async (req, res) => {
+app.get('/manager/approveTimeoff/:id',isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -175,7 +219,7 @@ app.get('/manager/approveTimeoff/:id', async (req, res) => {
 });
 
 // GET route to editSchedule for Owner
-app.get('/owner/editSchedule/:id', async (req, res) => {
+app.get('/owner/editSchedule/:id', isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -195,7 +239,7 @@ app.get('/owner/editSchedule/:id', async (req, res) => {
 });
 
 // GET route to editSchedule for Manager
-app.get('/manager/editSchedule/:id', async (req, res) => {
+app.get('/manager/editSchedule/:id', isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -215,7 +259,7 @@ app.get('/manager/editSchedule/:id', async (req, res) => {
 });
 
 // GET route to viewSchedule for Owner
-app.get('/owner/viewSchedule/:id', async (req, res) => {
+app.get('/owner/viewSchedule/:id',isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -235,7 +279,7 @@ app.get('/owner/viewSchedule/:id', async (req, res) => {
 });
 
 // GET route to viewSchedule for Manager
-app.get('/manager/viewSchedule/:id', async (req, res) => {
+app.get('/manager/viewSchedule/:id',isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -255,7 +299,7 @@ app.get('/manager/viewSchedule/:id', async (req, res) => {
 });
 
 // GET route to addManager for Owner
-app.get('/owner/addManager/:id', async (req, res) => {
+app.get('/owner/addManager/:id',isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -275,7 +319,7 @@ app.get('/owner/addManager/:id', async (req, res) => {
 });
 
 // GET route to removeManager for Owner
-app.get('/owner/removeManager/:id', async (req, res) => {
+app.get('/owner/removeManager/:id',isOwner, async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -295,7 +339,7 @@ app.get('/owner/removeManager/:id', async (req, res) => {
 });
 
 // GET route to addEmployee for Owner
-app.get('/owner/addEmployee/:id', async (req, res) => {
+app.get('/owner/addEmployee/:id', isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -315,7 +359,7 @@ app.get('/owner/addEmployee/:id', async (req, res) => {
 });
 
 // GET route to addEmployee for Manager
-app.get('/manager/addEmployee/:id', async (req, res) => {
+app.get('/manager/addEmployee/:id', isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -335,7 +379,7 @@ app.get('/manager/addEmployee/:id', async (req, res) => {
 });
 
 // GET route to removeEmployee for Owner
-app.get('/owner/removeEmployee/:id', async (req, res) => {
+app.get('/owner/removeEmployee/:id', isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -355,7 +399,7 @@ app.get('/owner/removeEmployee/:id', async (req, res) => {
 });
 
 // GET route to removeEmployee for Manager
-app.get('/manager/removeEmployee/:id', async (req, res) => {
+app.get('/manager/removeEmployee/:id',isManager, async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -375,7 +419,7 @@ app.get('/manager/removeEmployee/:id', async (req, res) => {
 });
 
 // GET route to changeAvailability for Employee
-app.get('/employee/edit/:id', async (req, res) => {
+app.get('/employee/edit/:id',isEmployee, async (req, res) => {
     const { id } = req.params;
     const employee = await Employee.findById({ _id: id });
     let date = employee.dob;
@@ -397,7 +441,7 @@ app.get('/employee/edit/:id', async (req, res) => {
     });
 });
 
-app.get('/employee/changeAvailability/:id', async (req, res) => {
+app.get('/employee/changeAvailability/:id',isEmployee, async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -420,7 +464,7 @@ app.get('/employee/changeAvailability/:id', async (req, res) => {
     }
 });
 
-app.get('/manager/changeAvailabilityManager/:id', async (req, res) => {
+app.get('/manager/changeAvailabilityManager/:id', isManager, async (req, res) => {
     const { id } = req.params;
     const manager = await Manager.findById({ _id: id });
 
@@ -437,7 +481,7 @@ app.get('/manager/changeAvailabilityManager/:id', async (req, res) => {
 })
 
 // GET route to viewSchedule for Employee
-app.get('/employee/viewSchedule/:id', async (req, res) => {
+app.get('/employee/viewSchedule/:id',isEmployee, async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -459,7 +503,7 @@ app.get('/employee/viewSchedule/:id', async (req, res) => {
 });
 
 // GET route to requestTimeoff for Employee
-app.get('/employee/requestTimeoff/:id', async (req, res) => {
+app.get('/employee/requestTimeoff/:id',isEmployee,async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -509,7 +553,10 @@ app.post("/", function (req, res) {
                 id: result._id,
                 role: result.role
             }
-            res.send(data);
+            // res.send(data);
+            // req.session.isAuth = true;
+            req.session.isOwner = true;
+            res.redirect('/owner/home/' + result._id);
             console.log("Owner logged in");
         })
         .catch((err) => {
@@ -528,7 +575,10 @@ app.post("/", function (req, res) {
                                 id: result._id,
                                 role: result.role
                             }
-                            res.send(data);
+                            // res.send(data);
+                            // req.session.isAuth = true;
+                            req.session.isManager = true;
+                            res.redirect('/manager/home/' + result._id);
                             console.log("Manager logged in");
                         }
                     })
@@ -549,17 +599,31 @@ app.post("/", function (req, res) {
                                         id: result._id,
                                         role: result.role
                                     }
-                                    res.send(data);
+                                    // res.send(data);
+                                    // req.session.isAuth = true;
+                                    req.session.isEmployee = true;
+                                    res.redirect('/employee/home/' + result._id);
                                     console.log("Employee logged in");
                                 }
                             })
                         })
                         .catch((err) => {
+                            res.redirect('/');
                             console.log("Oops! User doesn't exists!");
-                            res.sendStatus(404);
                         })
                 })
         })
+});
+
+app.post('/logout', function (req, res) {
+    req.session.destroy(function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Logged out");
+            res.redirect('/');
+        }
+    });
 });
 
 

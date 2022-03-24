@@ -55,10 +55,10 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <button class="btn btn-sm btn-primary log-btn" type="submit" onclick="location.href='/'">Log
-                                Out</button>
-                        </a>
+                        <form id="logoutform" method="post" action="/logout"></form>
+                             <a class="nav-link" >   
+                                 <button class="btn btn-sm btn-primary log-btn" type="submit" form="logoutform">Log Out</button>
+                            </a>
                     </li>
                 </ul>
             </div>
@@ -66,7 +66,8 @@
     </nav>
 
     <div id="content">
-        <h1>[Insert content here]</h1>
+        <!-- <h1>[Insert content here]</h1> -->
+        <h1>Welcome <%= name %> To Your Website!</h1>
     </div>
 
     <!-- Bootstrap Bundle with Popper -->

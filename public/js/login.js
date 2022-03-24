@@ -28,40 +28,40 @@ function handleFormSubmit(event) {
     }
 }
 
-function sendData(e) {
-    e.preventDefault();
-    const usernameValue = username.value.trim();
-    const passwordValue = password.value.trim();
+// function sendData(e) {
+//     e.preventDefault();
+//     const usernameValue = username.value.trim();
+//     const passwordValue = password.value.trim();
 
-    const data = {
-        userID: usernameValue,
-        password: passwordValue
-    }
+//     const data = {
+//         userID: usernameValue,
+//         password: passwordValue
+//     }
 
-    axios.post('/', data)
-        .then((response) => {
-            switch (response.data.role) {
-                case "Owner": {
-                    console.log(response.data.id);
-                    window.location = `/owner/home/${response.data.id}`;
-                    break;
-                }
-                case "Manager": {
-                    window.location = `/manager/home/${response.data.id}`;
-                    break;
-                }
-                case "Employee": {
-                    window.location = `/employee/home/${response.data.id}`;
-                    break;
-                }
-            }
-        })
-        .catch((error) => {
-            form.reset();
-            checkInputs();
-            alert("User not found. Please try again!")
-        })
-}
+//     axios.post('/', data)
+//         .then((response) => {
+//             switch (response.data.role) {
+//                 case "Owner": {
+//                     console.log(response.data.id);
+//                     window.location = `/owner/home/${response.data.id}`;
+//                     break;
+//                 }
+//                 case "Manager": {
+//                     window.location = `/manager/home/${response.data.id}`;
+//                     break;
+//                 }
+//                 case "Employee": {
+//                     window.location = `/employee/home/${response.data.id}`;
+//                     break;
+//                 }
+//             }
+//         })
+//         .catch((error) => {
+//             form.reset();
+//             checkInputs();
+//             alert("User not found. Please try again!")
+//         })
+// }
 
 function checkInputs() {
     // get the values from the inputs
