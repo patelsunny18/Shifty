@@ -49,8 +49,8 @@ body {
 }
 
 .navbar .nav-item.current {
-  border-left: #750e13 5px solid;
-  border-left-width: 5px;
+  border-bottom: #750e13 5px solid;
+  border-bottom-width: 5px;
   color: white;
   font-weight: bold;
 }
@@ -62,8 +62,8 @@ body {
 #cur {
   color: white !important;
   font-weight: bold;
-  border-bottom: #a2191f solid;
-  border-bottom-width: 4px;
+  border-left: #a2191f solid;
+  border-left-width: 4px;
 }
 
 #subBut {

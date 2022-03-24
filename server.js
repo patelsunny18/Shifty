@@ -478,6 +478,26 @@ app.get('/employee/requestTimeoff/:id', async (req, res) => {
     }
 });
 
+// GET route to availableShifts for Employee
+app.get('/employee/availableShifts/:id', async (req, res) => {
+    const { id } = req.params;
+    let employee = null;
+
+    // try to find the employee with the given ID
+    try {
+        employee = await Employee.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (employee) {
+        res.render('availableShifts', {
+            id: id
+        });
+    }
+})
+
 
 app.post("/", function (req, res) {
     let id = req.body.userID;
@@ -854,18 +874,18 @@ app.put('/editSchedule', async function (req, res) {
     })
 })
 
-app.post('/createTimeoff', async function (req, res){
-    
+app.post('/createTimeoff', async function (req, res) {
 
-    const name_from_id = await Employee.findById({_id: req.body.id})
 
-    const check = await Timeoff.find({ date: req.body.date}).then((result) => {
+    const name_from_id = await Employee.findById({ _id: req.body.id })
+
+    const check = await Timeoff.find({ date: req.body.date }).then((result) => {
         if (result.length > 0) {
             console.log('existing')
             res.status(208).send('existing')
         }
-        else{
-            const time_off = new Timeoff({name: name_from_id.firstName, date: req.body.date, approve: false})
+        else {
+            const time_off = new Timeoff({ name: name_from_id.firstName, date: req.body.date, approve: false })
             time_off.save().then((result_s) => {
                 console.log("Added successfully")
                 res.status(200).send('Sucess')
