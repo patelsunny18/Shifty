@@ -20,6 +20,13 @@ Run the following commands prior to running the server:
 
     npm install bcryptjs --save
 
+    npm install express-session --save
+
+    npm install connect-mongodb-session --save
+
+    npm install date-fns --save
+
+
 
     $ node server.js
 
