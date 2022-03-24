@@ -136,6 +136,7 @@ body {
   margin-bottom: 10px;
   padding-bottom: 20px;
   border-color: black;
+  min-width: 319.33px !important;
 }
 
 label{
@@ -300,7 +301,7 @@ label{
 
 #closingBtn{
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 15px;
   font-size: 30px;
   background-color: #6cbf6c !important;
@@ -345,7 +346,7 @@ label{
   border: none;
 }
 .modal-confirm .btn:hover, .modal-confirm .btn:focus {
-  background: #eda645;
+  background: #ee9f00;
   outline: none;
 }
 .modal-confirm .btn span {

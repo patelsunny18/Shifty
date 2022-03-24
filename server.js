@@ -354,6 +354,26 @@ app.get('/manager/removeEmployee/:id', async (req, res) => {
 });
 
 // GET route to changeAvailability for Employee
+app.get('/employee/edit/:id', async (req, res) => {
+    const { id } = req.params;
+    const employee = await Employee.findById({ _id: id });
+    let date = employee.dob;
+    let stringDate = (date.toLocaleDateString('pt-BR', { timeZone: "GMT", month: "numeric", day: "numeric", year: "numeric" }));    res.render('edit', {
+        id: id,
+        name: `${employee.firstName} ${employee.lastName}`,
+        fName: employee.firstName,
+        lName: employee.lastName,
+        address: employee.address,
+        phoneNumber: employee.phoneNumber,
+        dob: stringDate,
+        email: employee.email,
+        bank: employee.bankAccountNumber,
+        sin: employee.sin,
+        employeeID: employee.employeeID,
+        password: "*********"
+    });
+});
+
 app.get('/employee/changeAvailability/:id', async (req, res) => {
     const { id } = req.params;
     let employee = null;
@@ -376,6 +396,22 @@ app.get('/employee/changeAvailability/:id', async (req, res) => {
         });
     }
 });
+
+app.get('/manager/changeAvailabilityManager/:id', async (req, res) => {
+    const { id } = req.params;
+    const manager = await Manager.findById({ _id: id });
+
+    let availability = {};
+    if (manager === null) {
+        console.log("User not fou nd!");
+    } else {
+        availability = manager.availability;
+    }
+    res.render('changeAvailability', {
+        availability: JSON.stringify(availability),
+        id: id
+    });
+})
 
 // GET route to viewSchedule for Employee
 app.get('/employee/viewSchedule/:id', async (req, res) => {
@@ -764,10 +800,24 @@ app.post('/getAvailability', async function (req, res) {
     })
 })
 
+// app.put('/edit/:id', async (req, res) => {
+//     const { id } = req.params;
+//     const newAvailability = req.body.availability;
+//     const employee = await Employee.findByIdAndUpdate({ _id: `${id}` }, { availability: newAvailability });
+//     res.status(200).send("updated");
+// })
+
 app.put('/changeAvailability/:id', async (req, res) => {
     const { id } = req.params;
     const newAvailability = req.body.availability;
     const employee = await Employee.findByIdAndUpdate({ _id: `${id}` }, { availability: newAvailability });
+    res.status(200).send("updated");
+})
+
+app.put('/changeAvailabilityManager/:id', async (req, res) => {
+    const { id } = req.params;
+    const newAvailability = req.body.availability;
+    const manager = await Manager.findByIdAndUpdate({ _id: `${id}` }, { availability: newAvailability });
     res.status(200).send("updated");
 })
 
