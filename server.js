@@ -101,19 +101,23 @@ app.get('/employee/home/:id', async (req, res) => {
     });
 })
 
-app.get('/employee/edit/:id', async(req, res) => {
+app.get('/employee/edit/:id', async (req, res) => {
     const { id } = req.params;
     const employee = await Employee.findById({ _id: id });
-
-    let data = {};
-    if (employee === null) {
-        console.log("User not found!");
-    } else {
-        data = employee;
-    }
-    res.render('edit', {
-        data: JSON.stringify(data),
-        id: id
+    let date = employee.dob;
+    let stringDate = (date.toLocaleDateString('pt-BR', { timeZone: "GMT", month: "numeric", day: "numeric", year: "numeric" }));    res.render('edit', {
+        id: id,
+        name: `${employee.firstName} ${employee.lastName}`,
+        fName: employee.firstName,
+        lName: employee.lastName,
+        address: employee.address,
+        phoneNumber: employee.phoneNumber,
+        dob: stringDate,
+        email: employee.email,
+        bank: employee.bankAccountNumber,
+        sin: employee.sin,
+        employeeID: employee.employeeID,
+        password: "*********"
     });
 });
 
@@ -126,6 +130,22 @@ app.get('/employee/changeAvailability/:id', async (req, res) => {
         console.log("User not fou nd!");
     } else {
         availability = employee.availability;
+    }
+    res.render('changeAvailability', {
+        availability: JSON.stringify(availability),
+        id: id
+    });
+})
+
+app.get('/manager/changeAvailabilityManager/:id', async (req, res) => {
+    const { id } = req.params;
+    const manager = await Manager.findById({ _id: id });
+
+    let availability = {};
+    if (manager === null) {
+        console.log("User not fou nd!");
+    } else {
+        availability = manager.availability;
     }
     res.render('changeAvailability', {
         availability: JSON.stringify(availability),
@@ -515,6 +535,13 @@ app.put('/changeAvailability/:id', async (req, res) => {
     const { id } = req.params;
     const newAvailability = req.body.availability;
     const employee = await Employee.findByIdAndUpdate({ _id: `${id}` }, { availability: newAvailability });
+    res.status(200).send("updated");
+})
+
+app.put('/changeAvailabilityManager/:id', async (req, res) => {
+    const { id } = req.params;
+    const newAvailability = req.body.availability;
+    const manager = await Manager.findByIdAndUpdate({ _id: `${id}` }, { availability: newAvailability });
     res.status(200).send("updated");
 })
 
