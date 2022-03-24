@@ -840,7 +840,7 @@ app.post('/createTimeoff', async function (req, res){
     const check = await Timeoff.find({ date: req.body.date}).then((result) => {
         if (result.length > 0) {
             console.log('existing')
-            res.status(406).send('existing')
+            res.status(208).send('existing')
         }
         else{
             const time_off = new Timeoff({name: name_from_id.firstName, date: req.body.date, approve: false})

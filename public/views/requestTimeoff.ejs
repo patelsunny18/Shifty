@@ -90,14 +90,12 @@
     function submitRequest(){
 
     let currentId = '<%- id %>';
-    alert("Button pressed")
-    
     
     let date_schedule = new Date(document.getElementById("date").value + 'T00:00:00')
 
     axios.post('/createTimeoff', {date: date_schedule, id: currentId}).then(
         (result) =>{
-            if(result.status == 406){
+            if(result.status == 208){
             alert("There exists a request for that day already!")
             }
             else if (result.status == 200){
