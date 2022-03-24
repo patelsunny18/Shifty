@@ -329,7 +329,6 @@ function sendData(event) {
             $("#myModal").modal('show');
         })
         .catch((error) => {
-            console.log(error);
             alert("Oops! Something went wrong. Please, try again.");
         })
 }
