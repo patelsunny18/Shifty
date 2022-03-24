@@ -21,7 +21,6 @@ const Employee = require('./models/employee');
 const Manager = require('./models/manager');
 const Owner = require('./models/owner');
 const Schedule = require('./models/schedule');
-const res = require('express/lib/response');
 
 // Access to database
 // DO NOT TOUCH!
@@ -46,81 +45,351 @@ app.use(express.static(__dirname + '/public'))
 // make /public/css directory available for external CSS
 app.use(express.static(__dirname + '/public/css/'));
 
+// GET route to login page
 app.get('/', (req, res) => {
     res.render('login');
 });
 
-app.get('/addManager', (req, res) => {
-    res.render('addManager');
-});
-
-app.get('/addEmployee', (req, res) => {
-    res.render('addEmployee');
-});
-
-app.get('/removeManager', (req, res) => {
-    res.render('removeManager');
-});
-
-app.get('/removeEmployee', (req, res) => {
-    res.render('removeEmployee');
-});
-
-app.get('/viewSchedule', (req, res) => {
-    res.render('viewSchedule');
-});
-
-app.get("/createSchedule", (req, res) => {
-    res.render('createSchedule');
-});
-
+// GET route to Owner home
 app.get('/owner/home/:id', async (req, res) => {
     const { id } = req.params;
-    const owner = await Owner.findById({ _id: id });
-    res.render('ownerHome', {
-        id: id,
-        name: `${owner.firstName} ${owner.lastName}`
-    });
-})
+    let owner = null;
 
-app.get('/manager/home/:id', async (req, res) => {
-    const { id } = req.params;
-    const manager = await Manager.findById({ _id: id });
-    res.render('managerHome', {
-        id: id,
-        name: `${manager.firstName} ${manager.lastName}`
-    });
-})
-
-app.get('/employee/home/:id', async (req, res) => {
-    const { id } = req.params;
-    const employee = await Employee.findById({ _id: id });
-    res.render('employeeHome', {
-        id: id,
-        name: `${employee.firstName} ${employee.lastName}`
-    });
-})
-
-app.get('/employee/changeAvailability/:id', async (req, res) => {
-    const { id } = req.params;
-    const employee = await Employee.findById({ _id: id });
-
-    let availability = {};
-    if (employee === null) {
-        console.log("User not found!");
-    } else {
-        availability = employee.availability;
+    // try to find the owner with the given ID
+    try {
+        owner = await Owner.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
     }
-    res.render('changeAvailability', {
-        availability: JSON.stringify(availability),
-        id: id
-    });
+
+    // if found
+    if (owner) {
+        res.render('ownerHome', {
+            id: id,
+            name: `${owner.firstName} ${owner.lastName}`
+        });
+    }
 });
 
+// GEt route to Manager home
+app.get('/manager/home/:id', async (req, res) => {
+    const { id } = req.params;
+    let manager = null;
+
+    // try to find the manager with the given ID
+    try {
+        manager = await Manager.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (manager) {
+        res.render('managerHome', {
+            id: id,
+            name: `${manager.firstName} ${manager.lastName}`
+        });
+    }
+});
+
+// GET route to Employee home
+app.get('/employee/home/:id', async (req, res) => {
+    const { id } = req.params;
+    let employee = null;
+
+    // try to find the employee with the given ID
+    try {
+        employee = await Employee.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (employee) {
+        res.render('employeeHome', {
+            id: id,
+            name: `${employee.firstName} ${employee.lastName}`
+        });
+    }
+});
+
+// GET route to createSchedule for Owner
+app.get('/owner/createSchedule/:id', async (req, res) => {
+    const { id } = req.params;
+    let owner = null;
+
+    // try to find the owner with the given ID
+    try {
+        owner = Owner.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (owner) {
+        res.render('ownerCreateSchedule', {
+            id: id
+        });
+    }
+});
+
+// GET route to createSchedule for Manager
+app.get('/manager/createSchedule/:id', async (req, res) => {
+    const { id } = req.params;
+    let manager = null;
+
+    // try to find the manager with the given ID
+    try {
+        manager = await Manager.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (manager) {
+        res.render('managerCreateSchedule', {
+            id: id
+        });
+    }
+});
+
+// GET route to editSchedule for Owner
+app.get('/owner/editSchedule/:id', async (req, res) => {
+    const { id } = req.params;
+    let owner = null;
+
+    // try to find the owner with the given ID
+    try {
+        owner = Owner.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (owner) {
+        res.render('ownerEditSchedule', {
+            id: id
+        });
+    }
+});
+
+// GET route to editSchedule for Manager
+app.get('/manager/editSchedule/:id', async (req, res) => {
+    const { id } = req.params;
+    let manager = null;
+
+    // try to find the manager with the given ID
+    try {
+        manager = await Manager.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (manager) {
+        res.render('managerEditSchedule', {
+            id: id
+        });
+    }
+});
+
+// GET route to viewSchedule for Owner
+app.get('/owner/viewSchedule/:id', async (req, res) => {
+    const { id } = req.params;
+    let owner = null;
+
+    // try to find the owner with the given ID
+    try {
+        owner = Owner.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (owner) {
+        res.render('ownerViewSchedule', {
+            id: id
+        });
+    }
+});
+
+// GET route to viewSchedule for Manager
+app.get('/manager/viewSchedule/:id', async (req, res) => {
+    const { id } = req.params;
+    let manager = null;
+
+    // try to find the manager with the given ID
+    try {
+        manager = await Manager.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (manager) {
+        res.render('managerViewSchedule', {
+            id: id
+        });
+    }
+});
+
+// GET route to addManager for Owner
+app.get('/owner/addManager/:id', async (req, res) => {
+    const { id } = req.params;
+    let owner = null;
+
+    // try to find the owner with the given ID
+    try {
+        owner = Owner.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (owner) {
+        res.render('ownerAddManager', {
+            id: id
+        });
+    }
+});
+
+// GET route to removeManager for Owner
+app.get('/owner/removeManager/:id', async (req, res) => {
+    const { id } = req.params;
+    let owner = null;
+
+    // try to find the owner with the given ID
+    try {
+        owner = Owner.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (owner) {
+        res.render('ownerRemoveManager', {
+            id: id
+        });
+    }
+});
+
+// GET route to addEmployee for Owner
+app.get('/owner/addEmployee/:id', async (req, res) => {
+    const { id } = req.params;
+    let owner = null;
+
+    // try to find the owner with the given ID
+    try {
+        owner = Owner.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (owner) {
+        res.render('ownerAddEmployee', {
+            id: id
+        });
+    }
+});
+
+// GET route to addEmployee for Manager
+app.get('/manager/addEmployee/:id', async (req, res) => {
+    const { id } = req.params;
+    let manager = null;
+
+    // try to find the manager with the given ID
+    try {
+        manager = await Manager.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (manager) {
+        res.render('managerAddEmployee', {
+            id: id
+        });
+    }
+});
+
+// GET route to removeEmployee for Owner
+app.get('/owner/removeEmployee/:id', async (req, res) => {
+    const { id } = req.params;
+    let owner = null;
+
+    // try to find the owner with the given ID
+    try {
+        owner = Owner.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (owner) {
+        res.render('ownerRemoveEmployee', {
+            id: id
+        });
+    }
+});
+
+// GET route to removeEmployee for Manager
+app.get('/manager/removeEmployee/:id', async (req, res) => {
+    const { id } = req.params;
+    let manager = null;
+
+    // try to find the manager with the given ID
+    try {
+        manager = await Manager.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (manager) {
+        res.render('managerRemoveEmployee', {
+            id: id
+        });
+    }
+});
+
+// GET route to changeAvailability for Employee
+app.get('/employee/changeAvailability/:id', async (req, res) => {
+    const { id } = req.params;
+    let employee = null;
+
+    // try to find the employee with the given ID
+    try {
+        employee = await Employee.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (employee) {
+        let availability = {};
+
+        availability = employee.availability;
+        res.render('changeAvailability', {
+            availability: JSON.stringify(availability),
+            id: id
+        });
+    }
+});
+
+// GET route to viewSchedule for Employee
 app.get('/employee/viewSchedule/:id', async (req, res) => {
     const { id } = req.params;
-    const employee = await Employee.findById({ _id: id });
+    let employee = null;
 
+    // try to find the employee with the given ID
+    try {
+        employee = await Employee.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
     if (employee === null) {
         console.log("User not found");
     } else {
@@ -130,18 +399,25 @@ app.get('/employee/viewSchedule/:id', async (req, res) => {
     }
 });
 
+// GET route to requestTimeoff for Employee
 app.get('/employee/requestTimeoff/:id', async (req, res) => {
     const { id } = req.params;
-    const employee = await Employee.findById({ _id: id });
+    let employee = null;
 
-    res.render('requestTimeoff', {
-        id: id
-    });
+    // try to find the employee with the given ID
+    try {
+        employee = await Employee.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (employee) {
+        res.render('requestTimeoff', {
+            id: id
+        });
+    }
 });
-
-app.get("/editSchedule", (req, res) => {
-    res.render('editSchedule')
-})
 
 
 app.post("/", function (req, res) {
@@ -504,9 +780,18 @@ app.put('/editSchedule', async function (req, res) {
     const schedule = await Schedule.findOneAndUpdate({ week_number: weeknum }, { schedule: req.body }).then((result) => {
         res.status(200).send('Sucess')
     })
-
-
 })
+
+// GET route to error page
+app.get('/error', (req, res) => {
+    res.render('error');
+});
+
+// GET route to any incorrect URL
+app.get('*', (req, res) => {
+    res.render('error');
+});
+
 function getManagerId() {
     var id = generator.generate({
         length: 7,
