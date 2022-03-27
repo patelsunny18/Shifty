@@ -17,7 +17,7 @@
 
 </head>
 
-<body>
+<body onload="employees()">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
             <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse"
@@ -32,19 +32,20 @@
                                 class="fa fa-house icon"></i> Home</a>
                     </li>
                     <li class="nav-item dropdown current">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-calendar icon"></i> Schedule
+                        <a class="nav-link dropdown-toggle" href="#"
+                            id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false"><i class="fa fa-calendar icon"></i> Schedule
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-right" id="drop1"
                             aria-labelledby="navbarScrollingDropdown">
-                            <li><a class="dropdown-item" href="http://localhost:8080/manager/createSchedule/<%= id %>"
-                                    id="curNei1"><i class="fa-solid fa-calendar-plus icon"></i> Create
+                            <li><a class="dropdown-item" href="http://localhost:8080/manager/createSchedule/<%= id %>" id="cur"><i
+                                        class="fa-solid fa-calendar-plus icon"></i> Create
                                     Schedule</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/manager/editSchedule/<%= id %>"
-                                    id="cur"><i class="fa-solid fa-pen-to-square icon"></i> Edit
+                            <li><a class="dropdown-item" href="http://localhost:8080/manager/editSchedule/<%= id %>" id="curNei1"><i
+                                        class="fa-solid fa-pen-to-square icon"></i> Edit
                                     Schedule</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/manager/viewSchedule/<%= id %>"
-                                    id="curNei2"><i class="fa fa-eye icon"></i> View Schedule</a></li>
+                            <li><a class="dropdown-item" href="http://localhost:8080/manager/viewSchedule/<%= id %>" id="curNei2"><i
+                                        class="fa fa-eye icon"></i> View Schedule</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -52,8 +53,7 @@
                                 class="fa fa-user-group icon"></i> Team</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="http://localhost:8080/manager/shiftChange/<%= id %>"><i
-                                class="fas fa-arrow-right-arrow-left icon"></i> Shift Change</a>
+                        <a class="nav-link" href="http://localhost:8080/manager/shiftChange/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Shift Change</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="http://localhost:8080/manager/addEmployee/<%= id %>"
@@ -64,8 +64,7 @@
                             aria-labelledby="navbarScrollingDropdown">
                             <li><a class="dropdown-item" href="http://localhost:8080/manager/addEmployee/<%= id %>"><i
                                         class="fa-solid fa-user-plus icon"></i> Add Employee</a></li>
-                            <li><a class="dropdown-item"
-                                    href="http://localhost:8080/manager/removeEmployee/<%= id %>"><i
+                            <li><a class="dropdown-item" href="http://localhost:8080/manager/removeEmployee/<%= id %>"><i
                                         class="fa-solid fa-user-minus icon"></i> Remove Employee</a></li>
                         </ul>
                     </li>
@@ -81,200 +80,81 @@
                     </li>
                     <li class="nav-item">
                         <form id="logoutform" method="post" action="/logout"></form>
-                        <a class="nav-link">
-                            <button class="btn btn-sm btn-primary log-btn" type="submit" form="logoutform">Log
-                                Out</button>
-                        </a>
+                             <a class="nav-link" >   
+                                 <button class="btn btn-sm btn-primary log-btn" type="submit" form="logoutform">Log Out</button>
+                            </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div id="content">
-        <div id="header">
-            <h1 class="header">Create Schedule</h1>
-        </div>
-
-        <div id="content_body">
-            <div class="row">
-                <div class="col w-100">
-                    <div id="week_selection">
-                        <label class="form-label fw-bold" for="week_options">Select a week to create a schedule
-                            for:</label>
-                        <select name="weeks" id="weeks" class="form-select w-75">
-                            <option value="default">
-                                Choose the week period
-                            </option>
-                            <option value='<%= firstWeek %>'>
-                                <%= firstWeek %>
-                            </option>
-                            <option value='<%= secondWeek %>'>
-                                <%= secondWeek %>
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col w-100">
-                    <div id="select-employee">
-                        <label for="nameList" class="form-label fw-bold">Employee to be added to the schedule:</label>
-                        <select name="nameList" id="nameList" class="form-select w-75">
-                            <option value="default">Choose an employee</option>
-                            <% for( let i=0; i < nameList.length; i++ ) { %>
-                                <option value='<%= nameList[i] %>'>
-                                    <%= nameList[i] %>
-                                </option>
-                                <% } %>
-                        </select>
-                    </div>
-                </div>
-            </div>
+    <div>
+        <label for="calendar">Select week to create a schedule for</label>
+        <input type="date" name="calendar" id="calendar"></input>
+        <br>
+        <br>
+        <label for="nameslist">Name to add to schedule</label>
+        <select name="nameslist" id="nameslist"></select>
+        <button onclick="getAvailiblity()">Select to Add</button>
 
 
-            <div id="employee_availability" class="text-center">
-                <h2 class="header">Selected employee's current availability:</h2>
 
-                <table class="table table-dark table-bordered" id="avail_table">
-                    <thead>
-                        <tr>
-                            <th style="width: 14.28%;">Sunday</th>
-                            <th style="width: 14.28%;">Monday</th>
-                            <th style="width: 14.28%;">Tuesday</th>
-                            <th style="width: 14.28%;">Wednesday</th>
-                            <th style="width: 14.28%;">Thursday</th>
-                            <th style="width: 14.28%;">Friday</th>
-                            <th style="width: 14.28%;">Saturday</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td id="sunday"></td>
-                            <td id="monday"></td>
-                            <td id="tuesday"></td>
-                            <td id="wednesday"></td>
-                            <td id="thursday"></td>
-                            <td id="friday"></td>
-                            <td id="saturday"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div id="schedule_table" class="text-center">
-                <table class="table table-dark table-bordered" id="avail_table">
-                    <thead>
-                        <tr>
-                            <th style="width: 14.28%;">Sunday</th>
-                            <th style="width: 14.28%;">Monday</th>
-                            <th style="width: 14.28%;">Tuesday</th>
-                            <th style="width: 14.28%;">Wednesday</th>
-                            <th style="width: 14.28%;">Thursday</th>
-                            <th style="width: 14.28%;">Friday</th>
-                            <th style="width: 14.28%;">Saturday</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td id="sunday">
-                                From
-                                <div>
-                                    <input type="time" name="sunday_start" id="sunday_start">
-                                </div>
-                                to
-                                <div>
-                                    <input type="time" name="sunday_end" id="sunday_end">
-                                </div>
-                            </td>
-                            <td id="monday">
-                                From
-                                <div>
-                                    <input type="time" name="monday_start" id="monday_start">
-                                </div>
-                                to
-                                <div>
-                                    <input type="time" name="monday_end" id="monday_end">
-                                </div>
-                            </td>
-                            <td id="tuesday">
-                                From
-                                <div>
-                                    <input type="time" name="tuesday_start" id="tuesday_start">
-                                </div>
-                                to
-                                <div>
-                                    <input type="time" name="tuesday_end" id="tuesday_end">
-                                </div>
-                            </td>
-                            <td id="wednesday">
-                                From
-                                <div>
-                                    <input type="time" name="wednesday_start" id="wednesday_start">
-                                </div>
-                                to
-                                <div>
-                                    <input type="time" name="wednesday_end" id="wednesday_end">
-                                </div>
-                            </td>
-                            <td id="thursday">
-                                From
-                                <div>
-                                    <input type="time" name="thursday_start" id="thursday_start">
-                                </div>
-                                to
-                                <div>
-                                    <input type="time" name="thursday_end" id="thursday_end">
-                                </div>
-                            </td>
-                            <td id="friday">
-                                From
-                                <div>
-                                    <input type="time" name="friday_start" id="friday_start">
-                                </div>
-                                to
-                                <div>
-                                    <input type="time" name="friday_end" id="friday_end">
-                                </div>
-                            </td>
-                            <td id="saturday">
-                                From
-                                <div>
-                                    <input type="time" name="saturday_start" id="saturday_start">
-                                </div>
-                                to
-                                <div>
-                                    <input type="time" name="saturday_end" id="saturday_end">
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button class="btn btn-dark" id="getAvailBtn" onclick="addToSchedule()" disabled>Add to
-                    schedule</button>
-            </div>
-
-            <hr>
-
-            <div id="final_schedule_preview" class="text-center">
-                <h2>Final schedule's preview</h2>
-                <table class="table table-dark table-bordered" id="avail_table">
-                    <thead>
-                        <tr>
-                            <th style="width: 12.5%">Employee</th>
-                            <th style="width: 12.5%">Sunday</th>
-                            <th style="width: 12.5%">Monday</th>
-                            <th style="width: 12.5%">Tuesday</th>
-                            <th style="width: 12.5%">Wednesday</th>
-                            <th style="width: 12.5%">Thursday</th>
-                            <th style="width: 12.5%">Friday</th>
-                            <th style="width: 12.5%">Saturday</th>
-                        </tr>
-                    </thead>
-                    <tbody id="schedule_body">
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
+
+    <br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Sunday</th>
+                <th scope="col">Monday</th>
+                <th scope="col">Tuesday</th>
+                <th scope="col">Wednesday</th>
+                <th scope="col">Thursday</th>
+                <th scope="col">Friday</th>
+                <th scope="col">Saturday</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <tr>
+                <td><select id="sunday"></td>
+                <td><select id="monday"></td>
+                <td><select id="tuesday"></td>
+                <td><select id="wednesday"></td>
+                <td><select id="thursday"></td>
+                <td><select id="friday"></td>
+                <td><select id="saturday"></td>
+            </tr>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <button onclick="add()">Add to Schedule</button>
+    <br>
+    <p>Preview of Schedule</p>
+    <div>
+
+        <table id="Schedule" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Employees</th>
+                    <th scope="col">Sunday</th>
+                    <th scope="col">Monday</th>
+                    <th scope="col">Tuesday</th>
+                    <th scope="col">Wednesday</th>
+                    <th scope="col">Thursday</th>
+                    <th scope="col">Friday</th>
+                    <th scope="col">Saturday</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <button onclick="finish()">Finalize Schedule</button>
+
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -283,213 +163,393 @@
 
     <!-- Link for using Axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
     <script>
-        const nameList = document.querySelector("#nameList");
-        const getAvailBtn = document.querySelector('#getAvailBtn');
-        let selectedEmployee = null;
 
-        nameList.addEventListener('change', async function () {
-            selectedEmployee = nameList.value;
-            if (selectedEmployee === "default") {
-                getAvailBtn.disabled = true;
-                clearAvailabilityTable();
-            } else {
-                getAvailBtn.disabled = false;
-                getAvailability();
-            }
-        });
 
-        async function getAvailability() {
-            clearAvailabilityTable();
-            let request = null;
-            let firstName = selectedEmployee.split(' ')[0];
-            let availability = null;
+        function employees() {
+            const nlist = document.getElementById("nameslist")
 
-            try {
-                request = await axios.get(`/getAvailability/${firstName}`);
-            } catch (error) {
-                console.log(error);
-            }
-
-            if (request) {
-                availability = request.data;
-
-                for (const [key, value] of Object.entries(availability)) {
-                    if (value === "allDay") {
-                        document.querySelector(`#${key}`).innerHTML = "All Day";
-                    } else if (value === "day") {
-                        document.querySelector(`#${key}`).innerHTML = "Day";
-                    } else {
-                        document.querySelector(`#${key}`).innerHTML = "Night";
+            axios.get('/getNames').then(
+                (result) => {
+                    for (let i = 0; i < result.data.length; i++) {
+                        var option = document.createElement('option')
+                        option.innerText = result.data[i].firstName
+                        option.value = result.data[i].firstName
+                        nlist.append(option)
                     }
                 }
+            )
+        }
+
+        function getAvailiblity() {
+            clearshifts()
+            const name = document.getElementById('nameslist').value
+            axios.post('/getAvailability', { name: name }).then(
+                (result) => {
+                    console.log(result.data[0].availability)
+                    if (result.data[0].availability.sunday != undefined) {
+                        if (result.data[0].availability.sunday == 'allDay') {
+                            var option = document.createElement('option')
+                            option.innerText = "day"
+                            option.value = "day"
+                            option.id = "day"
+                            option.className = "shift"
+                            document.getElementById("sunday").append(option)
+                            var option = document.createElement('option')
+                            option.innerText = "night"
+                            option.value = "night"
+                            option.id = "night"
+                            option.className = "shift"
+                            document.getElementById("sunday").append(option)
+                        }
+                        else {
+                            var option = document.createElement('option')
+                            option.innerText = result.data[0].availability.sunday
+                            option.value = result.data[0].availability.sunday
+                            option.id = result.data[0].availability.sunday
+                            option.className = "shift"
+                            document.getElementById("sunday").append(option)
+                        }
+                    }
+
+                    var option = document.createElement('option')
+                    option.innerText = "No shift"
+                    option.value = ""
+                    option.className = "shift"
+                    document.getElementById("sunday").append(option)
+
+
+                    if (result.data[0].availability.monday != undefined) {
+
+                        if (result.data[0].availability.monday == 'allDay') {
+                            var option = document.createElement('option')
+                            option.innerText = "day"
+                            option.value = "day"
+                            option.id = "day"
+                            option.className = "shift"
+                            document.getElementById("monday").append(option)
+                            var option = document.createElement('option')
+                            option.innerText = "night"
+                            option.value = "night"
+                            option.id = "night"
+                            option.className = "shift"
+                            document.getElementById("monday").append(option)
+                        }
+                        else {
+                            var option = document.createElement('option')
+                            option.innerText = result.data[0].availability.monday
+                            option.value = result.data[0].availability.monday
+                            option.id = result.data[0].availability.monday
+                            option.className = "shift"
+                            document.getElementById("monday").append(option)
+                        }
+                    }
+
+                    var option = document.createElement('option')
+                    option.innerText = "No shift"
+                    option.value = ""
+                    option.className = "shift"
+                    document.getElementById("monday").append(option)
+
+
+                    if (result.data[0].availability.tuesday != undefined) {
+                        if (result.data[0].availability.tuesday == 'allDay') {
+                            var option = document.createElement('option')
+                            option.innerText = "day"
+                            option.value = "day"
+                            option.id = "day"
+                            option.className = "shift"
+                            document.getElementById("tuesday").append(option)
+                            var option = document.createElement('option')
+                            option.innerText = "night"
+                            option.value = "night"
+                            option.id = "night"
+                            option.className = "shift"
+                            document.getElementById("tuesday").append(option)
+                        }
+                        else {
+                            var option = document.createElement('option')
+                            option.innerText = result.data[0].availability.tuesday
+                            option.value = result.data[0].availability.tuesday
+                            option.id = result.data[0].availability.tuesday
+                            option.className = "shift"
+                            document.getElementById("tuesday").append(option)
+                        }
+                    }
+
+                    var option = document.createElement('option')
+                    option.innerText = "No shift"
+                    option.value = ""
+                    option.className = "shift"
+                    document.getElementById("tuesday").append(option)
+
+
+                    if (result.data[0].availability.wednesday != undefined) {
+                        if (result.data[0].availability.wednesday == 'allDay') {
+                            var option = document.createElement('option')
+                            option.innerText = "day"
+                            option.value = "day"
+                            option.id = "day"
+                            option.className = "shift"
+                            document.getElementById("wednesday").append(option)
+                            var option = document.createElement('option')
+                            option.innerText = "night"
+                            option.value = "night"
+                            option.id = "night"
+                            option.className = "shift"
+                            document.getElementById("wednesday").append(option)
+                        }
+                        else {
+                            var option = document.createElement('option')
+                            option.innerText = result.data[0].availability.wednesday
+                            option.value = result.data[0].availability.wednesday
+                            option.id = result.data[0].availability.wednesday
+                            option.className = "shift"
+                            document.getElementById("wednesday").append(option)
+                        }
+                    }
+
+                    var option = document.createElement('option')
+                    option.innerText = "No shift"
+                    option.value = ""
+                    option.className = "shift"
+                    document.getElementById("wednesday").append(option)
+
+
+                    if (result.data[0].availability.thursday != undefined) {
+                        if (result.data[0].availability.thursday == 'allDay') {
+                            var option = document.createElement('option')
+                            option.innerText = "day"
+                            option.value = "day"
+                            option.id = "day"
+                            option.className = "shift"
+                            document.getElementById("thursday").append(option)
+                            var option = document.createElement('option')
+                            option.innerText = "night"
+                            option.value = "night"
+                            option.id = "night"
+                            option.className = "shift"
+                            document.getElementById("thursday").append(option)
+                        }
+                        else {
+                            var option = document.createElement('option')
+                            option.innerText = result.data[0].availability.thursday
+                            option.value = result.data[0].availability.thursday
+                            option.id = result.data[0].availability.thursday
+                            option.className = "shift"
+                            document.getElementById("thursday").append(option)
+                        }
+                    }
+
+                    var option = document.createElement('option')
+                    option.innerText = "No shift"
+                    option.value = ""
+                    option.className = "shift"
+                    document.getElementById("thursday").append(option)
+
+
+                    if (result.data[0].availability.friday != undefined) {
+                        if (result.data[0].availability.friday == 'allDay') {
+                            var option = document.createElement('option')
+                            option.innerText = "day"
+                            option.value = "day"
+                            option.id = "day"
+                            option.className = "shift"
+                            document.getElementById("friday").append(option)
+                            var option = document.createElement('option')
+                            option.innerText = "night"
+                            option.value = "night"
+                            option.id = "night"
+                            option.className = "shift"
+                            document.getElementById("friday").append(option)
+                        }
+                        else {
+                            var option = document.createElement('option')
+                            option.innerText = result.data[0].availability.friday
+                            option.value = result.data[0].availability.friday
+                            option.id = result.data[0].availability.friday
+                            option.className = "shift"
+                            document.getElementById("friday").append(option)
+                        }
+                    }
+
+                    var option = document.createElement('option')
+                    option.innerText = "No shift"
+                    option.value = ""
+                    option.className = "shift"
+                    document.getElementById("friday").append(option)
+
+
+                    if (result.data[0].availability.saturday != undefined) {
+                        if (result.data[0].availability.saturday == 'allDay') {
+                            var option = document.createElement('option')
+                            option.innerText = "day"
+                            option.value = "day"
+                            option.id = "day"
+                            option.className = "shift"
+                            document.getElementById("saturday").append(option)
+                            var option = document.createElement('option')
+                            option.innerText = "night"
+                            option.value = "night"
+                            option.id = "night"
+                            option.className = "shift"
+                            document.getElementById("saturday").append(option)
+                        }
+                        else {
+                            var option = document.createElement('option')
+                            option.innerText = result.data[0].availability.saturday
+                            option.value = result.data[0].availability.saturday
+                            option.id = result.data[0].availability.saturday
+                            option.className = "shift"
+                            document.getElementById("saturday").append(option)
+                        }
+                    }
+
+                    var option = document.createElement('option')
+                    option.innerText = "No shift"
+                    option.value = ""
+                    option.className = "shift"
+                    document.getElementById("saturday").append(option)
+
+                }
+            )
+        }
+
+        function clearshifts() {
+
+            let selectbox1 = document.getElementById('sunday')
+            var x;
+            for (x = selectbox1.options.length - 1; x >= 0; x--) {
+                selectbox1.remove(x);
+            }
+
+            let selectbox2 = document.getElementById('monday')
+            var x1;
+            for (x1 = selectbox2.options.length - 1; x1 >= 0; x1--) {
+                selectbox2.remove(x1);
+            }
+            let selectbox3 = document.getElementById('tuesday')
+            var x2;
+            for (x2 = selectbox3.options.length - 1; x2 >= 0; x2--) {
+                selectbox3.remove(x2);
+            }
+            let selectbox4 = document.getElementById('wednesday')
+            var x3;
+            for (x3 = selectbox4.options.length - 1; x3 >= 0; x3--) {
+                selectbox4.remove(x3);
+            }
+
+            let selectbox5 = document.getElementById('thursday')
+            var x4;
+            for (x4 = selectbox5.options.length - 1; x4 >= 0; x4--) {
+                selectbox5.remove(x4);
+            }
+            let selectbox6 = document.getElementById('friday')
+            var x5;
+            for (x5 = selectbox6.options.length - 1; x5 >= 0; x5--) {
+                selectbox6.remove(x5);
+            }
+            let selectbox7 = document.getElementById('saturday')
+            var x6;
+            for (x6 = selectbox7.options.length - 1; x6 >= 0; x6--) {
+                selectbox7.remove(x6);
             }
         }
 
-        function clearAvailabilityTable() {
-            const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-            days.forEach(day => {
-                document.querySelector(`#${day}`).innerHTML = "";
-            });
+        function add() {
+            const schedulediv = document.getElementById("Schedule")
+
+            let elementExists = !!document.getElementById(document.getElementById('nameslist').value)
+            if (elementExists == false) {
+                var new_row = document.createElement('tr')
+                new_row.id = document.getElementById('nameslist').value;
+                schedulediv.append(new_row)
+
+            }
+            else if (elementExists == true) {
+                alert('This employee is already in the schedule')
+                return
+            }
+            console.log(elementExists)
+
+
+            var name = document.createElement('td')
+            name.innerText = document.getElementById('nameslist').value
+
+
+            var sunday = document.createElement('td')
+            sunday.innerText = document.getElementById('sunday').value
+
+            var monday = document.createElement('td')
+            monday.innerText = document.getElementById('monday').value
+
+            var tuesday = document.createElement('td')
+            tuesday.innerText = document.getElementById('tuesday').value
+
+
+            var wednesday = document.createElement('td')
+            wednesday.innerText = document.getElementById('wednesday').value
+
+            var thursday = document.createElement('td')
+            thursday.innerText = document.getElementById('thursday').value
+
+            var friday = document.createElement('td')
+            friday.innerText = document.getElementById('friday').value
+
+            var saturday = document.createElement('td')
+            saturday.innerText = document.getElementById('saturday').value
+
+
+            var add = document.getElementById(document.getElementById('nameslist').value)
+            add.append(name, sunday, monday, tuesday, wednesday, thursday, friday, saturday)
+
+            document.getElementById('sunday').value = ''
+            document.getElementById('monday').value = ''
+            document.getElementById('tuesday').value = ''
+            document.getElementById('wednesday').value = ''
+            document.getElementById('thursday').value = ''
+            document.getElementById('friday').value = ''
+            document.getElementById('saturday').value = ''
+            clearshifts()
         }
 
-        async function addToSchedule() {
-            const week = document.querySelector('#weeks').value;
-            const employee = document.querySelector('#nameList').value;
+        function finish() {
+            let schedule = document.getElementById('Schedule').rows.length
 
-            const sunday_start = document.querySelector('#sunday_start').value;
-            const sunday_end = document.querySelector('#sunday_end').value;
+            let shifts = []
+            for (let i = 1; i < schedule; i++) {
 
-            const monday_start = document.querySelector('#monday_start').value;
-            const monday_end = document.querySelector('#monday_end').value;
-
-            const tuesday_start = document.querySelector('#tuesday_start').value;
-            const tuesday_end = document.querySelector('#tuesday_end').value;
-
-            const wednesday_start = document.querySelector('#wednesday_start').value;
-            const wednesday_end = document.querySelector('#wednesday_end').value;
-
-            const thursday_start = document.querySelector('#thursday_start').value;
-            const thursday_end = document.querySelector('#thursday_end').value;
-
-            const friday_start = document.querySelector('#friday_start').value;
-            const friday_end = document.querySelector('#friday_end').value;
-
-            const saturday_start = document.querySelector('#saturday_start').value;
-            const saturday_end = document.querySelector('#saturday_end').value;
-
-            let data = {
-                week: week,
-                employee: employee
-            };
-
-            if (sunday_start && sunday_end) {
-                data.sunday = [sunday_start, sunday_end];
-            }
-
-            if (monday_start && monday_end) {
-                data.monday = [monday_start, monday_end];
-            }
-
-            if (tuesday_start && tuesday_end) {
-                data.tuesday = [tuesday_start, tuesday_end];
-            }
-
-            if (wednesday_start && wednesday_end) {
-                data.wednesday = [wednesday_start, wednesday_end];
-            }
-
-            if (thursday_start && thursday_end) {
-                data.thursday = [thursday_start, thursday_end];
-            }
-
-            if (friday_start && friday_end) {
-                data.friday = [friday_start, friday_end];
-            }
-
-            if (saturday_start && saturday_end) {
-                data.saturday = [saturday_start, saturday_end];
-            }
-
-            let request = null;
-            try {
-                request = await axios.post('/addToSchedule', data);
-            } catch (error) {
-                alert("Employee is already scheduled for the selected week!");
-            }
-
-            if (request) {
-                if (request.status === 200) {
-                    sunday_start.value = "";
-                    sunday_end.value = "";
-
-                    monday_start.value = "";
-                    monday_end.value = "";
-
-                    tuesday_start.value = "";
-                    tuesday_end.value = "";
-
-                    wednesday_start.value = "";
-                    wednesday_end.value = "";
-
-                    thursday_start.value = "";
-                    thursday_end.value = "";
-
-                    friday_start.value = "";
-                    friday_end.value = "";
-
-                    saturday_start.value = "";
-                    saturday_end.value = "";
-
-                    getSchedule(data.employee, data.week);
+                let new_shift = {
+                    name: document.getElementById('Schedule').rows[i].cells.item(0).innerText,
+                    sunday: document.getElementById('Schedule').rows[i].cells.item(1).innerText,
+                    monday: document.getElementById('Schedule').rows[i].cells.item(2).innerText,
+                    tuesday: document.getElementById('Schedule').rows[i].cells.item(3).innerText,
+                    wednesday: document.getElementById('Schedule').rows[i].cells.item(4).innerText,
+                    thursday: document.getElementById('Schedule').rows[i].cells.item(5).innerText,
+                    friday: document.getElementById('Schedule').rows[i].cells.item(6).innerText,
+                    saturday: document.getElementById('Schedule').rows[i].cells.item(7).innerText
                 }
-            }
-        }
 
-        async function getSchedule(employee, week) {
-            let request = null;
-            const data = {
-                employee: employee,
-                week: week
-            }
-            try {
-                request = await axios.post('/getSchedule', data);
-            } catch (error) {
-                console.log(error);
+                shifts.push(new_shift)
             }
 
-            if (request) {
-                const data = request.data;
-                const name = data.name;
-                const schedule_body = document.querySelector('#schedule_body');
-                const schedule_row = schedule_body.insertRow();
-                const employee = schedule_row.insertCell(0);
-                employee.innerHTML = name;
 
-                if ('Sunday' in data) {
-                    const sunday = schedule_row.insertCell(1);
-                    sunday.innerHTML = `${data.Sunday[0]} to ${data.Sunday[1]}`;
-                } else {
-                    schedule_row.insertCell(1);
+
+            let date_schedule = new Date(document.getElementById("calendar").value + 'T00:00:00')
+
+            console.log(shifts);
+            axios.post('/createSchedule', { date: date_schedule, shifts: shifts }).then((res) => {
+                if (res.status == 406) {
+                    alert("There exists a schedule for that week already!")
                 }
-                if ('Monday' in data) {
-                    const monday = schedule_row.insertCell(2);
-                    monday.innerHTML = `${data.Monday[0]} to ${data.Monday[1]}`;
-                } else {
-                    schedule_row.insertCell(2);
+                else if (res.status == 200) {
+                    alert("Successfully Submitted Schedule")
                 }
-                if ('Tuesday' in data) {
-                    const tuesday = schedule_row.insertCell(3);
-                    tuesday.innerHTML = `${data.Tuesday[0]} to ${data.Tuesday[1]}`;
-                } else {
-                    schedule_row.insertCell(3);
-                }
-                if ('Wednesday' in data) {
-                    const wednesday = schedule_row.insertCell(4);
-                    wednesday.innerHTML = `${data.Wednesday[0]} to ${data.Wednesday[1]}`;
-                } else {
-                    schedule_row.insertCell(4);
-                }
-                if ('Thursday' in data) {
-                    const thursday = schedule_row.insertCell(5);
-                    thursday.innerHTML = `${data.Thursday[0]} to ${data.Thursday[1]}`;
-                } else {
-                    schedule_row.insertCell(5);
-                }
-                if ('Friday' in data) {
-                    const friday = schedule_row.insertCell(6);
-                    friday.innerHTML = `${data.Friday[0]} to ${data.Friday[1]}`;
-                } else {
-                    schedule_row.insertCell(6);
-                }
-                if ('Saturday' in data) {
-                    const saturday = schedule_row.insertCell(7);
-                    saturday.innerHTML = `${data.Saturday[0]} to ${data.Saturday[1]}`;
-                } else {
-                    schedule_row.insertCell(7);
-                }
-            }
+            }).catch((err) => {
+                console.log(err)
+            })
+
+
         }
     </script>
 </body>
