@@ -237,36 +237,36 @@
         <div class="modal-dialog modal-confirm">
             <div class="modal-content" id="mainContent">
                 <div class="modal-header justify-content-center" id="mainModal">
-                    <h5 class="modal-title" id="exampleModalLabel">Change Your Old Password</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn2"><i class="fa-solid fa-xmark"></i></button>
+                    <h5 class="modal-title" id="exampleModalLabel">Change Your Current Password</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" onclick="resetPass()" aria-hidden="true" id="closingBtn2"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="modal-body text-center" id="mainBody">
                     <form action="/editPass" id="passForm">
-                        <div class="col-md-12 control">
+                        <div class="col-md-12 control inp">
                             <div class="input-group passDiv">
                                 <input class="form-control input-lg mb-3" placeholder="Enter Current Password" name="password" type="password" id="curPassword">
                                 <i class="fa-solid fa-eye pass" id="toggleCurPassword"></i>
                             </div>
-                            <small id="err">Error message</small>
+                            <small class="inp" id="err">Error message</small>
                         </div>
 
-                        <div class="col-md-12 control">
+                        <div class="col-md-12 control inp">
                             <div class="input-group passDiv">
                                 <input class="form-control input-lg mb-3" placeholder="Enter New Password" name="password" type="password" id="newPassword">
                                 <i class="fa-solid fa-eye pass" id="toggleNewPassword"></i>
                             </div>
-                            <small id="err">Error message</small>
+                            <small class="inp" id="err">Error message</small>
                         </div>
 
-                        <div class="col-md-12 control">
+                        <div class="col-md-12 control inp">
                             <div class="input-group passDiv">
                                 <input class="form-control input-lg mb-3" placeholder="Re-enter New Password" name="password" type="password" id="rNewPassword">
                                 <i class="fa-solid fa-eye pass" id="toggleRNewPassword"></i>
                             </div>
-                            <small id="err">Error message</small>
+                            <small class="inp" id="err">Error message</small>
                         </div>
                         <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" id="closeBtn" class="btn btn-secondary" onclick="resetPass()" data-bs-dismiss="modal">Close</button>
                             <button type="submit" id="passBtn" class="btn btn-primary"">Change Password</button>
                         </div>
                     </form>
@@ -277,19 +277,19 @@
 
     <div id="modalPass" class="modal fade">
         <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-                <div class="modal-header justify-content-center">
-                    <div class="icon-box">
+            <div class="modal-content" id="pass">
+                <div class="modal-header justify-content-center" id="passHead">
+                    <div class="icon-box" id="icon-box-pass">
                         <i class="fa-solid fa-circle-check" id="checkMark"></i>
                     </div>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn"><i class="fa-solid fa-xmark"></i></button>
+                    <button type="button" class="close" onclick="resetPass()" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="modal-body text-center">
                     <h4>Successful!</h4>
                     <p class="text-center" id="test"></p>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-success btn-block" data-bs-dismiss="modal" id="dismiss"><span>Dismiss</span><i class="fa-solid fa-circle-xmark"></i></button>
+                    <button type="button" class="btn btn-success btn-block" onclick="resetPass()" data-bs-dismiss="modal" id="dismiss"><span>Dismiss</span><i class="fa-solid fa-circle-xmark" id="dismissIcon"></i></button>
                 </div>
             </div>
         </div>
@@ -297,19 +297,19 @@
 
     <div id="modalFail" class="modal fade">
         <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-                <div class="modal-header justify-content-center" id="head">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-circle-check" id="checkMark"></i>
+            <div class="modal-content" id="fail">
+                <div class="modal-header justify-content-center" id="failHead">
+                    <div class="icon-box" id="icon-box-fail">
+                        <i class="fa-solid fa-circle-check" id="crossMark"></i>
                     </div>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn1"><i class="fa-solid fa-xmark"></i></button>
+                    <button type="button" class="close" data-bs-dismiss="modal" onclick="resetPass()" aria-hidden="true" id="closingBtn"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="modal-body text-center">
                     <h4>Unsuccessful!</h4>
-                    <p class="text-center" id="test"></p>
+                    <p class="text-center" id="failMsg"></p>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-success btn-block" id="retry" data-bs-dismiss="modal"><span>Retry</span><i class="fa-solid fa-check" id="okIcon"></i></button>
+                    <button type="button" class="btn btn-success btn-block" onclick="resetPass()" id="retry" data-bs-dismiss="modal"><span>Retry</span><i class="fa-solid fa-arrow-rotate-right" id="okIcon"></i></button>
                 </div>
             </div>
         </div>
@@ -426,6 +426,10 @@
         }
    })
 
+
+    function resetPass(){
+        document.getElementById("passForm").reset();
+    }
 
     function checkInputs() {
         const fNameValue = fName.value.trim();
@@ -584,7 +588,9 @@
     curPass.addEventListener("input", function (event) {
         if (this.value === '') {
             setErrorFor(curPass, "Current password cannot be blank");
-        } else {
+        } else if(this.value === newPass.value){
+            setErrorFor(newPass, "Can't be the same as current password");
+        }else {
             setSuccessFor(curPass);
         }
     })
@@ -592,7 +598,9 @@
     newPass.addEventListener("input", function (event) {
         if (this.value === '') {
             setErrorFor(newPass, "New password cannot be blank");
-        } else {
+        } else if(this.value === curPass.value){
+            setErrorFor(newPass, "Can't be the same as current password");
+        }else {
             setSuccessFor(newPass);
         }
     })
@@ -616,6 +624,9 @@
         if (curValue === '') {
             setErrorFor(curPass, "Current password cannot be blank");
             success = false;
+        } else if(this.value === newPass.value){
+            setErrorFor(newPass, "Can't be the same as current password");
+            success = false;
         } else {
             setSuccessFor(curPass);
             success = true;
@@ -623,6 +634,9 @@
         
         if (newValue === '') {
             setErrorFor(newPass, "New password cannot be blank");
+            success = false;
+        } else if(this.value === curValue){
+            setErrorFor(newPass, "Can't be the same as current password");
             success = false;
         } else {
             setSuccessFor(newPass);
@@ -654,9 +668,6 @@
 
         const curValue = curPass.value.trim();
         const newValue = newPass.value.trim();
-
-        console.log(curValue);
-        console.log(newValue);
         const data = {
             curPassword: curValue,
             newPassword: newValue,
@@ -671,12 +682,13 @@
                     $("#myModal").modal('hide');
                 }
                 else{
-                    let modal = document.getElementById("#myModal");
                     let message = result.data;
-                    document.getElementById("test").innerText = `${message}`;
+                    console.log(result);
+                    document.getElementById("failMsg").innerText = `${message}`;
                     $("#myModal").modal('hide');
                     $("#modalFail").modal('show');
                     document.getElementById('retry').onclick = function() {
+                        document.getElementById("passForm").reset();
                         $("#myModal").modal('show');
                     }
                 }
