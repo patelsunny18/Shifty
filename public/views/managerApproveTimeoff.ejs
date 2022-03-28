@@ -28,7 +28,7 @@
 
             <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item active current">
+                    <li class="nav-item active ">
                         <a class="nav-link" href="http://localhost:8080/manager/home/<%= id %>"><i
                                 class="fa fa-house icon"></i> Home</a>
                     </li>
@@ -49,12 +49,11 @@
                                         class="fa fa-eye icon"></i> View Schedule</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="http://localhost:8080/manager/team/<%= id %>"><i
-                                class="fa fa-user-group icon"></i> Team</a>
+                    <li class="nav-item current ">
+                        <a class="nav-link" href="http://localhost:8080/manager/approveTimeoff/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Approve Shift Change</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="http://localhost:8080/manager/ApproveTimeoff/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Approve Shift Change</a>
+                        <a class="nav-link" href="http://localhost:8080/manager/changeAvailabilityManager/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Change availability</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="http://localhost:8080/manager/addEmployee/<%= id %>"
@@ -75,7 +74,7 @@
             <div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
                 <ul class="navbar-nav ms-auto buttons">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="http://localhost:8080/manager/managerEdit/<%= id %>">
                             <button class="btn btn-sm btn-primary prof-btn" type="submit">My Profile</button>
                         </a>
                     </li>
@@ -89,6 +88,7 @@
             </div>
         </div>
     </nav>
+
 
     <div id="content">
         <h1>Time off Requests</h1>

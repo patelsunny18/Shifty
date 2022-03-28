@@ -27,7 +27,7 @@
 
             <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item active ">
                         <a class="nav-link" href="http://localhost:8080/manager/home/<%= id %>"><i
                                 class="fa fa-house icon"></i> Home</a>
                     </li>
@@ -38,22 +38,21 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-right" id="drop1"
                             aria-labelledby="navbarScrollingDropdown">
-                            <li><a class="dropdown-item" href="http://localhost:8080/manager/createSchedule/<%= id %>" id="cur"><i
+                            <li><a class="dropdown-item" id = "cur" href="http://localhost:8080/manager/createSchedule/<%= id %>"><i
                                         class="fa-solid fa-calendar-plus icon"></i> Create
                                     Schedule</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/manager/editSchedule/<%= id %>" id="curNei1"><i
+                            <li><a class="dropdown-item" id="curNei1" href="http://localhost:8080/manager/editSchedule/<%= id %>"><i
                                         class="fa-solid fa-pen-to-square icon"></i> Edit
                                     Schedule</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/manager/viewSchedule/<%= id %>" id="curNei2"><i
+                            <li><a class="dropdown-item" id="curNei2"href="http://localhost:8080/manager/viewSchedule/<%= id %>"><i
                                         class="fa fa-eye icon"></i> View Schedule</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="http://localhost:8080/manager/team/<%= id %>"><i
-                                class="fa fa-user-group icon"></i> Team</a>
+                        <a class="nav-link" href="http://localhost:8080/manager/approveTimeoff/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Approve Shift Change</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="http://localhost:8080/manager/shiftChange/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Shift Change</a>
+                        <a class="nav-link" href="http://localhost:8080/manager/changeAvailabilityManager/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Change availability</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="http://localhost:8080/manager/addEmployee/<%= id %>"
@@ -74,7 +73,7 @@
             <div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
                 <ul class="navbar-nav ms-auto buttons">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="http://localhost:8080/manager/managerEdit/<%= id %>">
                             <button class="btn btn-sm btn-primary prof-btn" type="submit">My Profile</button>
                         </a>
                     </li>
@@ -88,6 +87,7 @@
             </div>
         </div>
     </nav>
+
 
     <div>
         <label for="calendar">Select week to create a schedule for</label>

@@ -570,6 +570,7 @@ app.get('/manager/changeAvailabilityManager/:id', isManager, async (req, res) =>
     }
 });
 
+
 // GET route to viewSchedule for Employee
 app.get('/employee/viewSchedule/:id', isEmployee, async (req, res) => {
     const { id } = req.params;
@@ -613,7 +614,7 @@ app.get('/employee/requestTimeoff/:id', isEmployee, async (req, res) => {
 });
 
 // GET route to availableShifts for Employee
-app.get('/employee/availableShifts/:id', async (req, res) => {
+app.get('/employee/availableShifts/:id', isEmployee, async (req, res) => {
     const { id } = req.params;
     let employee = null;
 

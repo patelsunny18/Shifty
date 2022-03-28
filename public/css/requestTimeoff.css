@@ -54,7 +54,7 @@ body {
 }
 
 .navbar .nav-item.current {
-    border-bottom: #750e13 5px solid;
+    border-bottom: #da1e28 5px solid;
     border-bottom-width: 5px;
     color: white;
     font-weight: bold;

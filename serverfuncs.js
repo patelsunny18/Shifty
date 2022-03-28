@@ -5,6 +5,8 @@ const Manager = require('./models/manager');
 const Owner = require('./models/owner');
 
 const generator = require('generate-password');
+const session = require('express-session');
+const Bcrypt = require('bcryptjs');
 
 function getManagerId() {
     var id = generator.generate({
@@ -82,16 +84,19 @@ function checkEmployeeLogin(id, password) {
     return new Promise((resolve, reject) => {
         Employee.findOne({
             employeeID: id,
-            password: password
         }, (err, employee) => {
             if (err) {
                 reject(err);
             } else if (employee) {
-                if (employee.password === password) {
-                    resolve(employee);
-                } else {
-                    reject('Wrong password or id');
+                const hash = employee.password;
+                Bcrypt.compare(password, hash, (err, res) => {
+                    if (res) {
+                        resolve(employee);
+                    } else {
+                        reject('Wrong password');
+                    }
                 }
+                );
             } else {
                 reject('Employee not found');
             }
@@ -103,22 +108,27 @@ function checkManagerLogin(id, password) {
     return new Promise((resolve, reject) => {
         Manager.findOne({
             managerID: id,
-            password: password
         }, (err, manager) => {
             if (err) {
                 reject(err);
             } else if (manager) {
-                if (manager.password === password) {
-                    resolve(manager);
-                } else {
-                    reject('Wrong password or id');
-                }
+                const hash = manager.password;
+                Bcrypt.compare(password, hash, (err, result) => {
+                    if (err) {
+                        reject(err);
+                    } else if (result) {
+                        resolve(manager);
+                    } else {
+                        reject('Wrong password or id');
+                    }
+                });
             } else {
                 reject('Manager not found');
             }
         });
     });
 }
+
 
 function checkOwnerLogin(id, password) {
     return new Promise((resolve, reject) => {
@@ -150,6 +160,6 @@ exports = module.exports = {
     validateOwnerId, 
     validatePassword, 
     checkEmployeeLogin, 
-    checkManagerLogin, 
+    checkManagerLogin,
     checkOwnerLogin
 }
