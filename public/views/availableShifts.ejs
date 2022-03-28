@@ -72,7 +72,7 @@
     </nav>
 
     <div id="content">
-        <% for( let i=0; i < shifts.length; i++ ) { %>
+        <!-- <% for( let i=0; i < shifts.length; i++ ) { %>
             <div class="card">
                 <h5 class="card-header"><%= shifts[i].name %></h5>
                 <div class="card-body">
@@ -84,6 +84,28 @@
                     <a href="#" class="btn btn-primary"><%= shifts[i].status.toUpperCase() %></a>
                 </div>
             </div>
+            <% } %> -->
+
+            <% for( let i = 0; i < shifts.length; i++ ) { %>
+                <% if (i === 0 || i % 2 === 0) { %>
+                    <div class="row">
+                <% } %>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <h5 class="card-header"><%= shifts[i].name %></h5>
+                        <div class="card-body">
+                            <h5 class="card-title"><%= shifts[i].status %></h5>
+                            <p class="card-text">
+                                Date:   <%= shifts[i].date %> <br>
+                                Time:   <%= shifts[i].time %> <br>
+                            </p>
+                            <a href="#" class="btn btn-primary"><%= shifts[i].status %></a>
+                        </div>
+                    </div>
+                </div>
+                <% if (i % 2 !== 0) { %>
+                    </div>
+                <% } %>
             <% } %>
     </div>
 
