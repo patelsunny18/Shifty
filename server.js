@@ -11,6 +11,8 @@ const MongoDBSession = require('connect-mongodb-session')(session);
 const startOfWeek = require('date-fns/startOfWeek')
 const endOfWeek = require('date-fns/endOfWeek')
 const format = require('date-fns/format')
+const getDay = require('date-fns/getDay')
+const isSameWeek = require('date-fns/isSameWeek')
 
 // make webpage availible
 const PORT = 8080;
@@ -849,20 +851,36 @@ app.post('/createSchedule', async function (req, res) {
 
     let week = format(start, "yyyy-MM-dd") + " " + format(end, "yyyy-MM-dd")
 
+    
+
     const schedule = await Schedule.find({ week: week }).then((result) => {
         if (result.length > 0) {
             console.log('existing Schedule')
             res.status(406).send()
         }
         else {
-            const insertSchedule = new Schedule({ schedule: req.body.shifts, week: week })
-            insertSchedule.save().then((result_s) => {
-                console.log("Added successfully")
-                res.status(200).send()
-            }).catch((err) => {
-                console.log(err)
-            }
-            );
+            // acquire all approved timeoffs
+            const weeks = Timeoff.find({approve: true}).select('-_id').then((result) => {
+                let flag = true
+                if(result.length != 0){
+                    for(let h = 0; h < result.length;h++){
+                        flag = checkTimeoff(req.body, result[h])
+                        if(flag === false){
+                            res.status(208).send("Timeoff catch")
+                        }
+                    }
+                }
+                if (flag == true){
+                    const insertSchedule = new Schedule({ schedule: req.body.shifts, week: week })
+                    insertSchedule.save().then((result_s) => {
+                        console.log("Added successfully")
+                        res.status(200).send()
+                    }).catch((err) => {
+                        console.log(err)
+                    }
+                    );
+                }
+            })
         }
 
     })
@@ -899,6 +917,12 @@ app.get('/getWeeks', async function (req, res) {
     })
 })
 
+app.get('/getTimeoffs', async function (req, res) {
+    const weeks = await Timeoff.find({approve: false}).select('-_id').then((result) => {
+        res.status(200).send(result);
+    })
+})
+
 app.post('/getAvailability', async function (req, res) {
 
     const name = await Employee.find({ firstName: req.body.name }).select('availability -_id').then((result) => {
@@ -928,12 +952,21 @@ app.put('/changeAvailabilityManager/:id', async (req, res) => {
 })
 
 app.put('/editSchedule', async function (req, res) {
-    let currentdate = new Date();
-    let one = new Date(currentdate.getFullYear(), 0, 1);
-    let numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
-    let weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
+    
+    const schedule = await Schedule.findOneAndUpdate({ week: req.body.date }, { schedule: req.body.shifts }).then((result) => {
+        res.status(200).send('Sucess')
+    })
+})
 
-    const schedule = await Schedule.findOneAndUpdate({ week_number: weeknum }, { schedule: req.body }).then((result) => {
+app.put('/approveReq', async function (req, res) {
+    const schedule = await Timeoff.findOneAndUpdate({ name:req.body.name ,date: req.body.date }, { approve: true }).then((result) => {
+        res.status(200).send('Sucess')
+    })
+})
+
+app.post('/denyReq', async function (req, res) {
+    
+    const schedule = await Timeoff.findOneAndRemove({ name:req.body.name ,date: req.body.date }).then((result) => {
         res.status(200).send('Sucess')
     })
 })
@@ -1008,6 +1041,60 @@ function getPassword() {
         strict: true
     });
     return password;
+}
+
+function checkTimeoff(schedule, time_off){
+
+    let start_of_week = new Date(schedule.date)
+    let day_req = new Date(time_off.date)
+
+    console.log(start_of_week)
+    console.log(day_req)
+    
+    if(!isSameWeek(start_of_week, day_req)){
+        return true
+    }
+    
+    
+    let names = time_off.name
+    let day = getDay(day_req)
+    
+
+    for(let i = 0; i < schedule.shifts.length; i++){
+        if(schedule.shifts[i].name == names){
+            switch(day){
+            case 0:
+                if(schedule.shifts[i].sunday != ""){
+                    return false
+                }
+            case 1:
+                if(schedule.shifts[i].monday != ""){
+                    return false
+            }
+            case 2:
+                if(schedule.shifts[i].tuesday != ""){
+                    return false
+            }
+            case 3:
+                if(schedule.shifts[i].wednesday != ""){
+                    return false
+            }
+            case 4:
+                if(schedule.shifts[i].thursday != ""){
+                    return false
+            }
+            case 5:
+                if(schedule.shifts[i].friday != ""){
+                    return false
+            }
+            case 6:
+                if(schedule.shifts[i].saturday != ""){
+                    return false
+            }
+            }
+        }
+    }
+    return true
 }
 
 app.listen(PORT, HOST);

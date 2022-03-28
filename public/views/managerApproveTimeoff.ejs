@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="/css/requestTimeoff.css">
 </head>
 
-<body>
+<body onload="requests_timeoff()">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
             <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse"
@@ -67,8 +67,11 @@
     </nav>
 
     <div id="content">
-        <button onclick="requests_timeoff()">Silly</button>
         <h1>Time off Requests</h1>
+        <select id="timeoffreq"></select>
+        <button onclick="approve()">Approve Request</button>
+        <button onclick="deny()">Deny Request</button>
+         
 
     </div>
 
@@ -85,8 +88,48 @@
 
 <script>
     function requests_timeoff(){
-        
+
+        const possible = document.getElementById("timeoffreq")
+
+        axios.get('/getTimeoffs').then((result)=>{
+            console.log(result.data)
+            let requests = result.data
+
+            for (let i = 0; i < requests.length; i++){
+                var option = document.createElement('option')
+                option.innerText = result.data[i].name + " " + result.data[i].date
+                option.value = result.data[i].name + "/" + result.data[i].date
+                option.id = i
+                possible.append(option)
+            }
+        })
             
+    }
+
+    function approve(){
+        let info = document.getElementById(0).value.split("/")
+        
+        axios.put('/approveReq', {name:info[0], date:info[1]}).then((res) => {
+                if (res.status == 200) {
+                    alert("Successfully Approved Request")
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+    }
+
+    function deny(){
+        let info = document.getElementById(0).value.split("/")
+        
+        axios.post('/denyReq', {name:info[0], date:info[1]}).then((res) => {
+                if (res.status == 200) {
+                    alert("Successfully Denied Request")
+                    
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+        location.reload();
     }
 </script>
 </html>

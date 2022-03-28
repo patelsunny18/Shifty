@@ -91,7 +91,7 @@
 
     <div>
         <label for="calendar">Select week to create a schedule for</label>
-        <input type="date" name="calendar" id="calendar"></input>
+        <input type="date" name="calendar" id="calendar" required></input>
         <br>
         <br>
         <label for="nameslist">Name to add to schedule</label>
@@ -534,6 +534,10 @@
             }
 
 
+            if(!document.getElementById("calendar").value){
+                alert("Please select a date")
+                return
+            }
 
             let date_schedule = new Date(document.getElementById("calendar").value + 'T00:00:00')
 
@@ -541,6 +545,9 @@
             axios.post('/createSchedule', { date: date_schedule, shifts: shifts }).then((res) => {
                 if (res.status == 406) {
                     alert("There exists a schedule for that week already!")
+                }
+                else if (res.status == 208) {
+                    alert("You scheduled someone with time off")
                 }
                 else if (res.status == 200) {
                     alert("Successfully Submitted Schedule")

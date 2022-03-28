@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const expect = chai.expect
 
 const mongoDB = "mongodb+srv://group10:CMPT370@project.yb52a.mongodb.net/CMPT370Project?retryWrites=true&w=majority"
+const test_date = 'test'
 
 const connection = async() => {
     await mongoose.connect(mongoDB)
@@ -21,22 +22,17 @@ const connection = async() => {
 
 async function getSchedule(req, res) {
 
-    let currentdate = new Date();
-    let one = new Date(currentdate.getFullYear(), 0, 1);
-    let numberOfDays = Math.floor((currentdate - one) / (24 * 60 * 60 * 1000));
-    let weeknum = Math.ceil((currentdate.getDay() + 1 + numberOfDays) / 7);
-
-    const schedule = await Schedule.find({ week_number: weeknum }).then((result) => {
-        if(result[0].schedule == undefined){
-            return 'No Schedule'
+    const schedule = await Schedule.find({ week: test_date }).then((result) => {
+        if (result.length == 0) {
+            console.log('No Schedule')
         }
-        else{
-            return result[0].schedule
-        }   
+        else {
+            return result[0].schedule;
+        }
     }
     )
 
-}
+};
 
 describe('Data Recieved from server for View Schedule', function(){
     it('Expect data to be defined', ()=>{
@@ -76,31 +72,31 @@ describe('View Schedule array type check, assumes exists at least one Schedule',
 })
 
 describe('Check names for given database', function(){
-    it('Expect first name on schedule to be Nick', ()=>{
+    it('Expect first name on schedule not to be Nick', ()=>{
         getSchedule().then( (result) =>{
-            expect(result.data[0]).to.equal('Nick')
+            expect(result.data[0]).to.not.equal('Nick')
             }
         )
     })
-    it('Expect Nick to have a sunnday shift', ()=>{
+    it('Expect Sunny to have a sunday night shift', ()=>{
         getSchedule().then( (result) =>{
-            expect(result.data[0].sunday).to.not.equal("")
+            expect(result.data[0].sunday).to.not.equal("night")
             }
         )
     })
-    it('Expect Nick to not have a monday shift', ()=>{
+    it('Expect Sunny to not have a monday shift', ()=>{
         getSchedule().then( (result) =>{
             expect(result.data[0].monday).to.equal('')
             }
         )
     })
-    it('Expect Second name on schedule to be Sunny', ()=>{
+    it('Expect Second name on schedule to be Chris', ()=>{
         getSchedule().then( (result) =>{
-            expect(result.data[1]).to.equal('Sunny')
+            expect(result.data[1]).to.equal('Chris')
             }
         )
     })
-    it('Expect first name on schedule to be Aifaz', ()=>{
+    it('Expect Third name on schedule to be Aifaz', ()=>{
         getSchedule().then( (result) =>{
             expect(result.data[2]).to.equal('Aifaz')
             }

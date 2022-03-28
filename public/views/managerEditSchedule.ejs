@@ -333,6 +333,7 @@
 
         function finializeChanges() {
             let schedule = document.getElementById('Schedule').rows.length
+            let selected_date = document.getElementById("calendar").value
 
             let shifts = []
             for (let i = 1; i < schedule; i++) {
@@ -354,7 +355,7 @@
             }
 
 
-            axios.put('/editSchedule', shifts).then((res) => {
+            axios.put('/editSchedule', {date: selected_date, shifts: shifts}).then((res) => {
                 if (res.status == 200) {
                     alert("Successfully Submitted Schedule")
                 }
