@@ -13,7 +13,7 @@ const endOfWeek = require('date-fns/endOfWeek')
 const format = require('date-fns/format')
 const getDay = require('date-fns/getDay')
 const isSameWeek = require('date-fns/isSameWeek')
-const addDays  = require('date-fns/addDays');
+const addDays = require('date-fns/addDays');
 const parseISO = require('date-fns/parseISO');
 
 // make webpage availible
@@ -224,7 +224,7 @@ app.get('/manager/approveTimeoff/:id', isManager, async (req, res) => {
 });
 
 // GET route to ApproveTimeoff for Manager
-app.get('/owner/approveTimeoff/:id',isOwner,async (req, res) => {
+app.get('/owner/approveTimeoff/:id', isOwner, async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -453,7 +453,6 @@ app.get('/employee/edit/:id', isEmployee, async (req, res) => {
     } catch (error) {
         res.redirect('/error');
     }
-
     // if found
     if (employee) {
         let name = `${employee.firstName} ${employee.lastName}`;
@@ -484,6 +483,47 @@ app.get('/employee/edit/:id', isEmployee, async (req, res) => {
     }
 });
 
+app.get('/manager/managerEdit/:id', isManager, async (req, res) => {
+    const { id } = req.params;
+    let manager = null;
+
+    // try to find the manager with the given ID
+    try {
+        manager = await Manager.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+    // if found
+    if (manager) {
+        let name = `${manager.firstName} ${manager.lastName}`;
+        let firstName = manager.firstName;
+        let lastName = manager.lastName;
+        let address = manager.address;
+        let phoneNumber = manager.phoneNumber;
+        let date = manager.dob;
+        let stringDate = (date.toLocaleDateString('pt-BR', { timeZone: "GMT", month: "numeric", day: "numeric", year: "numeric" }));
+        let email = manager.email;
+        let bank = manager.bankAccountNumber;
+        let sin = manager.sin;
+        let managerID = manager.managerID;
+        res.render('managerEdit', {
+            name: name,
+            fName: firstName,
+            lName: lastName,
+            address: address,
+            phone: phoneNumber,
+            dob: stringDate,
+            email: email,
+            bank: bank,
+            password: "*********",
+            sin: sin,
+            managerID: managerID,
+            id: id
+        });
+    }
+});
+
+
 // GET route to changeAvailability for Employee
 app.get('/employee/changeAvailability/:id', isEmployee, async (req, res) => {
     const { id } = req.params;
@@ -510,19 +550,25 @@ app.get('/employee/changeAvailability/:id', isEmployee, async (req, res) => {
 
 app.get('/manager/changeAvailabilityManager/:id', isManager, async (req, res) => {
     const { id } = req.params;
-    const manager = await Manager.findById({ _id: id });
+    let manager = null;
 
-    let availability = {};
-    if (manager === null) {
-        console.log("User not fou nd!");
-    } else {
-        availability = manager.availability;
+    // try to find the employee with the given ID
+    try {
+        manager = await Manager.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
     }
-    res.render('changeAvailability', {
-        availability: JSON.stringify(availability),
-        id: id
-    });
-})
+
+    // if found
+    if (manager) {
+        let availability = {};
+        availability = manager.availability;
+        res.render('changeAvailabilityManager', {
+            availability: JSON.stringify(availability),
+            id: id
+        });
+    }
+});
 
 // GET route to viewSchedule for Employee
 app.get('/employee/viewSchedule/:id', isEmployee, async (req, res) => {
@@ -900,7 +946,7 @@ app.post('/createSchedule', async function (req, res) {
 
     let week = format(start, "yyyy-MM-dd") + " " + format(end, "yyyy-MM-dd")
 
-    
+
 
     const schedule = await Schedule.find({ week: week }).then((result) => {
         if (result.length > 0) {
@@ -909,17 +955,17 @@ app.post('/createSchedule', async function (req, res) {
         }
         else {
             // acquire all approved timeoffs
-            const weeks = Timeoff.find({approve: true}).select('-_id').then((result) => {
+            const weeks = Timeoff.find({ approve: true }).select('-_id').then((result) => {
                 let flag = true
-                if(result.length != 0){
-                    for(let h = 0; h < result.length;h++){
+                if (result.length != 0) {
+                    for (let h = 0; h < result.length; h++) {
                         flag = checkTimeoff(req.body, result[h])
-                        if(flag === false){
+                        if (flag === false) {
                             res.status(208).send("Timeoff catch")
                         }
                     }
                 }
-                if (flag == true){
+                if (flag == true) {
                     const insertSchedule = new Schedule({ schedule: req.body.shifts, week: week })
                     insertSchedule.save().then((result_s) => {
                         console.log("Added successfully")
@@ -967,7 +1013,7 @@ app.get('/getWeeks', async function (req, res) {
 })
 
 app.get('/getTimeoffs', async function (req, res) {
-    const weeks = await Timeoff.find({approve: false}).select('-_id').then((result) => {
+    const weeks = await Timeoff.find({ approve: false }).select('-_id').then((result) => {
         res.status(200).send(result);
     })
 })
@@ -1035,7 +1081,7 @@ app.put('/edit/:id', async (req, res) => {
             else {
                 Employee.findByIdAndUpdate(
                     { _id: `${id}` },
-                    { $set: { firstName: fName, lastName: lName, address: address, phoneNumber: phone, dob: dob, email: email, bankAccountNumber: bankAccount }},
+                    { $set: { firstName: fName, lastName: lName, address: address, phoneNumber: phone, dob: dob, email: email, bankAccountNumber: bankAccount } },
                     function (err, result) {
                         if (err) {
                             res.status(210).send(err);
@@ -1044,13 +1090,80 @@ app.put('/edit/:id', async (req, res) => {
                             res.status(200).send("Your details have been updated");
                         }
                     }
-                ); 
-                // })
+                );
             }
         })
+})
 
-    // const employee = await Employee.findByIdAndUpdate({ _id: `${id}` }, { $set: { firstName: fName, lastName: lName, address: address, phoneNumber: phone, dob: dob, email: email, bankAccountNumber: bankAccount } });
-    // res.status(200).send("updated");
+
+app.put('/managerEditPass/:id', async (req, res) => {
+    const { id } = req.params;
+    const curPass = req.body.curPassword;
+    const newPass = req.body.newPassword;
+    const hashedNewPass = Bcrypt.hashSync(newPass, 10);
+    const manager = await Manager.findById({ _id: `${id}` })
+        .then((result) => {
+            if (result.length == 0) {
+                res.send("Manager Doesn't Exist")
+            }
+            else {
+                const hash = result.password;
+                Bcrypt.compare(curPass, hash, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                    else if (!result) {
+                        console.log("Incorrect Current Password");
+                        res.status(210).send("Incorrect Current Password. Retry");
+                    }
+                    else if (result) {
+                        Manager.findByIdAndUpdate(
+                            { _id: `${id}` },
+                            { password: hashedNewPass },
+                            function (err, result) {
+                                if (err) {
+                                    res.status(210).send(err);
+                                } else {
+                                    console.log("Done");
+                                    res.status(200).send("Your password has been changed");
+                                }
+                            }
+                        );
+                    }
+                })
+            }
+        })
+})
+
+app.put('/managerEdit/:id', async (req, res) => {
+    const { id } = req.params;
+    const fName = req.body.firstName;
+    const lName = req.body.lastName;
+    const address = req.body.address;
+    const phone = req.body.phoneNumber;
+    const dob = req.body.dob;
+    const email = req.body.email;
+    const bankAccount = req.body.bankAccount;
+    const manager = await Manager.findById({ _id: `${id}` })
+        .then((result) => {
+            if (result.length == 0) {
+                res.send("Manager Doesn't Exist")
+            }
+            else {
+                Manager.findByIdAndUpdate(
+                    { _id: `${id}` },
+                    { $set: { firstName: fName, lastName: lName, address: address, phoneNumber: phone, dob: dob, email: email, bankAccountNumber: bankAccount } },
+                    function (err, result) {
+                        if (err) {
+                            res.status(210).send(err);
+                        } else {
+                            console.log("Done");
+                            res.status(200).send("Your details have been updated");
+                        }
+                    }
+                );
+            }
+        })
 })
 
 app.put('/changeAvailability/:id', async (req, res) => {
@@ -1068,21 +1181,21 @@ app.put('/changeAvailabilityManager/:id', async (req, res) => {
 })
 
 app.put('/editSchedule', async function (req, res) {
-    
+
     const schedule = await Schedule.findOneAndUpdate({ week: req.body.date }, { schedule: req.body.shifts }).then((result) => {
         res.status(200).send('Sucess')
     })
 })
 
 app.put('/approveReq', async function (req, res) {
-    const schedule = await Timeoff.findOneAndUpdate({ name:req.body.name ,date: req.body.date }, { approve: true }).then((result) => {
+    const schedule = await Timeoff.findOneAndUpdate({ name: req.body.name, date: req.body.date }, { approve: true }).then((result) => {
         res.status(200).send('Sucess')
     })
 })
 
 app.post('/denyReq', async function (req, res) {
-    
-    const schedule = await Timeoff.findOneAndRemove({ name:req.body.name ,date: req.body.date }).then((result) => {
+
+    const schedule = await Timeoff.findOneAndRemove({ name: req.body.name, date: req.body.date }).then((result) => {
         res.status(200).send('Sucess')
     })
 })
@@ -1159,54 +1272,54 @@ function getPassword() {
     return password;
 }
 
-function checkTimeoff(schedule, time_off){
+function checkTimeoff(schedule, time_off) {
 
     let start_of_week = new Date(schedule.date)
     let day_req = new Date(time_off.date)
 
     console.log(start_of_week)
     console.log(day_req)
-    
-    if(!isSameWeek(start_of_week, day_req)){
+
+    if (!isSameWeek(start_of_week, day_req)) {
         return true
     }
-    
-    
+
+
     let names = time_off.name
     let day = getDay(day_req)
-    
 
-    for(let i = 0; i < schedule.shifts.length; i++){
-        if(schedule.shifts[i].name == names){
-            switch(day){
-            case 0:
-                if(schedule.shifts[i].sunday != ""){
-                    return false
-                }
-            case 1:
-                if(schedule.shifts[i].monday != ""){
-                    return false
-            }
-            case 2:
-                if(schedule.shifts[i].tuesday != ""){
-                    return false
-            }
-            case 3:
-                if(schedule.shifts[i].wednesday != ""){
-                    return false
-            }
-            case 4:
-                if(schedule.shifts[i].thursday != ""){
-                    return false
-            }
-            case 5:
-                if(schedule.shifts[i].friday != ""){
-                    return false
-            }
-            case 6:
-                if(schedule.shifts[i].saturday != ""){
-                    return false
-            }
+
+    for (let i = 0; i < schedule.shifts.length; i++) {
+        if (schedule.shifts[i].name == names) {
+            switch (day) {
+                case 0:
+                    if (schedule.shifts[i].sunday != "") {
+                        return false
+                    }
+                case 1:
+                    if (schedule.shifts[i].monday != "") {
+                        return false
+                    }
+                case 2:
+                    if (schedule.shifts[i].tuesday != "") {
+                        return false
+                    }
+                case 3:
+                    if (schedule.shifts[i].wednesday != "") {
+                        return false
+                    }
+                case 4:
+                    if (schedule.shifts[i].thursday != "") {
+                        return false
+                    }
+                case 5:
+                    if (schedule.shifts[i].friday != "") {
+                        return false
+                    }
+                case 6:
+                    if (schedule.shifts[i].saturday != "") {
+                        return false
+                    }
             }
         }
     }
@@ -1225,13 +1338,13 @@ app.post('/getEmployeeShifts/:id', async function (req, res) {
             console.log('No Schedule')
         }
         else {
-            res.status(200).send({shifts:result[0].schedule,name: employee_name});
+            res.status(200).send({ shifts: result[0].schedule, name: employee_name });
         }
     }
     )
 })
 
-app.post('/createTransfer/:id', async function (req, res){
+app.post('/createTransfer/:id', async function (req, res) {
     const { id } = req.params;
     const employee_name = await Employee.findById({ _id: `${id}` }).select('firstName -_id');
 
@@ -1244,39 +1357,39 @@ app.post('/createTransfer/:id', async function (req, res){
 
     let day_of_week = split_val_shift[0]
     let time_of_shift = split_val_shift[1]
-    
+
 
 
     let flag = true
-    if(time_of_shift == '' || time_of_shift == undefined){
+    if (time_of_shift == '' || time_of_shift == undefined) {
         res.status(208).send()
         flag = false
     }
 
     let proper_date = null
 
-    switch(day_of_week){
-        case("Sunday"):
-        proper_date = addDays(start_of_week, 0)
-        break
-        case("Monday"):
-        proper_date = addDays(start_of_week, 1)
-        break
-        case("Tuesday"):
-        proper_date = addDays(start_of_week, 2)
-        break
-        case("Wednesday"):
-        proper_date = addDays(start_of_week, 3)
-        break
-        case("Thursday"):
-        proper_date = addDays(start_of_week, 4)
-        break
-        case("Friday"):
-        proper_date = addDays(start_of_week, 5)
-        break
-        case("Saturday"):
-        proper_date = addDays(start_of_week, 6)
-        break
+    switch (day_of_week) {
+        case ("Sunday"):
+            proper_date = addDays(start_of_week, 0)
+            break
+        case ("Monday"):
+            proper_date = addDays(start_of_week, 1)
+            break
+        case ("Tuesday"):
+            proper_date = addDays(start_of_week, 2)
+            break
+        case ("Wednesday"):
+            proper_date = addDays(start_of_week, 3)
+            break
+        case ("Thursday"):
+            proper_date = addDays(start_of_week, 4)
+            break
+        case ("Friday"):
+            proper_date = addDays(start_of_week, 5)
+            break
+        case ("Saturday"):
+            proper_date = addDays(start_of_week, 6)
+            break
     }
     const new_transfer = new Shift({
         name: employee_name.firstName,
@@ -1285,15 +1398,15 @@ app.post('/createTransfer/:id', async function (req, res){
         status: req.body.status
     })
 
-    if(flag == true){
-        new_transfer.save().then((result)=>{
+    if (flag == true) {
+        new_transfer.save().then((result) => {
             res.status(200).send()
         })
     }
 })
 
 
-app.post('/createSwap/:id', async function (req, res){
+app.post('/createSwap/:id', async function (req, res) {
     const { id } = req.params;
     const employee_name = await Employee.findById({ _id: `${id}` }).select('firstName -_id');
 
@@ -1306,39 +1419,39 @@ app.post('/createSwap/:id', async function (req, res){
 
     let day_of_week = split_val_shift[0]
     let time_of_shift = split_val_shift[1]
-    
+
 
 
     let flag = true
-    if(time_of_shift == '' || time_of_shift == undefined){
+    if (time_of_shift == '' || time_of_shift == undefined) {
         res.status(208).send()
         flag = false
     }
 
     let proper_date = null
 
-    switch(day_of_week){
-        case("Sunday"):
-        proper_date = addDays(start_of_week, 0)
-        break
-        case("Monday"):
-        proper_date = addDays(start_of_week, 1)
-        break
-        case("Tuesday"):
-        proper_date = addDays(start_of_week, 2)
-        break
-        case("Wednesday"):
-        proper_date = addDays(start_of_week, 3)
-        break
-        case("Thursday"):
-        proper_date = addDays(start_of_week, 4)
-        break
-        case("Friday"):
-        proper_date = addDays(start_of_week, 5)
-        break
-        case("Saturday"):
-        proper_date = addDays(start_of_week, 6)
-        break
+    switch (day_of_week) {
+        case ("Sunday"):
+            proper_date = addDays(start_of_week, 0)
+            break
+        case ("Monday"):
+            proper_date = addDays(start_of_week, 1)
+            break
+        case ("Tuesday"):
+            proper_date = addDays(start_of_week, 2)
+            break
+        case ("Wednesday"):
+            proper_date = addDays(start_of_week, 3)
+            break
+        case ("Thursday"):
+            proper_date = addDays(start_of_week, 4)
+            break
+        case ("Friday"):
+            proper_date = addDays(start_of_week, 5)
+            break
+        case ("Saturday"):
+            proper_date = addDays(start_of_week, 6)
+            break
     }
     const new_transfer = new Shift({
         name: employee_name.firstName,
@@ -1347,8 +1460,8 @@ app.post('/createSwap/:id', async function (req, res){
         status: req.body.status
     })
 
-    if(flag == true){
-        new_transfer.save().then((result)=>{
+    if (flag == true) {
+        new_transfer.save().then((result) => {
             res.status(200).send()
         })
     }
