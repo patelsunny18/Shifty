@@ -67,6 +67,7 @@
 
     <div id="content">
         <h1>[Insert content here]</h1>
+        <button onclick="sample()">Test</button>
     </div>
 
     <!-- Bootstrap Bundle with Popper -->
@@ -79,4 +80,12 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </body>
 
+
+<script>
+    function sample(){
+        axios.post('/shift').then((result) => {
+            alert("click")
+        })
+    }
+</script>
 </html>

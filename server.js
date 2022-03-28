@@ -26,6 +26,7 @@ const Manager = require('./models/manager');
 const Owner = require('./models/owner');
 const Schedule = require('./models/schedule');
 const Timeoff = require('./models/timeoff');
+const Shift = require('./models/shift');
 
 // Access to database
 // DO NOT TOUCH!
@@ -1096,6 +1097,20 @@ function checkTimeoff(schedule, time_off){
     }
     return true
 }
+
+
+app.post('/shift', async function (req, res) {
+
+    const insertShift = new Shift({
+        name: "Test Name 1",
+        date: "Friday",
+        time: "night"
+    });
+    
+    insertShift.save().then((result)=>{
+        console.log("Saved")
+    })
+})
 
 app.listen(PORT, HOST);
 
