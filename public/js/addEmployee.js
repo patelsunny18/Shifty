@@ -108,7 +108,7 @@ address.addEventListener("input", function (event) {
 phone.addEventListener("input", function (event) {
     if (this.value === '') {
         setErrorFor(phone, "Phone can't be blank");
-    } else if (!this.value.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)) {
+    } else if (!this.value.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/im)) {
         setErrorFor(phone, "Incorrect phone number");
     } else {
         setSuccessFor(phone);

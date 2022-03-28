@@ -83,9 +83,16 @@
 
     <div class="container" id="container2">
         <div class="header">
-            <%= name %>
-            <div class="btn">
-                <button onclick="edit()">Edit Details</button>
+            <div class="col-md-12">
+                <%= name %>
+            </div>
+            <div class="col-md-12">
+                <div class="btn">
+                    <button id="editing" onclick="edit()" title="Edit Your Details">Edit</button>
+                </div>
+                <div class="btn">
+                    <button id="revert" onclick="revert()" title="Discard Your Changes" disabled>Revert</button>
+                </div>
             </div>
         </div>
         <form action="/edit" class="form" id="form">
@@ -100,7 +107,7 @@
                         </div>
                         <input type="text" class="form-control" placeholder="First name" id="fName" name="fName" disabled>
                     </div>
-                    <small>Error message</small>
+                    <small id="err">Error message</small>
                 </div>
                 <div class="col-md-6 control">
                     <label for="lName">Last Name</label>
@@ -112,7 +119,7 @@
                         </div>
                         <input type="text" class="form-control" placeholder="Last name" id="lName" name="lName" disabled>
                     </div>
-                    <small>Error message</small>
+                    <small id="err">Error message</small>
                 </div>
             </div>
             <div class="row">
@@ -126,19 +133,19 @@
                         </div>
                         <input type="text" class="form-control" name="address" id="address" placeholder="Address" disabled>
                     </div>
-                    <small>Error message</small>
+                    <small id="err">Error message</small>
                 </div>
                 <div class="col-md-6 control">
-                    <label for="phone">Phone Number</label>
+                    <label for="phoneNumber">Phone Number</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <div class="input-group-text">
                                 <i class="fa fa-phone"></i>
                             </div>
                         </div>
-                        <input type="tel" class="form-control" name="phone" id="phone" placeholder="(xxx) xxx- xxx" disabled>
+                        <input type="tel" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="(xxx) xxx- xxx" disabled>
                     </div>
-                    <small>Error message</small>
+                    <small id="err">Error message</small>
                 </div>
             </div>
             <div class="row">
@@ -152,7 +159,7 @@
                         </div>
                         <input type="date" class="form-control" name="dob" id="dob" disabled>
                     </div>
-                    <small>Error message</small>
+                    <small id="err">Error message</small>
                 </div>
                 <div class="col-md-6 control">
                     <label for="email">Email</label>
@@ -164,7 +171,7 @@
                         </div>
                         <input type="email" name="email" id="email" class="form-control" placeholder="abc123@email.com" disabled>
                     </div>
-                    <small>Error message</small>
+                    <small id="err">Error message</small>
                 </div>
             </div>
             <div class="row">
@@ -178,7 +185,7 @@
                         </div>
                         <input type="text" name="bankAccount" id="bankAccount" class="form-control" disabled>
                     </div>
-                    <small>Error message</small>
+                    <small id="err">Error message</small>
                 </div>
                 <div class="col-md-6 control">
                     <label for="sinNumber">SIN Number</label>
@@ -190,7 +197,7 @@
                         </div>
                         <input type="text" name="sinNumber" id="sinNumber" class="form-control" disabled>
                     </div>
-                    <small>Error message</small>
+                    <small id="err">Error message</small>
                 </div>
             </div>
             <div class="row">
@@ -204,7 +211,7 @@
                         </div>
                         <input type="text" name="employeeID" id="employeeID" class="form-control" disabled>
                     </div>
-                    <small>Error message</small>
+                    <small id="err">Error message</small>
                 </div>
                 <div class="col-md-6 control">
                     <label for="password">Password</label>
@@ -214,69 +221,469 @@
                                 <i class="fa-solid fa-key"></i>
                             </div>
                         </div>
-                        <input type="text" name="password" id="password" class="form-control" disabled>
+                        <input type="text" name="password" id="password" class="form-control" disabled />
+                        <input type="button" class="btn-dark" value="Change" data-bs-target="#myModal" data-bs-toggle="modal" id="changebtn" title="Change Your Password"/>
                     </div>
-                    <small>Error message</small>
-                </div>
+                    <small id="err">Error message</small>
+                </div>                  
             </div>
             <div class="cen">
-                <button type="submit" id="subBut" disabled>Submit</button>
+                <button type="submit" id="subBut" title="Click Here To Submit Changes" disabled>Submit</button>
             </div>
         </form>
     </div>
+
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content" id="mainContent">
+                <div class="modal-header justify-content-center" id="mainModal">
+                    <h5 class="modal-title" id="exampleModalLabel">Change Your Old Password</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn2"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="modal-body text-center" id="mainBody">
+                    <form action="/editPass" id="passForm">
+                        <div class="col-md-12 control">
+                            <div class="input-group passDiv">
+                                <input class="form-control input-lg mb-3" placeholder="Enter Current Password" name="password" type="password" id="curPassword">
+                                <i class="fa-solid fa-eye pass" id="toggleCurPassword"></i>
+                            </div>
+                            <small id="err">Error message</small>
+                        </div>
+
+                        <div class="col-md-12 control">
+                            <div class="input-group passDiv">
+                                <input class="form-control input-lg mb-3" placeholder="Enter New Password" name="password" type="password" id="newPassword">
+                                <i class="fa-solid fa-eye pass" id="toggleNewPassword"></i>
+                            </div>
+                            <small id="err">Error message</small>
+                        </div>
+
+                        <div class="col-md-12 control">
+                            <div class="input-group passDiv">
+                                <input class="form-control input-lg mb-3" placeholder="Re-enter New Password" name="password" type="password" id="rNewPassword">
+                                <i class="fa-solid fa-eye pass" id="toggleRNewPassword"></i>
+                            </div>
+                            <small id="err">Error message</small>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" id="passBtn" class="btn btn-primary"">Change Password</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalPass" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-circle-check" id="checkMark"></i>
+                    </div>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4>Successful!</h4>
+                    <p class="text-center" id="test"></p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-success btn-block" data-bs-dismiss="modal" id="dismiss"><span>Dismiss</span><i class="fa-solid fa-circle-xmark"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalFail" class="modal fade">
+        <div class="modal-dialog modal-confirm">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center" id="head">
+                    <div class="icon-box">
+                        <i class="fa-solid fa-circle-check" id="checkMark"></i>
+                    </div>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn1"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4>Unsuccessful!</h4>
+                    <p class="text-center" id="test"></p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-success btn-block" id="retry" data-bs-dismiss="modal"><span>Retry</span><i class="fa-solid fa-check" id="okIcon"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Link for using Axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
     <script>
-    
-    let editMode = false;
-
     function getCurrentData(){
         let dateStr = '<%= dob %>';
         let date = dateStr.split("/").reverse().join("-");
         document.getElementById("fName").value = '<%= fName %>';
         document.getElementById("lName").value = '<%= lName %>';
         document.getElementById("address").value = '<%= address %>';
-        document.getElementById("phone").value = '<%= phoneNumber %>';
+        document.getElementById("phoneNumber").value = '<%= phone %>';
         document.getElementById("dob").value = date;
         document.getElementById("email").value = '<%= email %>';
         document.getElementById("bankAccount").value = '<%= bank %>';
         document.getElementById("sinNumber").value = '<%= sin %>';
-        document.getElementById("employeeID").value = '<%= employeeID %>';
+        document.getElementById("employeeID").value = '<%= employeeID %>'
         document.getElementById("password").value = '<%= password %>';
     }
-
     getCurrentData();
 
+    function revert(){
+        document.getElementById("subBut").disabled = true;
+        document.getElementById("revert").disabled = true;
+        document.getElementById("editing").disabled = false; 
+        location.reload();
+    }
+
     function edit(){
-        if(editMode == false){
-            editMode = true;
-            document.getElementById("fName").disabled = false;
-            document.getElementById("lName").disabled = false;
-            document.getElementById("address").disabled = false;
-            document.getElementById("phone").disabled = false;
-            document.getElementById("dob").disabled = false;
-            document.getElementById("email").disabled = false;
-            document.getElementById("bankAccount").disabled = false;
-            document.getElementById("sinNumber").disabled = true;
-            document.getElementById("employeeID").disabled = true;
-            document.getElementById("password").disabled = true;
-            document.getElementById("subBut").disabled = false;
+        document.getElementById("fName").disabled = false;
+        document.getElementById("lName").disabled = false;
+        document.getElementById("address").disabled = false;
+        document.getElementById("phoneNumber").disabled = false;
+        document.getElementById("dob").disabled = false;
+        document.getElementById("email").disabled = false;
+        document.getElementById("bankAccount").disabled = false;
+        document.getElementById("sinNumber").disabled = true;
+        document.getElementById("employeeID").disabled = true;
+        document.getElementById("password").disabled = true;
+        document.getElementById("subBut").disabled = false;
+        document.getElementById("revert").disabled = false;
+        document.getElementById("editing").disabled = true;
+    }
+
+    const passForm = document.querySelector("#passForm");
+    const form = document.querySelector("#form");
+    const fName = document.querySelector("#fName");
+    const lName = document.querySelector("#lName");
+    const address = document.querySelector("#address");
+    const phone = document.querySelector("#phoneNumber");
+    const dob = document.querySelector("#dob");
+    const email = document.querySelector("#email");
+    const bankAccount = document.querySelector("#bankAccount");
+
+    fName.addEventListener("input", function (event) {
+        if (this.value === '') {
+            setErrorFor(fName, "First name can't be blank");
+        } else {
+            setSuccessFor(fName);
         }
-        else if(editMode == true){
-            editMode = false;
-            document.getElementById("fName").disabled = true;
-            document.getElementById("lName").disabled = true;
-            document.getElementById("address").disabled = true;
-            document.getElementById("phone").disabled = true;
-            document.getElementById("dob").disabled = true;
-            document.getElementById("email").disabled = true;
-            document.getElementById("bankAccount").disabled = true;
-            document.getElementById("sinNumber").disabled = true;
-            document.getElementById("employeeID").disabled = true;
-            document.getElementById("password").disabled = true;
-            document.getElementById("subBut").disabled = true;
+    })
+
+    lName.addEventListener("input", function (event) {
+        if (this.value === '') {
+            setErrorFor(lName, "Last name can't be blank");
+        } else {
+            setSuccessFor(lName);
         }
+    })
+
+    address.addEventListener("input", function (event) {
+        if (this.value === '') {
+            setErrorFor(address, "Address can't be blank");
+        } else {
+            setSuccessFor(address);
+        }
+    })
+
+    phone.addEventListener("input", function (event) {
+        if (this.value === '') {
+            setErrorFor(phone, "Phone can't be blank");
+        } else if (!this.value.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/im)) {
+            setErrorFor(phone, "Incorrect phone number");
+        } else {
+            setSuccessFor(phone);
+        }
+    })
+
+    dob.addEventListener("input", function (event) {
+        if (this.value === '') {
+            setErrorFor(dob, "Date of birth can't be blank");
+        } else {
+            setSuccessFor(dob);
+        }
+    })
+
+    email.addEventListener("input", function (event) {
+        if (this.value === '') {
+            setErrorFor(email, "Email can't be blank");
+        } else {
+            setSuccessFor(email);
+        }
+    })
+
+    bankAccount.addEventListener("input", function (event) {
+        if (this.value === '') {
+            setErrorFor(bankAccount, "Bank account can't be blank");
+        } else {
+            setSuccessFor(bankAccount);
+        }
+   })
+
+
+    function checkInputs() {
+        const fNameValue = fName.value.trim();
+        const lNameValue = lName.value.trim();
+        const addressValue = address.value.trim();
+        const phoneValue = phone.value.trim();
+        const dobValue = dob.value.trim();
+        const emailValue = email.value.trim();
+        const bankAccountValue = bankAccount.value.trim();
+
+        let success = false;
+
+        if (fNameValue === '') {
+            setErrorFor(fName, "First name can't be blank");
+            success = false;
+        } else {
+            setSuccessFor(fName);
+            success = true;
+        }
+        
+        if (lNameValue === '') {
+            setErrorFor(lName, "Last name can't be blank");
+            success = false;
+        } else {
+            setSuccessFor(lName);
+            success = true;
+        }
+
+        if (addressValue === '') {
+            setErrorFor(address, "Last name can't be blank");
+            success = false;
+        } else {
+            setSuccessFor(address);
+            success = true;
+        }
+
+        if (phoneValue === '') {
+            setErrorFor(phone, "Phone can't be blank");
+        } else if (!phoneValue.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)) {
+            setErrorFor(phone, "Incorrect phone number");
+        } else {
+            setSuccessFor(phone);
+        }
+
+        if (dobValue === '') {
+            setErrorFor(dob, "Date of birth can't be blank");
+            success = false;
+        } else {
+            setSuccessFor(dob);
+            success = true;
+        }
+
+        if (emailValue === '') {
+            setErrorFor(email, "Email can't be blank");
+            success = false;
+        } else {
+            setSuccessFor(email);
+            success = true;
+        }
+
+        if (bankAccountValue === '') {
+            setErrorFor(bankAccount, "Bank account number can't be blank");
+            success = false;
+        } else {
+            setSuccessFor(bankAccount);
+            success = true;
+        }
+
+        return success;
+    }
+
+
+    function setErrorFor(input, message) {
+        const control = input.parentElement.parentElement;
+        const small = control.querySelector("small");
+        small.innerText = message;
+        control.className = 'col control error';
+    }
+
+    function setSuccessFor(input) {
+        const control = input.parentElement.parentElement;
+        control.className = 'col control success';
+    }
+
+    form.addEventListener("submit", handleFormSubmit);
+
+
+    function handleFormSubmit(event) {
+        if (!checkInputs()) {
+            event.preventDefault();
+        } else {
+            sendData(event);
+        }
+    }
+
+    function sendData(event) {
+        event.preventDefault();
+
+        const fNameValue = fName.value.trim();
+        const lNameValue = lName.value.trim();
+        const addressValue = address.value.trim();
+        const phoneValue = phone.value.trim();
+        const dobValue = dob.value.trim();
+        const emailValue = email.value.trim();
+        const bankAccountValue = bankAccount.value.trim();
+        const data = {
+            firstName: fNameValue,
+            lastName: lNameValue,
+            address: addressValue,
+            phoneNumber: phoneValue,
+            dob: dobValue,
+            email: emailValue,
+            bankAccount: bankAccountValue
+        };
+
+        axios.put(`/edit/<%= id %>`, data)
+        .then((result) => {
+            if (result.status === 200) {
+                    let message = result.data;
+                    document.getElementById("test").innerText = `${message}`;
+                    $("#modalPass").modal('show');
+                    document.getElementById('dismiss').onclick = function() {
+                        location.reload();
+                    }
+                }
+                else{
+                    let message = result.data;
+                    document.getElementById("test").innerText = `${message}`;
+                    $("#modalFail").modal('show');
+                }
+            })
+    }
+
+    const curPassword = document.querySelector('#curPassword');
+    document.querySelector('#toggleCurPassword').addEventListener('click', function (e) {
+        const type = curPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        curPassword.setAttribute('type', type);
+    });
+
+    const newPassword = document.querySelector('#newPassword');
+    document.querySelector('#toggleNewPassword').addEventListener('click', function (e) {
+        const type = newPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        newPassword.setAttribute('type', type);
+    });
+
+    const rNewPassword = document.querySelector('#rNewPassword');
+    document.querySelector('#toggleRNewPassword').addEventListener('click', function (e) {
+        const type = rNewPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        rNewPassword.setAttribute('type', type);
+    });
+
+    const curPass = document.querySelector("#curPassword");
+    const newPass = document.querySelector("#newPassword");
+    const rNewPass = document.querySelector("#rNewPassword");
+
+    curPass.addEventListener("input", function (event) {
+        if (this.value === '') {
+            setErrorFor(curPass, "Current password cannot be blank");
+        } else {
+            setSuccessFor(curPass);
+        }
+    })
+
+    newPass.addEventListener("input", function (event) {
+        if (this.value === '') {
+            setErrorFor(newPass, "New password cannot be blank");
+        } else {
+            setSuccessFor(newPass);
+        }
+    })
+
+    rNewPass.addEventListener("input", function (event) {
+        if (this.value !== newPass.value) {
+            setErrorFor(rNewPass, "Passwords do no match");
+        } else {
+            setSuccessFor(rNewPass);
+        }
+    })
+
+
+    function checkInputs() {
+        const curValue = curPass.value.trim();
+        const newValue = newPass.value.trim();
+        const rNewValue = rNewPass.value.trim();
+
+        let success = false;
+
+        if (curValue === '') {
+            setErrorFor(curPass, "Current password cannot be blank");
+            success = false;
+        } else {
+            setSuccessFor(curPass);
+            success = true;
+        }
+        
+        if (newValue === '') {
+            setErrorFor(newPass, "New password cannot be blank");
+            success = false;
+        } else {
+            setSuccessFor(newPass);
+            success = true;
+        }
+
+        if (rNewValue !== newValue) {
+            setErrorFor(rNewPass, "Passwords do not match");
+            success = false;
+        } else {
+            setSuccessFor(rNewPass);
+            success = true;
+        }
+        return success;
+    }
+
+    passForm.addEventListener("submit", handlePassFormSubmit);
+
+    function handlePassFormSubmit(event) {
+        if (!checkInputs()) {
+            event.preventDefault();
+        } else {
+            sendPassData(event);
+        }
+    }
+    
+    function sendPassData(event) {
+        event.preventDefault();
+
+        const curValue = curPass.value.trim();
+        const newValue = newPass.value.trim();
+
+        console.log(curValue);
+        console.log(newValue);
+        const data = {
+            curPassword: curValue,
+            newPassword: newValue,
+        };
+
+        axios.put(`/editPass/<%= id %>`, data)
+            .then((result) => {
+                if (result.status === 200) {
+                    let message = result.data;
+                    document.getElementById("test").innerText = `${message}`;
+                    $("#modalPass").modal('show');
+                    $("#myModal").modal('hide');
+                }
+                else{
+                    let modal = document.getElementById("#myModal");
+                    let message = result.data;
+                    document.getElementById("test").innerText = `${message}`;
+                    $("#myModal").modal('hide');
+                    $("#modalFail").modal('show');
+                    document.getElementById('retry').onclick = function() {
+                        $("#myModal").modal('show');
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
     </script>
 </body>

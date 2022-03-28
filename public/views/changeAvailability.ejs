@@ -310,7 +310,7 @@
                 availability: newAvailability
             };
 
-            axios.put(`/changeAvailabilityManager/<%= id %>`, data)
+            axios.put(`/changeAvailability/<%= id %>`, data)
                 .then((result) => {
                     if (result.status === 200) {
                         alert("Your availability has been updated!");

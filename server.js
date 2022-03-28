@@ -102,10 +102,9 @@ app.get('/', (req, res) => {
 });
 
 // GET route to Owner home
-app.get('/owner/home/:id', isOwner,async (req, res) => {
+app.get('/owner/home/:id', isOwner, async (req, res) => {
     const { id } = req.params;
     let owner = null;
-
     // try to find the owner with the given ID
     try {
         owner = await Owner.findById({ _id: id });
@@ -123,7 +122,7 @@ app.get('/owner/home/:id', isOwner,async (req, res) => {
 });
 
 // GEt route to Manager home
-app.get('/manager/home/:id', isManager,async (req, res) => {
+app.get('/manager/home/:id', isManager, async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -144,7 +143,7 @@ app.get('/manager/home/:id', isManager,async (req, res) => {
 });
 
 // GET route to Employee home
-app.get('/employee/home/:id',isEmployee,async (req, res) => {
+app.get('/employee/home/:id', isEmployee, async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -165,7 +164,7 @@ app.get('/employee/home/:id',isEmployee,async (req, res) => {
 });
 
 // GET route to createSchedule for Owner
-app.get('/owner/createSchedule/:id', isOwner,async (req, res) => {
+app.get('/owner/createSchedule/:id', isOwner, async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -185,7 +184,7 @@ app.get('/owner/createSchedule/:id', isOwner,async (req, res) => {
 });
 
 // GET route to createSchedule for Manager
-app.get('/manager/createSchedule/:id',isManager,async (req, res) => {
+app.get('/manager/createSchedule/:id', isManager, async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -205,7 +204,7 @@ app.get('/manager/createSchedule/:id',isManager,async (req, res) => {
 });
 
 // GET route to ApproveTimeoff for Manager
-app.get('/manager/approveTimeoff/:id',isManager,async (req, res) => {
+app.get('/manager/approveTimeoff/:id', isManager, async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -245,7 +244,7 @@ app.get('/owner/approveTimeoff/:id',isOwner,async (req, res) => {
 });
 
 // GET route to editSchedule for Owner
-app.get('/owner/editSchedule/:id', isOwner,async (req, res) => {
+app.get('/owner/editSchedule/:id', isOwner, async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -265,7 +264,7 @@ app.get('/owner/editSchedule/:id', isOwner,async (req, res) => {
 });
 
 // GET route to editSchedule for Manager
-app.get('/manager/editSchedule/:id', isManager,async (req, res) => {
+app.get('/manager/editSchedule/:id', isManager, async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -285,7 +284,7 @@ app.get('/manager/editSchedule/:id', isManager,async (req, res) => {
 });
 
 // GET route to viewSchedule for Owner
-app.get('/owner/viewSchedule/:id',isOwner,async (req, res) => {
+app.get('/owner/viewSchedule/:id', isOwner, async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -305,7 +304,7 @@ app.get('/owner/viewSchedule/:id',isOwner,async (req, res) => {
 });
 
 // GET route to viewSchedule for Manager
-app.get('/manager/viewSchedule/:id',isManager,async (req, res) => {
+app.get('/manager/viewSchedule/:id', isManager, async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -325,7 +324,7 @@ app.get('/manager/viewSchedule/:id',isManager,async (req, res) => {
 });
 
 // GET route to addManager for Owner
-app.get('/owner/addManager/:id',isOwner,async (req, res) => {
+app.get('/owner/addManager/:id', isOwner, async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -345,7 +344,7 @@ app.get('/owner/addManager/:id',isOwner,async (req, res) => {
 });
 
 // GET route to removeManager for Owner
-app.get('/owner/removeManager/:id',isOwner, async (req, res) => {
+app.get('/owner/removeManager/:id', isOwner, async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -365,7 +364,7 @@ app.get('/owner/removeManager/:id',isOwner, async (req, res) => {
 });
 
 // GET route to addEmployee for Owner
-app.get('/owner/addEmployee/:id', isOwner,async (req, res) => {
+app.get('/owner/addEmployee/:id', isOwner, async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -385,7 +384,7 @@ app.get('/owner/addEmployee/:id', isOwner,async (req, res) => {
 });
 
 // GET route to addEmployee for Manager
-app.get('/manager/addEmployee/:id', isManager,async (req, res) => {
+app.get('/manager/addEmployee/:id', isManager, async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -405,7 +404,7 @@ app.get('/manager/addEmployee/:id', isManager,async (req, res) => {
 });
 
 // GET route to removeEmployee for Owner
-app.get('/owner/removeEmployee/:id', isOwner,async (req, res) => {
+app.get('/owner/removeEmployee/:id', isOwner, async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -425,7 +424,7 @@ app.get('/owner/removeEmployee/:id', isOwner,async (req, res) => {
 });
 
 // GET route to removeEmployee for Manager
-app.get('/manager/removeEmployee/:id',isManager, async (req, res) => {
+app.get('/manager/removeEmployee/:id', isManager, async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -444,30 +443,49 @@ app.get('/manager/removeEmployee/:id',isManager, async (req, res) => {
     }
 });
 
-// GET route to changeAvailability for Employee
-app.get('/employee/edit/:id',isEmployee, async (req, res) => {
+app.get('/employee/edit/:id', isEmployee, async (req, res) => {
     const { id } = req.params;
-    const employee = await Employee.findById({ _id: id });
-    let date = employee.dob;
-    let stringDate = (date.toLocaleDateString('pt-BR', { timeZone: "GMT", month: "numeric", day: "numeric", year: "numeric" })); res.render('edit', {
-        id: id,
-        name: `${employee.firstName} ${employee.lastName}`,
-        fName: employee.firstName,
-        lName: employee.lastName,
-        address: employee.address,
-        phoneNumber: employee.phoneNumber,
-        dob: stringDate,
-        email: employee.email,
-        bank: employee.bankAccountNumber,
-        sin: employee.sin,
-        wage: employee.wage,
-        availability: employee.availability,
-        employeeID: employee.employeeID,
-        password: "*********"
-    });
+    let employee = null;
+
+    // try to find the employee with the given ID
+    try {
+        employee = await Employee.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (employee) {
+        let name = `${employee.firstName} ${employee.lastName}`;
+        let firstName = employee.firstName;
+        let lastName = employee.lastName;
+        let address = employee.address;
+        let phoneNumber = employee.phoneNumber;
+        let date = employee.dob;
+        let stringDate = (date.toLocaleDateString('pt-BR', { timeZone: "GMT", month: "numeric", day: "numeric", year: "numeric" }));
+        let email = employee.email;
+        let bank = employee.bankAccountNumber;
+        let sin = employee.sin;
+        let employeeID = employee.employeeID;
+        res.render('edit', {
+            name: name,
+            fName: firstName,
+            lName: lastName,
+            address: address,
+            phone: phoneNumber,
+            dob: stringDate,
+            email: email,
+            bank: bank,
+            password: "*********",
+            sin: sin,
+            employeeID: employeeID,
+            id: id
+        });
+    }
 });
 
-app.get('/employee/changeAvailability/:id',isEmployee, async (req, res) => {
+// GET route to changeAvailability for Employee
+app.get('/employee/changeAvailability/:id', isEmployee, async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -507,7 +525,7 @@ app.get('/manager/changeAvailabilityManager/:id', isManager, async (req, res) =>
 })
 
 // GET route to viewSchedule for Employee
-app.get('/employee/viewSchedule/:id',isEmployee, async (req, res) => {
+app.get('/employee/viewSchedule/:id', isEmployee, async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -529,7 +547,7 @@ app.get('/employee/viewSchedule/:id',isEmployee, async (req, res) => {
 });
 
 // GET route to requestTimeoff for Employee
-app.get('/employee/requestTimeoff/:id',isEmployee,async (req, res) => {
+app.get('/employee/requestTimeoff/:id', isEmployee, async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -961,12 +979,79 @@ app.post('/getAvailability', async function (req, res) {
     })
 })
 
-// app.put('/edit/:id', async (req, res) => {
-//     const { id } = req.params;
-//     const newAvailability = req.body.availability;
-//     const employee = await Employee.findByIdAndUpdate({ _id: `${id}` }, { availability: newAvailability });
-//     res.status(200).send("updated");
-// })
+app.put('/editPass/:id', async (req, res) => {
+    const { id } = req.params;
+    const curPass = req.body.curPassword;
+    const newPass = req.body.newPassword;
+    const hashedNewPass = Bcrypt.hashSync(newPass, 10);
+    const employee = await Employee.findById({ _id: `${id}` })
+        .then((result) => {
+            if (result.length == 0) {
+                res.send("Employee Doesn't Exist")
+            }
+            else {
+                const hash = result.password;
+                Bcrypt.compare(curPass, hash, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                    else if (!result) {
+                        console.log("Incorrect Current Password");
+                        res.status(210).send("Incorrect Current Password. Retry");
+                    }
+                    else if (result) {
+                        Employee.findByIdAndUpdate(
+                            { _id: `${id}` },
+                            { password: hashedNewPass },
+                            function (err, result) {
+                                if (err) {
+                                    res.status(210).send(err);
+                                } else {
+                                    console.log("Done");
+                                    res.status(200).send("Your password has been changed");
+                                }
+                            }
+                        );
+                    }
+                })
+            }
+        })
+})
+
+app.put('/edit/:id', async (req, res) => {
+    const { id } = req.params;
+    const fName = req.body.firstName;
+    const lName = req.body.lastName;
+    const address = req.body.address;
+    const phone = req.body.phoneNumber;
+    const dob = req.body.dob;
+    const email = req.body.email;
+    const bankAccount = req.body.bankAccount;
+    const employee = await Employee.findById({ _id: `${id}` })
+        .then((result) => {
+            if (result.length == 0) {
+                res.send("Employee Doesn't Exist")
+            }
+            else {
+                Employee.findByIdAndUpdate(
+                    { _id: `${id}` },
+                    { $set: { firstName: fName, lastName: lName, address: address, phoneNumber: phone, dob: dob, email: email, bankAccountNumber: bankAccount }},
+                    function (err, result) {
+                        if (err) {
+                            res.status(210).send(err);
+                        } else {
+                            console.log("Done");
+                            res.status(200).send("Your details have been updated");
+                        }
+                    }
+                ); 
+                // })
+            }
+        })
+
+    // const employee = await Employee.findByIdAndUpdate({ _id: `${id}` }, { $set: { firstName: fName, lastName: lName, address: address, phoneNumber: phone, dob: dob, email: email, bankAccountNumber: bankAccount } });
+    // res.status(200).send("updated");
+})
 
 app.put('/changeAvailability/:id', async (req, res) => {
     const { id } = req.params;

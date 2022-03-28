@@ -302,9 +302,6 @@ label{
   border: none !important;
 }
 
-#closingBtn:hover {
-  opacity: 1;
-}
 
 #okIcon{
   margin-top: 2px !important;
