@@ -536,14 +536,21 @@ app.get('/employee/availableShifts/:id', async (req, res) => {
     } catch (error) {
         res.redirect('/error');
     }
+    let shifts = null;
+    try {
+        shifts = await Shift.find({});
+    } catch (error) {
+        console.log(error);
+    }
 
     // if found
-    if (employee) {
+    if (employee && shifts) {
         res.render('availableShifts', {
-            id: id
+            id: id,
+            shifts: shifts
         });
     }
-})
+});
 
 
 app.post("/", function (req, res) {

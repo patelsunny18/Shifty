@@ -184,5 +184,9 @@ body {
 #content {
     width: 100%;
     max-width: 100%;
-    padding: 0;
+    padding: 3% 10%;
+}
+
+.card {
+    margin: 3% 0%;
 }
