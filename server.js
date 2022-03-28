@@ -13,6 +13,8 @@ const endOfWeek = require('date-fns/endOfWeek')
 const format = require('date-fns/format')
 const getDay = require('date-fns/getDay')
 const isSameWeek = require('date-fns/isSameWeek')
+const addDays  = require('date-fns/addDays');
+const parseISO = require('date-fns/parseISO');
 
 // make webpage availible
 const PORT = 8080;
@@ -27,6 +29,7 @@ const Owner = require('./models/owner');
 const Schedule = require('./models/schedule');
 const Timeoff = require('./models/timeoff');
 const Shift = require('./models/shift');
+
 
 // Access to database
 // DO NOT TOUCH!
@@ -1106,17 +1109,144 @@ function checkTimeoff(schedule, time_off){
 }
 
 
-app.post('/shift', async function (req, res) {
+app.post('/getEmployeeShifts/:id', async function (req, res) {
 
-    const insertShift = new Shift({
-        name: "Test Name 1",
-        date: "Friday",
-        time: "night"
-    });
+    const { id } = req.params;
+    let day = req.body.date
+    const employee_name = await Employee.findById({ _id: `${id}` }).select('firstName -_id');
+
+    const schedule = await Schedule.find({ week: day }).then((result) => {
+        if (result.length == 0) {
+            console.log('No Schedule')
+        }
+        else {
+            res.status(200).send({shifts:result[0].schedule,name: employee_name});
+        }
+    }
+    )
+})
+
+app.post('/createTransfer/:id', async function (req, res){
+    const { id } = req.params;
+    const employee_name = await Employee.findById({ _id: `${id}` }).select('firstName -_id');
+
+    let split_val_week = req.body.week.split(' ')
+
+    let start_of_week = parseISO(split_val_week[0])
+
+    let split_val_shift = req.body.shift.split(': ')
+
+
+    let day_of_week = split_val_shift[0]
+    let time_of_shift = split_val_shift[1]
     
-    insertShift.save().then((result)=>{
-        console.log("Saved")
+
+
+    let flag = true
+    if(time_of_shift == '' || time_of_shift == undefined){
+        res.status(208).send()
+        flag = false
+    }
+
+    let proper_date = null
+
+    switch(day_of_week){
+        case("Sunday"):
+        proper_date = addDays(start_of_week, 0)
+        break
+        case("Monday"):
+        proper_date = addDays(start_of_week, 1)
+        break
+        case("Tuesday"):
+        proper_date = addDays(start_of_week, 2)
+        break
+        case("Wednesday"):
+        proper_date = addDays(start_of_week, 3)
+        break
+        case("Thursday"):
+        proper_date = addDays(start_of_week, 4)
+        break
+        case("Friday"):
+        proper_date = addDays(start_of_week, 5)
+        break
+        case("Saturday"):
+        proper_date = addDays(start_of_week, 6)
+        break
+    }
+    const new_transfer = new Shift({
+        name: employee_name.firstName,
+        date: proper_date,
+        time: time_of_shift,
+        status: req.body.status
     })
+
+    if(flag == true){
+        new_transfer.save().then((result)=>{
+            res.status(200).send()
+        })
+    }
+})
+
+
+app.post('/createSwap/:id', async function (req, res){
+    const { id } = req.params;
+    const employee_name = await Employee.findById({ _id: `${id}` }).select('firstName -_id');
+
+    let split_val_week = req.body.week.split(' ')
+
+    let start_of_week = parseISO(split_val_week[0])
+
+    let split_val_shift = req.body.shift.split(': ')
+
+
+    let day_of_week = split_val_shift[0]
+    let time_of_shift = split_val_shift[1]
+    
+
+
+    let flag = true
+    if(time_of_shift == '' || time_of_shift == undefined){
+        res.status(208).send()
+        flag = false
+    }
+
+    let proper_date = null
+
+    switch(day_of_week){
+        case("Sunday"):
+        proper_date = addDays(start_of_week, 0)
+        break
+        case("Monday"):
+        proper_date = addDays(start_of_week, 1)
+        break
+        case("Tuesday"):
+        proper_date = addDays(start_of_week, 2)
+        break
+        case("Wednesday"):
+        proper_date = addDays(start_of_week, 3)
+        break
+        case("Thursday"):
+        proper_date = addDays(start_of_week, 4)
+        break
+        case("Friday"):
+        proper_date = addDays(start_of_week, 5)
+        break
+        case("Saturday"):
+        proper_date = addDays(start_of_week, 6)
+        break
+    }
+    const new_transfer = new Shift({
+        name: employee_name.firstName,
+        date: proper_date,
+        time: time_of_shift,
+        status: req.body.status
+    })
+
+    if(flag == true){
+        new_transfer.save().then((result)=>{
+            res.status(200).send()
+        })
+    }
 })
 
 app.listen(PORT, HOST);

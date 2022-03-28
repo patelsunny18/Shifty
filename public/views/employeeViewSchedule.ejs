@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="/css/employeeViewSchedule.css">
 </head>
 
-<body>
+<body onload="schedules()">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
             <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse"
@@ -66,8 +66,34 @@
     </nav>
 
     <div id="content">
-        <h1>[Insert content here]</h1>
-        <button onclick="sample()">Test</button>
+        <label for="calendar">Select which week you would like to view a schedule for:</label>
+        <select name="calendar" id="calendar"></select>
+        <button onclick="display()">Submit</button>
+        <br>
+
+        <table id="Schedule" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Employees</th>
+                    <th scope="col">Sunday</th>
+                    <th scope="col">Monday</th>
+                    <th scope="col">Tuesday</th>
+                    <th scope="col">Wednesday</th>
+                    <th scope="col">Thursday</th>
+                    <th scope="col">Friday</th>
+                    <th scope="col">Saturday</th>
+                </tr>
+            </thead>
+            
+        </table>
+
+        <br>
+        <br>
+        <h2>My shifts</h2>
+        <select id="myshifts"></select>
+        <button onclick="transfer()">Transfer</button>
+        <button onclick="swap()">Swap</button>
+        
     </div>
 
     <!-- Bootstrap Bundle with Popper -->
@@ -81,11 +107,177 @@
 </body>
 
 
-<script>
-    function sample(){
-        axios.post('/shift').then((result) => {
-            alert("click")
+
+<script text="text/javascript">
+    
+
+    function getDays(){
+        let selected_date = document.getElementById("calendar").value
+    }
+
+    function display() {
+        clearSched()
+        myShifts()
+        const schedulediv = document.getElementById("Schedule")
+        let selected_date = document.getElementById("calendar").value
+        console.log(selected_date)
+
+
+        let shifts = [];
+        axios.post('/getSchedule', { date: selected_date })
+            .then((result) => {
+                // console.log(result.data);
+                shifts = result.data;
+                console.log(shifts)
+
+                for (var i = 0; i < shifts.length; i++) {
+                    var new_row = document.createElement('tr')
+                    new_row.id = i;
+                    schedulediv.append(new_row)
+
+                    var name = document.createElement('td')
+                    name.innerText = shifts[i].name
+
+                    var sunday = document.createElement('td')
+                    sunday.innerText = shifts[i].sunday
+
+                    var monday = document.createElement('td')
+                    monday.innerText = shifts[i].monday
+
+                    var tuesday = document.createElement('td')
+                    tuesday.innerText = shifts[i].tuesday
+
+                    var wednesday = document.createElement('td')
+                    wednesday.innerText = shifts[i].wednesday
+
+                    var thursday = document.createElement('td')
+                    thursday.innerText = shifts[i].thursday
+
+                    var friday = document.createElement('td')
+                    friday.innerText = shifts[i].friday
+
+                    var saturday = document.createElement('td')
+                    saturday.innerText = shifts[i].saturday
+
+                    var add = document.getElementById(i)
+                    add.append(name, sunday, monday, tuesday, wednesday, thursday, friday, saturday)
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+
+    function schedules() {
+        const nlist = document.getElementById("calendar")
+
+        axios.get('/getWeeks').then(
+            (result) => {
+
+                for (let i = 0; i < result.data.length; i++) {
+                    var option = document.createElement('option')
+                    option.innerText = result.data[i].week
+                    option.value = result.data[i].week
+                    nlist.append(option)
+                }
+            }
+        )
+    }
+
+    function clearSched(){
+        var elmtTable = document.getElementById('Schedule');
+        var tableRows = elmtTable.getElementsByTagName('tr');
+        var rowCount = tableRows.length;
+
+        for (var x=rowCount-1; x>0; x--) {
+        elmtTable.removeChild(tableRows[x]);
+        }
+    }
+
+    function clearMyShifts(){
+        var elmtTable = document.getElementById('myshifts');
+        var tableRows = elmtTable.getElementsByTagName('option');
+        var rowCount = tableRows.length;
+
+        for (var x=rowCount-1; x>=0; x--) {
+        elmtTable.removeChild(tableRows[x]);
+        }
+    }
+
+    function myShifts(){
+
+        clearMyShifts()
+        
+        const nlist = document.getElementById("myshifts")
+        let selected_date = document.getElementById("calendar").value
+
+        axios.post('/getEmployeeShifts/<%= id %>', { date: selected_date }).then(
+            (result) => {
+                let shifts = result.data.shifts;
+                let cur_name = result.data.name.firstName;
+                
+                
+                for (var i = 0; i < shifts.length; i++) {
+                    if(cur_name == shifts[i].name){
+                        
+                    var sunday = document.createElement('option')
+                    sunday.innerText = "Sunday: " + shifts[i].sunday
+
+                    var monday = document.createElement('option')
+                    monday.innerText = "Monday: " + shifts[i].monday
+
+                    var tuesday = document.createElement('option')
+                    tuesday.innerText =  "Tuesday: " + shifts[i].tuesday
+
+                    var wednesday = document.createElement('option')
+                    wednesday.innerText = "Wednesday: " + shifts[i].wednesday
+
+                    var thursday = document.createElement('option')
+                    thursday.innerText = "Thursday: " + shifts[i].thursday
+
+                    var friday = document.createElement('option')
+                    friday.innerText = "Friday: " + shifts[i].friday
+
+                    var saturday = document.createElement('option')
+                    saturday.innerText = "Saturday: " + shifts[i].saturday
+
+                    
+                    nlist.append(sunday, monday, tuesday, wednesday, thursday, friday, saturday)
+                    }
+                }
+            }
+        )
+    }
+    
+    function transfer(){
+
+        let selected_date = document.getElementById("calendar").value
+        let shift_data = document.getElementById('myshifts').value
+
+        axios.post('/createTransfer/<%= id %>', {shift:shift_data, week:selected_date, status:'transfer'}).then((result)=>{
+            if(result.status == 200){
+                alert("Success")
+            }
+            else if (result.status == 208){
+                alert("You cant post empty shifts")
+            }
         })
     }
+
+    function swap(){
+
+    let selected_date = document.getElementById("calendar").value
+let shift_data = document.getElementById('myshifts').value
+
+axios.post('/createSwap/<%= id %>', {shift:shift_data, week:selected_date, status:'swap'}).then((result)=>{
+    if(result.status == 200){
+        alert("Success")
+    }
+    else if (result.status == 208){
+        alert("You cant swap empty shifts")
+    }
+})
+}
 </script>
 </html>
