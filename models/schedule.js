@@ -3,8 +3,7 @@ const Schema = mongoose.Schema;
 
 const scheduleSchema = new Schema({
     schedule: {
-        type: [mongoose.SchemaTypes.ObjectId],
-        ref: "Shift",
+        type: Array,
         required: true
     },
     week: {

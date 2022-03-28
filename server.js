@@ -11,7 +11,6 @@ const MongoDBSession = require('connect-mongodb-session')(session);
 const startOfWeek = require('date-fns/startOfWeek')
 const endOfWeek = require('date-fns/endOfWeek')
 const format = require('date-fns/format')
-const { addDays, parseISO, add, getDay } = require('date-fns');
 
 // make webpage availible
 const PORT = 8080;
@@ -23,7 +22,6 @@ const app = express();
 const Employee = require('./models/employee');
 const Manager = require('./models/manager');
 const Owner = require('./models/owner');
-const Shift = require('./models/shift');
 const Schedule = require('./models/schedule');
 const Timeoff = require('./models/timeoff');
 
@@ -98,7 +96,7 @@ app.get('/', (req, res) => {
 });
 
 // GET route to Owner home
-app.get('/owner/home/:id', isOwner, async (req, res) => {
+app.get('/owner/home/:id', isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -119,7 +117,7 @@ app.get('/owner/home/:id', isOwner, async (req, res) => {
 });
 
 // GEt route to Manager home
-app.get('/manager/home/:id', isManager, async (req, res) => {
+app.get('/manager/home/:id', isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -140,7 +138,7 @@ app.get('/manager/home/:id', isManager, async (req, res) => {
 });
 
 // GET route to Employee home
-app.get('/employee/home/:id', isEmployee, async (req, res) => {
+app.get('/employee/home/:id',isEmployee,async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -161,7 +159,7 @@ app.get('/employee/home/:id', isEmployee, async (req, res) => {
 });
 
 // GET route to createSchedule for Owner
-app.get('/owner/createSchedule/:id', isOwner, async (req, res) => {
+app.get('/owner/createSchedule/:id', isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -172,65 +170,16 @@ app.get('/owner/createSchedule/:id', isOwner, async (req, res) => {
         res.redirect('/error');
     }
 
-    // get the first and second week from the current date
-    const currDate = new Date();
-    const startOfWeek1 = startOfWeek(addDays(currDate, 7));
-    const endOfWeek1 = endOfWeek(addDays(currDate, 7));
-    let firstWeek = format(startOfWeek1, "yyyy-MM-dd") + " to " + format(endOfWeek1, "yyyy-MM-dd");
-
-    let startOfWeek2 = startOfWeek(addDays(currDate, 14));
-    let endOfWeek2 = endOfWeek(addDays(currDate, 14));
-    let secondWeek = format(startOfWeek2, "yyyy-MM-dd") + " to " + format(endOfWeek2, "yyyy-MM-dd");
-
-    let firstWeekDates = [
-        format(addDays(currDate, 2), "do MMMM"),
-        format(addDays(currDate, 3), "do MMMM"),
-        format(addDays(currDate, 4), "do MMMM"),
-        format(addDays(currDate, 5), "do MMMM"),
-        format(addDays(currDate, 6), "do MMMM"),
-        format(addDays(currDate, 7), "do MMMM"),
-        format(addDays(currDate, 8), "do MMMM"),
-    ];
-
-    let secondWeekDates = [
-        format(addDays(currDate, 9), "do MMMM"),
-        format(addDays(currDate, 10), "do MMMM"),
-        format(addDays(currDate, 11), "do MMMM"),
-        format(addDays(currDate, 12), "do MMMM"),
-        format(addDays(currDate, 13), "do MMMM"),
-        format(addDays(currDate, 14), "do MMMM"),
-        format(addDays(currDate, 15), "do MMMM"),
-    ];
-
-    let nameList = [];
-    let employees = null;
-    try {
-        employees = await Employee.find({});
-    } catch (error) {
-        res.redirect('/error');
-    }
-
-    if (employees) {
-        employees.forEach(employee => {
-            nameList.push(`${employee.firstName} ${employee.lastName}`);
-        });
-    }
-
     // if found
     if (owner) {
         res.render('ownerCreateSchedule', {
-            id: id,
-            firstWeek: firstWeek,
-            secondWeek: secondWeek,
-            nameList: nameList,
-            firstWeekDates: firstWeekDates,
-            secondWeekDates: secondWeekDates
+            id: id
         });
     }
 });
 
 // GET route to createSchedule for Manager
-app.get('/manager/createSchedule/:id', isManager, async (req, res) => {
+app.get('/manager/createSchedule/:id',isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -250,7 +199,7 @@ app.get('/manager/createSchedule/:id', isManager, async (req, res) => {
 });
 
 // GET route to ApproveTimeoff for Manager
-app.get('/manager/approveTimeoff/:id', isManager, async (req, res) => {
+app.get('/manager/approveTimeoff/:id',isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -270,7 +219,7 @@ app.get('/manager/approveTimeoff/:id', isManager, async (req, res) => {
 });
 
 // GET route to editSchedule for Owner
-app.get('/owner/editSchedule/:id', isOwner, async (req, res) => {
+app.get('/owner/editSchedule/:id', isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -290,7 +239,7 @@ app.get('/owner/editSchedule/:id', isOwner, async (req, res) => {
 });
 
 // GET route to editSchedule for Manager
-app.get('/manager/editSchedule/:id', isManager, async (req, res) => {
+app.get('/manager/editSchedule/:id', isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -310,7 +259,7 @@ app.get('/manager/editSchedule/:id', isManager, async (req, res) => {
 });
 
 // GET route to viewSchedule for Owner
-app.get('/owner/viewSchedule/:id', isOwner, async (req, res) => {
+app.get('/owner/viewSchedule/:id',isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -330,7 +279,7 @@ app.get('/owner/viewSchedule/:id', isOwner, async (req, res) => {
 });
 
 // GET route to viewSchedule for Manager
-app.get('/manager/viewSchedule/:id', isManager, async (req, res) => {
+app.get('/manager/viewSchedule/:id',isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -350,7 +299,7 @@ app.get('/manager/viewSchedule/:id', isManager, async (req, res) => {
 });
 
 // GET route to addManager for Owner
-app.get('/owner/addManager/:id', isOwner, async (req, res) => {
+app.get('/owner/addManager/:id',isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -370,7 +319,7 @@ app.get('/owner/addManager/:id', isOwner, async (req, res) => {
 });
 
 // GET route to removeManager for Owner
-app.get('/owner/removeManager/:id', isOwner, async (req, res) => {
+app.get('/owner/removeManager/:id',isOwner, async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -390,7 +339,7 @@ app.get('/owner/removeManager/:id', isOwner, async (req, res) => {
 });
 
 // GET route to addEmployee for Owner
-app.get('/owner/addEmployee/:id', isOwner, async (req, res) => {
+app.get('/owner/addEmployee/:id', isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -410,7 +359,7 @@ app.get('/owner/addEmployee/:id', isOwner, async (req, res) => {
 });
 
 // GET route to addEmployee for Manager
-app.get('/manager/addEmployee/:id', isManager, async (req, res) => {
+app.get('/manager/addEmployee/:id', isManager,async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -430,7 +379,7 @@ app.get('/manager/addEmployee/:id', isManager, async (req, res) => {
 });
 
 // GET route to removeEmployee for Owner
-app.get('/owner/removeEmployee/:id', isOwner, async (req, res) => {
+app.get('/owner/removeEmployee/:id', isOwner,async (req, res) => {
     const { id } = req.params;
     let owner = null;
 
@@ -450,7 +399,7 @@ app.get('/owner/removeEmployee/:id', isOwner, async (req, res) => {
 });
 
 // GET route to removeEmployee for Manager
-app.get('/manager/removeEmployee/:id', isManager, async (req, res) => {
+app.get('/manager/removeEmployee/:id',isManager, async (req, res) => {
     const { id } = req.params;
     let manager = null;
 
@@ -470,7 +419,7 @@ app.get('/manager/removeEmployee/:id', isManager, async (req, res) => {
 });
 
 // GET route to changeAvailability for Employee
-app.get('/employee/edit/:id', isEmployee, async (req, res) => {
+app.get('/employee/edit/:id',isEmployee, async (req, res) => {
     const { id } = req.params;
     const employee = await Employee.findById({ _id: id });
     let date = employee.dob;
@@ -492,7 +441,7 @@ app.get('/employee/edit/:id', isEmployee, async (req, res) => {
     });
 });
 
-app.get('/employee/changeAvailability/:id', isEmployee, async (req, res) => {
+app.get('/employee/changeAvailability/:id',isEmployee, async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -532,7 +481,7 @@ app.get('/manager/changeAvailabilityManager/:id', isManager, async (req, res) =>
 })
 
 // GET route to viewSchedule for Employee
-app.get('/employee/viewSchedule/:id', isEmployee, async (req, res) => {
+app.get('/employee/viewSchedule/:id',isEmployee, async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -554,7 +503,7 @@ app.get('/employee/viewSchedule/:id', isEmployee, async (req, res) => {
 });
 
 // GET route to requestTimeoff for Employee
-app.get('/employee/requestTimeoff/:id', isEmployee, async (req, res) => {
+app.get('/employee/requestTimeoff/:id',isEmployee,async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -892,148 +841,50 @@ app.post('/addManager', function (req, res) {
     }
 })
 
-app.post('/addToSchedule', async (req, res) => {
-    const data = req.body;
-    const name = data.employee;
-    const [firstName, lastName] = name.split(' ');
-    const [weekStart, weekEnd] = data.week.split(' to ');
-    const first_date_of_week = startOfWeek(parseISO(weekStart));
+app.post('/createSchedule', async function (req, res) {
 
-    let employee = null;
-    try {
-        employee = await Employee.findOne({ firstName: firstName, lastName: lastName });
-    } catch (error) {
-        console.log(error);
-    }
+    let day = new Date(req.body.date)
+    let start = startOfWeek(day)
+    let end = endOfWeek(day)
 
-    Shift.find({ employee: employee._id, week: data.week }, async (err, docs) => {
-        if (docs.length) {
-            console.log("employee is already scheduled");
-            res.status(409).send("employee is already scheduled");
-        } else {
-            for (const [key, value] of Object.entries(data)) {
-                if (key === 'sunday') {
-                    const newShift = new Shift({
-                        employee: employee._id,
-                        date: addDays(first_date_of_week, 0),
-                        startTime: data.sunday[0],
-                        endTime: data.sunday[1],
-                        status: "confirmed",
-                        week: data.week
-                    });
-                    newShift.save((err) => {
-                        if (err) throw "cannot add sunday";
-                    });
-                } else if (key === 'monday') {
-                    const newShift = new Shift({
-                        employee: employee._id,
-                        date: addDays(first_date_of_week, 1),
-                        startTime: data.monday[0],
-                        endTime: data.monday[1],
-                        status: "confirmed",
-                        week: data.week
-                    });
-                    newShift.save((err) => {
-                        if (err) throw "cannot add monday";
-                    });
-                } else if (key === 'tuesday') {
-                    const newShift = new Shift({
-                        employee: employee._id,
-                        date: addDays(first_date_of_week, 2),
-                        startTime: data.tuesday[0],
-                        endTime: data.tuesday[1],
-                        status: "confirmed",
-                        week: data.week
-                    });
-                    newShift.save((err) => {
-                        if (err) throw "cannot add tuesday";
-                    });
-                } else if (key === 'wednesday') {
-                    const newShift = new Shift({
-                        employee: employee._id,
-                        date: addDays(first_date_of_week, 3),
-                        startTime: data.wednesday[0],
-                        endTime: data.wednesday[1],
-                        status: "confirmed",
-                        week: data.week
-                    });
-                    newShift.save((err) => {
-                        if (err) throw "cannot add wednesday";
-                    });
-                } else if (key === 'thursday') {
-                    const newShift = new Shift({
-                        employee: employee._id,
-                        date: addDays(first_date_of_week, 4),
-                        startTime: data.thursday[0],
-                        endTime: data.thursday[1],
-                        status: "confirmed",
-                        week: data.week
-                    });
-                    newShift.save((err) => {
-                        if (err) throw "cannot add thursday";
-                    });
-                } else if (key === 'friday') {
-                    const newShift = new Shift({
-                        employee: employee._id,
-                        date: addDays(first_date_of_week, 5),
-                        startTime: data.friday[0],
-                        endTime: data.friday[1],
-                        status: "confirmed",
-                        week: data.week
-                    });
-                    newShift.save((err) => {
-                        if (err) throw err;
-                    });
-                } else if (key === 'saturday') {
-                    const newShift = new Shift({
-                        employee: employee._id,
-                        date: addDays(first_date_of_week, 6),
-                        startTime: data.saturday[0],
-                        endTime: data.saturday[1],
-                        status: "confirmed",
-                        week: data.week
-                    });
-                    newShift.save((err) => {
-                        if (err) throw "cannot add saturday";
-                    });
-                }
-            }
-            res.status(200).send("Shifts added");
+    let week = format(start, "yyyy-MM-dd") + " " + format(end, "yyyy-MM-dd")
+
+    const schedule = await Schedule.find({ week: week }).then((result) => {
+        if (result.length > 0) {
+            console.log('existing Schedule')
+            res.status(406).send()
         }
-    });
-});
+        else {
+            const insertSchedule = new Schedule({ schedule: req.body.shifts, week: week })
+            insertSchedule.save().then((result_s) => {
+                console.log("Added successfully")
+                res.status(200).send()
+            }).catch((err) => {
+                console.log(err)
+            }
+            );
+        }
+
+    })
+
+})
 
 app.post('/getSchedule', async function (req, res) {
-    const name = req.body.employee;
-    const week = req.body.week;
-    const [firstName, lastName] = name.split(' ');
 
-    let employee = null;
-    try {
-        employee = await Employee.findOne({ firstName: firstName, lastName: lastName });
-    } catch (error) {
-        console.log(error);
-    }
 
-    let shifts = null;
-    try {
-        shifts = await Shift.find({ employee: employee._id, week: week }).populate('employee', "firstName lastName");
-    } catch (error) {
-        console.log(error);
-    }
+    let day = req.body.date
 
-    if (shifts) {
-        let data = {
-            name: `${firstName} ${lastName}`,
-            week: week,
+
+    const schedule = await Schedule.find({ week: day }).then((result) => {
+        if (result.length == 0) {
+            console.log('No Schedule')
         }
-
-        shifts.forEach(shift => {
-            const day = format(shift.date, "EEEE");
-            data[`${day}`] = [shift.startTime, shift.endTime];
-        });
-        res.send(data);
+        else {
+            res.status(200).send(result[0].schedule);
+        }
     }
+    )
+
 });
 
 app.get('/getNames', async function (req, res) {
@@ -1048,20 +899,19 @@ app.get('/getWeeks', async function (req, res) {
     })
 })
 
-app.get('/getAvailability/:name', async (req, res) => {
-    const firstName = req.params.name;
-    let employee = null;
+app.post('/getAvailability', async function (req, res) {
 
-    try {
-        employee = await Employee.findOne({ firstName: firstName });
-    } catch (error) {
-        res.redirect('/error');
-    }
+    const name = await Employee.find({ firstName: req.body.name }).select('availability -_id').then((result) => {
+        res.send(result);
+    })
+})
 
-    if (employee) {
-        res.send(employee.availability);
-    }
-});
+// app.put('/edit/:id', async (req, res) => {
+//     const { id } = req.params;
+//     const newAvailability = req.body.availability;
+//     const employee = await Employee.findByIdAndUpdate({ _id: `${id}` }, { availability: newAvailability });
+//     res.status(200).send("updated");
+// })
 
 app.put('/changeAvailability/:id', async (req, res) => {
     const { id } = req.params;
