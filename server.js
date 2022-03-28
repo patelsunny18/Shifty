@@ -224,6 +224,26 @@ app.get('/manager/approveTimeoff/:id',isManager,async (req, res) => {
     }
 });
 
+// GET route to ApproveTimeoff for Manager
+app.get('/owner/approveTimeoff/:id',isOwner,async (req, res) => {
+    const { id } = req.params;
+    let owner = null;
+
+    // try to find the owner with the given ID
+    try {
+        owner = await Owner.findById({ _id: id });
+    } catch (error) {
+        res.redirect('/error');
+    }
+
+    // if found
+    if (owner) {
+        res.render('ownerApproveTimeoff', {
+            id: id
+        });
+    }
+});
+
 // GET route to editSchedule for Owner
 app.get('/owner/editSchedule/:id', isOwner,async (req, res) => {
     const { id } = req.params;
