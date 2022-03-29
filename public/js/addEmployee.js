@@ -329,6 +329,7 @@ function sendData(event) {
             $("#myModal").modal('show');
         })
         .catch((error) => {
-            alert("Oops! Something went wrong. Please, try again.");
+            document.getElementById("failMsg").innerText = "Oops! Something went wrong. Please, try again.";
+            $("#modalFail").modal('show');
         })
 }
