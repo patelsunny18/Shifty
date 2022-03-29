@@ -772,42 +772,35 @@ app.post('/addEmployee', (req, res) => {
                             userID: employeeID,
                             password: password
                         };
-                        res.send(responseData)
+                        res.status(200).send(responseData)
                     })
                     .catch((err) => {
-                        console.log(err)
+                        console.log(err);
                     })
             }
             else {
-                let sentence = "";
                 if (result[0].phoneNumber === req.body.phoneNumber && result[0].email === req.body.email && result[0].sin === req.body.sinNumber) {
-                    let sentence = "A manager with similar phone number, email and SIN number already exists in the system."
+                    res.status(210).send("A manager with similar phone number, email and SIN number already exists in the system.");
                 }
                 else if (result[0].phoneNumber === req.body.phoneNumber && result[0].email === req.body.email) {
-                    sentence = "A manager with similar phone number and email already exists in the system."
+                    res.status(210).send("A manager with similar phone number and email already exists in the system.");
                 }
                 else if (result[0].phoneNumber === req.body.phoneNumber && result[0].sin === req.body.sinNumber) {
-                    sentence = "A manager with similar phone number and SIN number already exists in the system."
+                    res.status(210).send("A manager with similar phone number and SIN number already exists in the system.");
                 }
                 else if (result[0].email === req.body.email && result[0].sin === req.body.sinNumber) {
-                    sentence = "A manager with similar email and SIN number already exists in the system."
+                    res.status(210).send("A manager with similar email and SIN number already exists in the system.");
                 }
                 else if (result[0].phoneNumber === req.body.phoneNumber) {
-                    let sentence = "A manager with similar phone number already exists in the system."
+                    res.status(210).send("A manager with similar phone number already exists in the system.");
                 }
                 else if (result[0].email === req.body.email) {
-                    sentence = "A manager with similar email already exists in the system."
+                    res.status(210).send("A manager with similar email already exists in the system.");
                 }
                 else if (result[0].sin === req.body.sinNumber) {
-                    sentence = "A manager with similar SIN number already exists in the system."
+                    res.status(210).send("A manager with similar SIN number already exists in the system.");
                 }
-                let responseData = {
-                    statusCode: 409,
-                    message: sentence
-                }
-                res.send(responseData);
             }
-
         })
     }
     catch (err) {
@@ -832,7 +825,7 @@ app.post('/removeEmployee', function (req, res) {
                 }
             })
             .catch((err) => {
-                res.status(500).send(error)
+                res.status(500).send(err)
             })
     }
     catch (error) {
@@ -853,19 +846,15 @@ app.post('/removeManager', function (req, res) {
                 console.log(result.deletedCount);
                 if (result.deletedCount == 1) {
                     console.log("Manager removed from the system")
-                    let responseData = {
-                        first: fName,
-                        last: lName
-                    };
-                    res.send(responseData)
+                    res.status(200).send(`${fName} ${lName} has been removed from the system.`);
                 }
                 else {
-                    console.log("Manager doesn't exist in the system.")
+                    res.status(210).send("Manager doesn't exist in the system.");
                 }
             })
             .catch((err) => {
-                console.log(err)
-                res.send(err)
+                res.status(500).send(err)
+
             })
     }
     catch (error) {

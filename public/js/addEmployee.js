@@ -109,7 +109,7 @@ phone.addEventListener("input", function (event) {
     if (this.value === '') {
         setErrorFor(phone, "Phone can't be blank");
     } else if (!this.value.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/im)) {
-        setErrorFor(phone, "Incorrect phone number");
+        setErrorFor(phone, "Phone number has to be 10 digits");
     } else {
         setSuccessFor(phone);
     }
@@ -142,6 +142,8 @@ bankAccount.addEventListener("input", function (event) {
 sinNumber.addEventListener("input", function (event) {
     if (this.value === '') {
         setErrorFor(sinNumber, "SIN number can't be blank");
+    } else if (!this.value.match(/^\d{9}$/)) {
+        setErrorFor(sinNumber, "SIN number has to be 9 digit");
     } else {
         setSuccessFor(sinNumber);
     }
@@ -196,7 +198,7 @@ function checkInputs() {
     if (phoneValue === '') {
         setErrorFor(phone, "Phone can't be blank");
     } else if (!phoneValue.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)) {
-        setErrorFor(phone, "Incorrect phone number");
+        setErrorFor(phone, "Phone number has to be 10 digits");
     } else {
         setSuccessFor(phone);
     }
@@ -224,11 +226,13 @@ function checkInputs() {
         setSuccessFor(bankAccount);
         success = true;
     }
-
     if (sinNumberValue === '') {
         setErrorFor(sinNumber, "SIN number can't be blank");
         success = false;
-    } else {
+    } else if (!sinNumberValue.match(/^\d{9}$/)) {
+        setErrorFor(sinNumber, "SIN number has to be 9 digit");
+    }
+    else {
         setSuccessFor(sinNumber);
         success = true;
     }
@@ -323,10 +327,19 @@ function sendData(event) {
 
     axios.post('/addEmployee', data)
         .then((result) => {
-            document.getElementById("test").innerText = `${result.data.fName} ${result.data.lName} has been added to the system!`;
-            document.getElementById("test1").innerText = `UserID: ${result.data.userID}`;
-            document.getElementById("test2").innerText = `Password: ${result.data.password}`;
-            $("#myModal").modal('show');
+            if (result.status === 200) {
+                document.getElementById("test").innerText = `${result.data.fName} ${result.data.lName} has been added to the system!`;
+                document.getElementById("test1").innerText = `UserID: ${result.data.userID}`;
+                document.getElementById("test2").innerText = `Password: ${result.data.password}`;
+                $("#myModal").modal('show');
+            }
+            else {
+                let message = result.data;
+                console.log(result);
+                console.log("Reached")
+                document.getElementById("failMsg").innerText = `${message}`;
+                $("#modalFail").modal('show');
+            }
         })
         .catch((error) => {
             document.getElementById("failMsg").innerText = "Oops! Something went wrong. Please, try again.";
