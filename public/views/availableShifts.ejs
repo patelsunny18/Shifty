@@ -28,26 +28,21 @@
 
             <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="http://localhost:8080/employee/home/<%= id %>"><i
-                                class="fa fa-house icon"></i> Home</a>
+                    <li class="nav-item active ">
+                        <a class="nav-link" href="http://localhost:8080/employee/home/<%= id %>"><i class="fa fa-house icon"></i> Home</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="http://localhost:8080/employee/viewSchedule/<%= id %>"><i
-                                class="fa fa-eye icon"></i> View Schedule</a>
+                        <a class="nav-link" href="http://localhost:8080/employee/viewSchedule/<%= id %>"><i class="fa fa-eye icon"></i> View Schedule</a>
                     </li>
                     <li class="nav-item current">
-                        <a class="nav-link" href="http://localhost:8080/employee/availableShifts/<%= id %>"><i
-                                class="fas fa-arrow-right-arrow-left icon"></i> Available Shifts</a>
+                        <a class="nav-link" href="http://localhost:8080/employee/availableShifts/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Available Shifts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="http://localhost:8080/employee/changeAvailability/<%= id %>"><i
-                                class="fa-solid fa-pen-to-square icon"></i> Change
+                        <a class="nav-link" href="http://localhost:8080/employee/changeAvailability/<%= id %>"><i class="fa-solid fa-pen-to-square icon"></i> Change
                             Availability</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="http://localhost:8080/employee/requestTimeoff/<%= id %>"><i
-                                class="fa-solid fa-calendar-minus"></i> Request TimeOff</a>
+                        <a class="nav-link" href="http://localhost:8080/employee/requestTimeoff/<%= id %>"><i class="fa-solid fa-calendar-minus"></i> Request TimeOff</a>
                     </li>
                 </ul>
             </div>
@@ -55,16 +50,15 @@
             <div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
                 <ul class="navbar-nav ms-auto buttons">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="http://localhost:8080/employee/edit/<%= id %>">
                             <button class="btn btn-sm btn-primary prof-btn" type="submit">My Profile</button>
                         </a>
                     </li>
                     <li class="nav-item">
                         <form id="logoutform" method="post" action="/logout"></form>
-                        <a class="nav-link">
-                            <button class="btn btn-sm btn-primary log-btn" type="submit" form="logoutform">Log
-                                Out</button>
-                        </a>
+                             <a class="nav-link" >   
+                                 <button class="btn btn-sm btn-primary log-btn" type="submit" form="logoutform">Log Out</button>
+                            </a>
                     </li>
                 </ul>
             </div>
