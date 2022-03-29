@@ -1,0 +1,5 @@
+Time off request submitted by employee (Nick Simpson)
+Time off request recieved by management 
+Time off request shown in database, initally as false, will remain false unless request is approved
+Time off request denied by the management
+Time off request removed from the database
