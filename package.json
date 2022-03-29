@@ -28,7 +28,7 @@
     "generate-password": "^1.7.0",
     "jsdom": "^19.0.0",
     "mocha": "^9.2.1",
-    "mongoose": "^6.2.8",
+    "mongoose": "^6.2.9",
     "mongoose-unique-validator": "^3.0.0"
   }
 }
