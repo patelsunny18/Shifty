@@ -1,0 +1,3 @@
+test7:
+
+clicking on edit should enable certain fields that the user can change

@@ -1,0 +1,7 @@
+test1:
+
+Testing by clicking on myProfile button should load that employees details.
+
+Also to confirm adding screenshot of the database to confirm the details.
+
+Employee details should load correctly.

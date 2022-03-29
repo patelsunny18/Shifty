@@ -1,0 +1,5 @@
+test6:
+
+updating password should encrypt the password before updating it on the database.
+
+including screenshots of database before and after updating password.

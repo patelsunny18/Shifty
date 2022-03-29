@@ -1,0 +1,5 @@
+test2:
+
+testing the buttons not shown in the screenshot since it's not possible.
+But when page is loaded then user can't click on submit and revert buttons 
+or any of the input fields since they are disabled.

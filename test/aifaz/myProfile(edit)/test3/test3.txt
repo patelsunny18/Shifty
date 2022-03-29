@@ -1,0 +1,4 @@
+test3:
+
+clicking on change button next to password should open a 
+modal where user can change password.

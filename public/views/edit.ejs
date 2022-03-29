@@ -49,7 +49,7 @@
                             Availability</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="http://localhost:8080/employee/requestTimeoff/<%= id %>"><i class="fa-solid fa-calendar-minus"></i> Request TimeOff</a>
+                        <a class="nav-link" href="http://localhost:8080/employee/requestTimeoff/<%= id %>"><i class="fa-solid fa-calendar-minus icon"></i> Request TimeOff</a>
                     </li>
                 </ul>
             </div>
@@ -526,6 +526,14 @@
         const dobValue = dob.value.trim();
         const emailValue = email.value.trim();
         const bankAccountValue = bankAccount.value.trim();
+
+        if(fNameValue === '' || lNameValue === '' || addressValue === '' || phoneValue === null || dobValue === null || emailValue === '' || bankAccountValue === null){
+            let message = result.data;
+            document.getElementById("failMsg").innerText = "Error can't leave details blank";
+            $("#modalFail").modal('show');
+            return
+        }
+
         const data = {
             firstName: fNameValue,
             lastName: lNameValue,
@@ -548,7 +556,7 @@
                 }
                 else{
                     let message = result.data;
-                    document.getElementById("test").innerText = `${message}`;
+                    document.getElementById("failMsg").innerText = `${message}`;
                     $("#modalFail").modal('show');
                 }
             })
@@ -615,10 +623,12 @@
         if (curValue === '') {
             setErrorFor(curPass, "Current password cannot be blank");
             success = false;
-        } else if(this.value === newPass.value){
+        } 
+        else if(this.value === newPass.value){
             setErrorFor(newPass, "Can't be the same as current password");
             success = false;
-        } else {
+        }
+         else {
             setSuccessFor(curPass);
             success = true;
         }
@@ -626,10 +636,12 @@
         if (newValue === '') {
             setErrorFor(newPass, "New password cannot be blank");
             success = false;
-        } else if(this.value === curValue){
+        } 
+        else if(this.value === curValue){
             setErrorFor(newPass, "Can't be the same as current password");
             success = false;
-        } else {
+        } 
+        else {
             setSuccessFor(newPass);
             success = true;
         }
@@ -659,6 +671,51 @@
 
         const curValue = curPass.value.trim();
         const newValue = newPass.value.trim();
+
+        if(curValue === '' && newValue === ''){
+            document.getElementById("failMsg").innerText = "Current and New Password cannot be blank";
+            $("#myModal").modal('hide');
+            $("#modalFail").modal('show');
+            document.getElementById('retry').onclick = function() {
+                document.getElementById("passForm").reset();
+                $("#myModal").modal('show');
+            }
+            return
+        }
+
+        if(curValue === newValue){
+            document.getElementById("failMsg").innerText = "Current Password and New Password cannot be the same";
+            $("#myModal").modal('hide');
+            $("#modalFail").modal('show');
+            document.getElementById('retry').onclick = function() {
+                document.getElementById("passForm").reset();
+                $("#myModal").modal('show');
+            }
+            return
+        }
+
+        if(curValue === ''){
+            document.getElementById("failMsg").innerText = "Current Password cannot be blank";
+            $("#myModal").modal('hide');
+            $("#modalFail").modal('show');
+            document.getElementById('retry').onclick = function() {
+                document.getElementById("passForm").reset();
+                $("#myModal").modal('show');
+            }
+            return
+        }
+
+        if(newValue === ''){
+            document.getElementById("failMsg").innerText = "New Password cannot be blank";
+            $("#myModal").modal('hide');
+            $("#modalFail").modal('show');
+            document.getElementById('retry').onclick = function() {
+                document.getElementById("passForm").reset();
+                $("#myModal").modal('show');
+            }
+            return
+        }
+
         const data = {
             curPassword: curValue,
             newPassword: newValue,
