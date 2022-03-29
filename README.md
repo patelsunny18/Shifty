@@ -32,4 +32,14 @@ Run the following commands prior to running the server:
 
 To run the application simply type npm start in a terminal when in the project directory
 
+Owner:
+    ownerID: 12345
+    password: iamdummy
 
+Manager:
+    managerID: 5851568
+    password: candy123
+
+Employee:
+    employeeID: 392861
+    password: simpsons
