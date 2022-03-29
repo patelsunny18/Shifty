@@ -1050,7 +1050,7 @@ app.put('/editPass/:id', async (req, res) => {
                     }
                     else if (!result) {
                         console.log("Incorrect Current Password");
-                        res.status(210).send("Incorrect Current Password");
+                        res.status(210).send("Incorrect Password Entered");
                     }
                     else if (result) {
                         Employee.findByIdAndUpdate(
@@ -1061,7 +1061,7 @@ app.put('/editPass/:id', async (req, res) => {
                                     res.status(210).send(err);
                                 } else {
                                     console.log("Done");
-                                    res.status(200).send("Your password has been changed");
+                                    res.status(200).send("Your Password Has Been Updated");
                                 }
                             }
                         );
@@ -1094,7 +1094,7 @@ app.put('/edit/:id', async (req, res) => {
                             res.status(210).send(err);
                         } else {
                             console.log("Done");
-                            res.status(200).send("Your details have been updated");
+                            res.status(200).send("Your Details Have Been Updated");
                         }
                     }
                 );
@@ -1121,7 +1121,7 @@ app.put('/managerEditPass/:id', async (req, res) => {
                     }
                     else if (!result) {
                         console.log("Incorrect Current Password");
-                        res.status(210).send("Incorrect Current Password. Retry");
+                        res.status(210).send("Incorrect Password Entered");
                     }
                     else if (result) {
                         Manager.findByIdAndUpdate(
@@ -1132,7 +1132,7 @@ app.put('/managerEditPass/:id', async (req, res) => {
                                     res.status(210).send(err);
                                 } else {
                                     console.log("Done");
-                                    res.status(200).send("Your password has been changed");
+                                    res.status(200).send("Your Password Has Been Updated");
                                 }
                             }
                         );
@@ -1165,7 +1165,7 @@ app.put('/managerEdit/:id', async (req, res) => {
                             res.status(210).send(err);
                         } else {
                             console.log("Done");
-                            res.status(200).send("Your details have been updated");
+                            res.status(200).send("Your Details Have Been Updated");
                         }
                     }
                 );
