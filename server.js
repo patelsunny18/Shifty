@@ -235,10 +235,13 @@ app.get('/owner/approveTimeoff/:id', isOwner, async (req, res) => {
         res.redirect('/error');
     }
 
+    const shifts = await Shift.find({ status: "awaiting" }).populate('sender', 'firstName lastName').populate('recipient', 'firstName lastName');
+
     // if found
     if (owner) {
         res.render('ownerApproveTimeoff', {
-            id: id
+            id: id,
+            shifts: shifts
         });
     }
 });
@@ -626,7 +629,7 @@ app.get('/employee/availableShifts/:id', isEmployee, async (req, res) => {
     }
     let shifts = null;
     try {
-        shifts = await Shift.find({});
+        shifts = await Shift.find({}).populate('sender', 'firstName lastName');
     } catch (error) {
         console.log(error);
     }
@@ -1342,7 +1345,7 @@ app.post('/getEmployeeShifts/:id', async function (req, res) {
 
 app.post('/createTransfer/:id', async function (req, res) {
     const { id } = req.params;
-    const employee_name = await Employee.findById({ _id: `${id}` }).select('firstName -_id');
+    // const employee_name = await Employee.findById({ _id: `${id}` });
 
     let split_val_week = req.body.week.split(' ')
 
@@ -1388,7 +1391,7 @@ app.post('/createTransfer/:id', async function (req, res) {
             break
     }
     const new_transfer = new Shift({
-        name: employee_name.firstName,
+        sender: id,
         date: proper_date,
         time: time_of_shift,
         status: req.body.status
@@ -1399,69 +1402,82 @@ app.post('/createTransfer/:id', async function (req, res) {
             res.status(200).send()
         })
     }
-})
+});
 
+app.post('/transfer', async (req, res) => {
+    const data = req.body;
 
-app.post('/createSwap/:id', async function (req, res) {
-    const { id } = req.params;
-    const employee_name = await Employee.findById({ _id: `${id}` }).select('firstName -_id');
+    let shift = await Shift.findById(data.shiftID);
+    shift.sender = data.sender;
+    shift.recipient = data.recipient;
+    shift.status = "awaiting";
+    await shift.save();
+    res.send("Success");
+});
 
-    let split_val_week = req.body.week.split(' ')
+app.post('/approveTransfer', async (req, res) => {
+    const shiftID = req.body.shiftID;
+    const shift = await Shift.findById({ _id: shiftID }).populate('sender', 'firstName').populate('recipient', 'firstName');
 
-    let start_of_week = parseISO(split_val_week[0])
+    const sender = shift.sender.firstName;
+    const recipient = shift.recipient.firstName;
+    const date = new Date(shift.date);
+    const time = shift.time;
 
-    let split_val_shift = req.body.shift.split(': ')
+    const start_of_week = startOfWeek(date);
+    const end_of_week = endOfWeek(date);
+    const week = format(start_of_week, "yyyy-MM-dd") + " " + format(end_of_week, "yyyy-MM-dd");
 
+    const schedule = await Schedule.find({ week: week },);
+    const employees = schedule[0].schedule;
+    const copy_schedule = JSON.parse(JSON.stringify(employees));
 
-    let day_of_week = split_val_shift[0]
-    let time_of_shift = split_val_shift[1]
+    for (let i = 0; i < copy_schedule.length; i++) {
+        const day_number = getDay(date);
+        if (sender === copy_schedule[i].name) {
+            switch (day_number) {
+                case 0:
+                    copy_schedule[i].sunday = "";
+                    break;
+            }
+        }
+        if (recipient === copy_schedule[i].name) {
+            switch (day_number) {
+                case 0:
+                    copy_schedule[i].sunday = `${time}`;
+                    break;
+            }
+        }
+    }
+    let new_schedule = null;
+    let deleted_shift = null;
 
-
-
-    let flag = true
-    if (time_of_shift == '' || time_of_shift == undefined) {
-        res.status(208).send()
-        flag = false
+    try {
+        new_schedule = await Schedule.findOneAndUpdate({ week: week }, { schedule: copy_schedule });
+        deleted_shift = await Shift.findOneAndRemove({ _id: shiftID });
+    } catch (error) {
+        console.log(error);
     }
 
-    let proper_date = null
-
-    switch (day_of_week) {
-        case ("Sunday"):
-            proper_date = addDays(start_of_week, 0)
-            break
-        case ("Monday"):
-            proper_date = addDays(start_of_week, 1)
-            break
-        case ("Tuesday"):
-            proper_date = addDays(start_of_week, 2)
-            break
-        case ("Wednesday"):
-            proper_date = addDays(start_of_week, 3)
-            break
-        case ("Thursday"):
-            proper_date = addDays(start_of_week, 4)
-            break
-        case ("Friday"):
-            proper_date = addDays(start_of_week, 5)
-            break
-        case ("Saturday"):
-            proper_date = addDays(start_of_week, 6)
-            break
+    if (new_schedule && deleted_shift) {
+        res.send("Success");
     }
-    const new_transfer = new Shift({
-        name: employee_name.firstName,
-        date: proper_date,
-        time: time_of_shift,
-        status: req.body.status
-    })
+});
 
-    if (flag == true) {
-        new_transfer.save().then((result) => {
-            res.status(200).send()
-        })
+app.post('/disapproveTransfer', async (req, res) => {
+    const shiftID = req.body.shiftID;
+    let shift = null;
+
+    try {
+        shift = await Shift.findByIdAndUpdate({ _id: shiftID }, { $unset: { recipient: "" }, status: "transfer" });
+    } catch (error) {
+        console.log(error);
     }
-})
+
+    if (shift) {
+        res.send("Success");
+    }
+});
 
 app.listen(PORT, HOST);
 

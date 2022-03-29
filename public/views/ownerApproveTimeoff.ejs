@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="/css/requestTimeoff.css">
 </head>
 
-<body onload="requests_timeoff()">
+<body onload="requests_timeoff(), assign_function_to_button()">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
             <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse"
@@ -49,8 +49,13 @@
                                         class="fa fa-eye icon"></i> View Schedule</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item current">
-                        <a class="nav-link" href="http://localhost:8080/owner/ApproveTimeoff/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Approve Shift Change</a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://localhost:8080/owner/team/<%= id %>"><i
+                                class="fa fa-user-group icon"></i> Team</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://localhost:8080/owner/ApproveTimeoff/<%= id %>"><i
+                                class="fas fa-arrow-right-arrow-left icon"></i> Shift Change</a>
                     </li>
                     <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle" href="http://localhost:8080/owner/addEmployee/<%= id %>"
@@ -77,9 +82,10 @@
                 <ul class="navbar-nav ms-auto buttons">
                     <li class="nav-item">
                         <form id="logoutform" method="post" action="/logout"></form>
-                             <a class="nav-link" >   
-                                 <button class="btn btn-sm btn-primary log-btn" type="submit" form="logoutform">Log Out</button>
-                            </a>
+                        <a class="nav-link">
+                            <button class="btn btn-sm btn-primary log-btn" type="submit" form="logoutform">Log
+                                Out</button>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -91,13 +97,46 @@
         <select id="timeoffreq"></select>
         <button onclick="approve()">Approve Request</button>
         <button onclick="deny()">Deny Request</button>
-         
+
         <br>
         <br>
-        <h1>Shift Change Requests</h1>
-        <select id="shiftreq"></select>
-        <button>Approve Request</button>
-        <button>Deny Request</button>
+        <div id="content-body">
+            <h1>Shift Changes</h1>
+            <% if (shifts.length===0) { %>
+                <h1>No available shifts!</h1>
+                <% } else { %>
+                    <% for( let i=0; i < shifts.length; i++ ) { %>
+                        <% if (shifts[i].status ==="awaiting" ) { %>
+                            <% if (i===0 || i % 2===0) { %>
+                                <div class="row">
+                                    <% } %>
+                                        <div class="col-sm-6">
+                                            <div class="card">
+                                                <h5 class="card-header">From 
+                                                    <%= shifts[i].sender.firstName %>
+                                                        <%= shifts[i].sender.lastName %> to 
+                                                        <%= shifts[i].recipient.firstName %> <%= shifts[i].recipient.lastName %> 
+                                                </h5>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">
+                                                        <%= shifts[i].status.toUpperCase() %>
+                                                    </h5>
+                                                    <p class="card-text">
+                                                        Date: <%= shifts[i].date %> <br>
+                                                            Time: <%= shifts[i].time.toUpperCase() %> <br>
+                                                    </p>
+                                                    <button class="btn btn-primary approve <%= shifts[i]._id %>">Approve</button>
+                                                    <button class="btn btn-danger disapprove <%= shifts[i]._id %>">Disapprove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% if (i % 2 !==0) { %>
+                                </div>
+                                <% } %>
+                                    <% } %>
+                                        <% } %>
+                                            <% } %>
+        </div>
     </div>
 
     <!-- Bootstrap Bundle with Popper -->
@@ -112,15 +151,34 @@
 
 
 <script>
-    function requests_timeoff(){
+    function assign_function_to_button() {
+        const approveButtons = document.getElementsByClassName('btn btn-primary approve');
+        const disapproveButtons = document.getElementsByClassName('btn btn-danger disapprove');
+
+        Array.from(approveButtons).forEach(button => {
+            button.onclick = function() {
+                const className = button.classList;
+                approve(className[3]);
+            }
+        });
+
+        Array.from(disapproveButtons).forEach(button => {
+            button.onclick = function() {
+                const className = button.classList;
+                disapprove(className[3]);
+            }
+        });
+    }
+
+    function requests_timeoff() {
 
         const possible = document.getElementById("timeoffreq")
 
-        axios.get('/getTimeoffs').then((result)=>{
+        axios.get('/getTimeoffs').then((result) => {
             console.log(result.data)
             let requests = result.data
 
-            for (let i = 0; i < requests.length; i++){
+            for (let i = 0; i < requests.length; i++) {
                 var option = document.createElement('option')
                 option.innerText = result.data[i].name + " " + result.data[i].date
                 option.value = result.data[i].name + "/" + result.data[i].date
@@ -128,33 +186,25 @@
                 possible.append(option)
             }
         })
-            
+
     }
 
-    function approve(){
-        let info = document.getElementById(0).value.split("/")
-        
-        axios.put('/approveReq', {name:info[0], date:info[1]}).then((res) => {
-                if (res.status == 200) {
-                    alert("Successfully Approved Request")
-                }
-            }).catch((err) => {
-                console.log(err)
-            })
+    async function approve(shiftID) {
+        console.log(shiftID);
+        const request = await axios.post('/approveTransfer', { shiftID: shiftID });
+        if (request) {
+            alert(request.data);
+            window.location.reload();
+        }
     }
 
-    function deny(){
-        let info = document.getElementById(0).value.split("/")
-        
-        axios.post('/denyReq', {name:info[0], date:info[1]}).then((res) => {
-                if (res.status == 200) {
-                    alert("Successfully Denied Request")
-                    
-                }
-            }).catch((err) => {
-                console.log(err)
-            })
-        location.reload();
+    async function disapprove(shiftID) {
+        const request = await axios.post('/disapproveTransfer', { shiftID: shiftID });
+        if (request) {
+            alert(request.data);
+            window.location.reload();
+        }
     }
 </script>
+
 </html>

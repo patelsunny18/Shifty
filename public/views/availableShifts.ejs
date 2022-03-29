@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="/css/availableShifts.css">
 </head>
 
-<body>
+<body onload="disableButtons()">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
             <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse"
@@ -66,41 +66,41 @@
     </nav>
 
     <div id="content">
-        <!-- <% for( let i=0; i < shifts.length; i++ ) { %>
-            <div class="card">
-                <h5 class="card-header"><%= shifts[i].name %></h5>
-                <div class="card-body">
-                    <h5 class="card-title"><%= shifts[i].status.toUpperCase() %></h5>
-                    <p class="card-text">
-                        Date:   <%= shifts[i].date %> <br>
-                        Time:   <%= shifts[i].time.toUpperCase() %> <br>
-                    </p>
-                    <a href="#" class="btn btn-primary"><%= shifts[i].status.toUpperCase() %></a>
-                </div>
-            </div>
-            <% } %> -->
-
-            <% for( let i = 0; i < shifts.length; i++ ) { %>
-                <% if (i === 0 || i % 2 === 0) { %>
-                    <div class="row">
-                <% } %>
-                <div class="col-sm-6">
-                    <div class="card">
-                        <h5 class="card-header"><%= shifts[i].name %></h5>
-                        <div class="card-body">
-                            <h5 class="card-title"><%= shifts[i].status %></h5>
-                            <p class="card-text">
-                                Date:   <%= shifts[i].date %> <br>
-                                Time:   <%= shifts[i].time %> <br>
-                            </p>
-                            <a href="#" class="btn btn-primary"><%= shifts[i].status %></a>
-                        </div>
-                    </div>
-                </div>
-                <% if (i % 2 !== 0) { %>
-                    </div>
-                <% } %>
-            <% } %>
+        <% if (shifts.length===0) { %>
+            <h1>No available shifts!</h1>
+            <% } else { %>
+                <% for( let i=0; i < shifts.length; i++ ) { %>
+                    <% if (shifts[i].status !=="awaiting" ) { %>
+                        <% if (i===0 || i % 2===0) { %>
+                            <div class="row">
+                                <% } %>
+                                    <div class="col-sm-6">
+                                        <div class="card">
+                                            <h5 class="card-header">
+                                                <%= shifts[i].sender.firstName %>
+                                                    <%= shifts[i].sender.lastName %>
+                                            </h5>
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <%= shifts[i].status.toUpperCase() %>
+                                                </h5>
+                                                <p class="card-text">
+                                                    Date: <%= shifts[i].date %> <br>
+                                                        Time: <%= shifts[i].time.toUpperCase() %> <br>
+                                                </p>
+                                                <button class="btn btn-primary shift-button <%= shifts[i].sender._id %>"
+                                                    id="<%= shifts[i]._id %>">
+                                                    <%= shifts[i].status.toUpperCase() %>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% if (i % 2 !==0) { %>
+                            </div>
+                            <% } %>
+                                <% } %>
+                                    <% } %>
+                                        <% } %>
     </div>
 
     <!-- Bootstrap Bundle with Popper -->
@@ -111,6 +111,47 @@
 
     <!-- Link for using Axios to send requests -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script type="text/javascript">
+        function disableButtons() {
+            const currentEmployee = '<%= id %>';
+
+            const curr_employee_buttons = document.getElementsByClassName(`btn btn-primary ${currentEmployee}`);
+            Array.from(curr_employee_buttons).forEach(shift_button => {
+                shift_button.disabled = true;
+            });
+
+            const shift_buttons = document.getElementsByClassName('btn btn-primary shift-button');
+            Array.from(shift_buttons).forEach(button => {
+                const className = button.classList;
+                button.onclick = function () {
+                    transfer(className[3], button.id);
+                }
+            })
+        }
+
+        async function transfer(otherEmployee, shiftID) {
+            const currentEmployee = '<%= id %>';
+
+            let data = {
+                sender: otherEmployee,
+                recipient: currentEmployee,
+                shiftID: shiftID
+            };
+
+            let request = null;
+            try {
+                request = await axios.post('/transfer', data);
+            } catch (error) {
+                console.log(error);
+            }
+
+            if (request) {
+                alert('Success');
+                window.location.reload();
+            }
+        }
+    </script>
 </body>
 
 </html>

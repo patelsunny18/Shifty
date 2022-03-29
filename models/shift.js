@@ -2,9 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const shiftSchema = new Schema({
-    name: {
-        type: String,
+    sender: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Employee",
         required: true
+    },
+    recipient: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Employee"
     },
     date: {
         type: String,
