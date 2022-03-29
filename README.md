@@ -2,6 +2,9 @@ nsya# CMPT 370 Group 10 Project
 
 The Project repository for Group 10
 
+In order to run the application, it must be ran in an environment where node.js is present
+
+First time start:
 Run the following commands prior to running the server:
 
     npm install express
@@ -27,7 +30,6 @@ Run the following commands prior to running the server:
     npm install date-fns --save
 
 
-
-    $ node server.js
+To run the application simply type npm start in a terminal when in the project directory
 
 
