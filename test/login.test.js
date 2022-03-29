@@ -122,7 +122,7 @@ describe ('check if owner id is invalid', () => {
 describe ('check Login user', () => {
     it('should return employee', async () => {
         let id = '375738';
-        let password = 'e6JvC5bKy';
+        let password = '123';
         return serverfuncs.checkEmployeeLogin(id, password)
             .then((employee) => {
                 expect(employee).to.be.an('object');
@@ -130,8 +130,8 @@ describe ('check Login user', () => {
         );
     })
     it ('should return manager', () => {
-        let id = '3963318';
-        let password = 'FHPb4grX';
+        let id = '8681727';
+        let password = 'Yc25Gx';
         return serverfuncs.checkManagerLogin(id, password)
             .then((manager) => {
                 expect(manager).to.be.an('object');
