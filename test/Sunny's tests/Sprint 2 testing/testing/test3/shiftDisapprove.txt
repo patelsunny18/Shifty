@@ -1,0 +1,5 @@
+Test Case:
+	- Disapprove shift removes the recipient but keeps the shift available for other's to pickup.
+
+Test Data:
+	- Meow's picked up shift will be disapproved.

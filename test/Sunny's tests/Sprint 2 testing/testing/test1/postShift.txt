@@ -1,0 +1,5 @@
+Test Case:
+	- Posting shift for transfer
+
+Test Data:
+	- Thether's Sunday shift is posted for transfer

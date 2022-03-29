@@ -28,7 +28,7 @@
 
             <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item active ">
+                    <li class="nav-item active">
                         <a class="nav-link" href="http://localhost:8080/owner/home/<%= id %>"><i
                                 class="fa fa-house icon"></i> Home</a>
                     </li>
@@ -49,15 +49,11 @@
                                         class="fa fa-eye icon"></i> View Schedule</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="http://localhost:8080/owner/team/<%= id %>"><i
-                                class="fa fa-user-group icon"></i> Team</a>
-                    </li>
-                    <li class="nav-item">
+                    <li class="nav-item current1">
                         <a class="nav-link" href="http://localhost:8080/owner/ApproveTimeoff/<%= id %>"><i
-                                class="fas fa-arrow-right-arrow-left icon"></i> Shift Change</a>
+                                class="fas fa-arrow-right-arrow-left icon"></i> Approve Shift Change</a>
                     </li>
-                    <li class="nav-item dropdown ">
+                    <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="http://localhost:8080/owner/addEmployee/<%= id %>"
                             id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false"><i class="fa-solid fa-briefcase icon"></i>
@@ -106,16 +102,17 @@
                 <h1>No available shifts!</h1>
                 <% } else { %>
                     <% for( let i=0; i < shifts.length; i++ ) { %>
-                        <% if (shifts[i].status ==="awaiting" ) { %>
+                        <% if (shifts[i].status==="awaiting" ) { %>
                             <% if (i===0 || i % 2===0) { %>
                                 <div class="row">
                                     <% } %>
                                         <div class="col-sm-6">
                                             <div class="card">
-                                                <h5 class="card-header">From 
+                                                <h5 class="card-header">From
                                                     <%= shifts[i].sender.firstName %>
-                                                        <%= shifts[i].sender.lastName %> to 
-                                                        <%= shifts[i].recipient.firstName %> <%= shifts[i].recipient.lastName %> 
+                                                        <%= shifts[i].sender.lastName %> to
+                                                            <%= shifts[i].recipient.firstName %>
+                                                                <%= shifts[i].recipient.lastName %>
                                                 </h5>
                                                 <div class="card-body">
                                                     <h5 class="card-title">
@@ -125,8 +122,10 @@
                                                         Date: <%= shifts[i].date %> <br>
                                                             Time: <%= shifts[i].time.toUpperCase() %> <br>
                                                     </p>
-                                                    <button class="btn btn-primary approve <%= shifts[i]._id %>">Approve</button>
-                                                    <button class="btn btn-danger disapprove <%= shifts[i]._id %>">Disapprove</button>
+                                                    <button
+                                                        class="btn btn-primary approve <%= shifts[i]._id %>">Approve</button>
+                                                    <button
+                                                        class="btn btn-danger disapprove <%= shifts[i]._id %>">Disapprove</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -156,14 +155,14 @@
         const disapproveButtons = document.getElementsByClassName('btn btn-danger disapprove');
 
         Array.from(approveButtons).forEach(button => {
-            button.onclick = function() {
+            button.onclick = function () {
                 const className = button.classList;
                 approve(className[3]);
             }
         });
 
         Array.from(disapproveButtons).forEach(button => {
-            button.onclick = function() {
+            button.onclick = function () {
                 const className = button.classList;
                 disapprove(className[3]);
             }

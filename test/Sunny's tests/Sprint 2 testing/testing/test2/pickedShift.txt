@@ -1,0 +1,5 @@
+Test Case:
+	- Posted shift can be picked up
+
+Test Data:
+	- Meow picks up Thether's Sunday shift

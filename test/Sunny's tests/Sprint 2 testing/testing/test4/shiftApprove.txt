@@ -1,0 +1,5 @@
+Test Case:
+	- Meow picked up Thether's Sunday shift for pickup. Owner approved the transfer.
+
+Test Data:
+	- Meow's shift pick up is approved.
