@@ -166,22 +166,22 @@
                 </div>
             </div>
         </div>
-
+    
         <div id="modalFail" class="modal fade">
             <div class="modal-dialog modal-confirm">
-                <div class="modal-content">
-                    <div class="modal-header justify-content-center" id="head">
-                        <div class="icon-box">
+                <div class="modal-content" id="fail">
+                    <div class="modal-header justify-content-center" id="failHead">
+                        <div class="icon-box" id="icon-box-fail">
                             <i class="fa-solid fa-circle-xmark" id="crossMark"></i>
                         </div>
-                        <button type="button" class="close" data-bs-dismiss="modal" onclick="location.reload();" aria-hidden="true" id="closingBtn1"><i class="fa-solid fa-xmark"></i></button>
+                        <button type="button" class="close" data-bs-dismiss="modal" onclick="resetPass()" aria-hidden="true" id="closingBtn"><i class="fa-solid fa-circle-xmark"></i></button>
                     </div>
                     <div class="modal-body text-center">
                         <h4>Unsuccessful!</h4>
                         <p class="text-center" id="failMsg"></p>
                     </div>
                     <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-success btn-block" onclick="location.reload();" id="retry" data-bs-dismiss="modal"><span>Retry</span><i class="fa-solid fa-arrow-rotate-right" id="okIcon"></i></button>
+                        <button type="button" class="btn btn-success btn-block" onclick="resetPass()" id="retry" data-bs-dismiss="modal"><span>Retry</span><i class="fa-solid fa-arrow-rotate-right" id="okIcon"></i></button>
                     </div>
                 </div>
             </div>
