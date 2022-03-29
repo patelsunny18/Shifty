@@ -570,6 +570,7 @@ app.get('/manager/changeAvailabilityManager/:id', isManager, async (req, res) =>
     }
 });
 
+
 // GET route to viewSchedule for Employee
 app.get('/employee/viewSchedule/:id', isEmployee, async (req, res) => {
     const { id } = req.params;
@@ -613,7 +614,7 @@ app.get('/employee/requestTimeoff/:id', isEmployee, async (req, res) => {
 });
 
 // GET route to availableShifts for Employee
-app.get('/employee/availableShifts/:id', async (req, res) => {
+app.get('/employee/availableShifts/:id', isEmployee, async (req, res) => {
     const { id } = req.params;
     let employee = null;
 
@@ -639,13 +640,24 @@ app.get('/employee/availableShifts/:id', async (req, res) => {
     }
 });
 
+// function encryptOwner() {
+//     Owner.findOne({ role: "Owner" })
+//         .then((result) => {
+//             let password = result.password;
+//             const hashedPass = Bcrypt.hashSync(password, 10);
+//             Owner.findOneAndUpdate({ role: "Owner" }, { password: hashedPass })
+//         })
+//         .catch((err) => {
+//             console.log(err);
+//         })
+// }
 
 app.post("/", function (req, res) {
     let id = req.body.userID;
     let password = req.body.password;
-
     Owner.findOne({ ownerID: id, password: password })
         .then((result) => {
+
             const data = {
                 id: result._id,
                 role: result.role
@@ -811,21 +823,16 @@ app.post('/removeEmployee', function (req, res) {
         var myquery = { firstName: fName, lastName: lName, employeeID: id };
         Employee.deleteOne(myquery)
             .then((result) => {
-                console.log(result.deletedCount);
                 if (result.deletedCount == 1) {
                     console.log("Employee removed from the system")
-                    let responseData = {
-                        first: fName,
-                        last: lName
-                    };
-                    res.send(responseData)
+                    res.status(200).send(`${fName} ${lName} has been removed from the system.`);
                 }
                 else {
-                    console.log("Employee doesn't exist in the system.")
+                    res.status(210).send("Employee doesn't exist in the system.");
                 }
             })
             .catch((err) => {
-                res.send(err)
+                res.status(500).send(error)
             })
     }
     catch (error) {
@@ -1043,7 +1050,7 @@ app.put('/editPass/:id', async (req, res) => {
                     }
                     else if (!result) {
                         console.log("Incorrect Current Password");
-                        res.status(210).send("Incorrect Current Password. Retry");
+                        res.status(210).send("Incorrect Password Entered");
                     }
                     else if (result) {
                         Employee.findByIdAndUpdate(
@@ -1054,7 +1061,7 @@ app.put('/editPass/:id', async (req, res) => {
                                     res.status(210).send(err);
                                 } else {
                                     console.log("Done");
-                                    res.status(200).send("Your password has been changed");
+                                    res.status(200).send("Your Password Has Been Updated");
                                 }
                             }
                         );
@@ -1087,7 +1094,7 @@ app.put('/edit/:id', async (req, res) => {
                             res.status(210).send(err);
                         } else {
                             console.log("Done");
-                            res.status(200).send("Your details have been updated");
+                            res.status(200).send("Your Details Have Been Updated");
                         }
                     }
                 );
@@ -1114,7 +1121,7 @@ app.put('/managerEditPass/:id', async (req, res) => {
                     }
                     else if (!result) {
                         console.log("Incorrect Current Password");
-                        res.status(210).send("Incorrect Current Password. Retry");
+                        res.status(210).send("Incorrect Password Entered");
                     }
                     else if (result) {
                         Manager.findByIdAndUpdate(
@@ -1125,7 +1132,7 @@ app.put('/managerEditPass/:id', async (req, res) => {
                                     res.status(210).send(err);
                                 } else {
                                     console.log("Done");
-                                    res.status(200).send("Your password has been changed");
+                                    res.status(200).send("Your Password Has Been Updated");
                                 }
                             }
                         );
@@ -1158,7 +1165,7 @@ app.put('/managerEdit/:id', async (req, res) => {
                             res.status(210).send(err);
                         } else {
                             console.log("Done");
-                            res.status(200).send("Your details have been updated");
+                            res.status(200).send("Your Details Have Been Updated");
                         }
                     }
                 );

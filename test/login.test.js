@@ -120,9 +120,9 @@ describe ('check if owner id is invalid', () => {
 });
 
 describe ('check Login user', () => {
-    it('should return employee', () => {
-        let id = '236335';
-        let password = 'y5ucV1';
+    it('should return employee', async () => {
+        let id = '375738';
+        let password = 'e6JvC5bKy';
         return serverfuncs.checkEmployeeLogin(id, password)
             .then((employee) => {
                 expect(employee).to.be.an('object');
@@ -130,14 +130,14 @@ describe ('check Login user', () => {
         );
     })
     it ('should return manager', () => {
-        let id = '7693799';
-        let password = 'PcN3qM';
+        let id = '3963318';
+        let password = 'FHPb4grX';
         return serverfuncs.checkManagerLogin(id, password)
             .then((manager) => {
                 expect(manager).to.be.an('object');
             }
         );
-    })
+    })   
     it ('should return owner', () => {
         let id = '12345';
         let password = 'iamdummy';
@@ -150,18 +150,113 @@ describe ('check Login user', () => {
 });
 
 
+describe('check if employee session is working', () => {
+    it('should return true', () => {
+        return chai.request('http://localhost:8080/employee/:id')
+            .get('/employee/622d96a9c6b90d7ac27bf842')
+            .send()
+            .then((res) => {
+                res.should.have.status(200);
+            }
+        );
+    });
+});
+
+describe('check if manager session is working', () => {
+    it('should return true', () => {
+        return chai.request('http://localhost:8080/manager/:id')
+            .get('/manager/622db2ab390ab17968ba43fe')
+            .send()
+            .then((res) => {
+                res.should.have.status(200);
+            }
+        );
+    });
+});
+
+describe('check if owner session is working', () => {
+    it('should return true', () => {
+        return chai.request('http://localhost:8080/owner/:id')
+            .get('/owner/6217f84fc0e8e57587a58bb1')
+            .send()
+            .then((res) => {
+                res.should.have.status(200);
+            }
+        );
+    });
+}
+);
 
 
+describe('check if employee session is not working', () => {
+    it('should return false', () => {
+        return chai.request('http://localhost:8080/employee/:id')
+            .get('/employee/622d96a9c6b90d7ac27bf842')
+            .send()
+            .then((res) => {
+                res.should.have.status(200);
+            }
+        );
+    });
+});
+
+describe('check if manager session is not working', () => {
+    it('should return false', () => {
+        return chai.request('http://localhost:8080/manager/:id')
+            .get('/manager/622db2ab390ab17968ba43fe')
+            .send()
+            .then((res) => {
+                res.should.have.status(200);
+            }
+        );
+    });
+});
+
+describe('check if owner session is not working', () => {
+    it('should return false', () => {
+        return chai.request('http://localhost:8080/owner/:id')
+            .get('/owner/6217f84fc0e8e57587a58bb1')
+            .send()
+            .then((res) => {
+                res.should.have.status(200);
+            }
+        );
+    });
+});
 
 
+describe('check if logged out & destroyed employee session', () => {
+    it('should destroy employee session', () => {
+        return chai.request('http://localhost:8080')
+            .get('/employee/logout')
+            .send()
+            .then((res) => {
+                res.should.have.status(200);
+            }
+        );
+    });
+});
 
+describe('check if logged out & destroyed manager session', () => {
+    it('should destroy manager session', () => {
+        return chai.request('http://localhost:8080')
+            .get('/manager/logout')
+            .send()
+            .then((res) => {
+                res.should.have.status(200);
+            }
+        );
+    });
+});
 
-
-
-
-
-
-
-
-        
-      
+describe('check if logged out & destroyed session', () => {
+    it('should destroy owner session', () => {
+        return chai.request('http://localhost:8080')
+            .get('/owner/logout')
+            .send()
+            .then((res) => {
+                res.should.have.status(200);
+            }
+        );
+    });
+});

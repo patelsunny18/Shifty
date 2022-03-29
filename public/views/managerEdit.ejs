@@ -28,45 +28,60 @@
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
-            <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
+            <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse"
+                data-bs-target=".dual-collapse2">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#"><i class="fa fa-house icon"></i> Home</a>
+                    <li class="nav-item active current">
+                        <a class="nav-link" href="http://localhost:8080/manager/home/<%= id %>"><i
+                                class="fa fa-house icon"></i> Home</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-calendar icon"></i> Schedule </a>
-                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-right" id="drop1" aria-labelledby="navbarScrollingDropdown">
-                            <li><a class="dropdown-item" href="http://localhost:8080/createSchedule"><i class="fa-solid fa-calendar-plus icon"></i> Create Schedule</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/editSchedule"><i class="fa-solid fa-pen-to-square icon"></i> Edit Schedule</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/viewSchedule"><i class="fa fa-eye icon"></i> View Schedule</a></li>
+                        <a class="nav-link dropdown-toggle" href="#"
+                            id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false"><i class="fa fa-calendar icon"></i> Schedule
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-right" id="drop1"
+                            aria-labelledby="navbarScrollingDropdown">
+                            <li><a class="dropdown-item" href="http://localhost:8080/manager/createSchedule/<%= id %>"><i
+                                        class="fa-solid fa-calendar-plus icon"></i> Create
+                                    Schedule</a></li>
+                            <li><a class="dropdown-item" href="http://localhost:8080/manager/editSchedule/<%= id %>"><i
+                                        class="fa-solid fa-pen-to-square icon"></i> Edit
+                                    Schedule</a></li>
+                            <li><a class="dropdown-item" href="http://localhost:8080/manager/viewSchedule/<%= id %>"><i
+                                        class="fa fa-eye icon"></i> View Schedule</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa fa-user-group icon"></i> Team</a>
+                        <a class="nav-link" href="http://localhost:8080/manager/approveTimeoff/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Approve Shift Change</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-arrow-right-arrow-left icon"></i> Shift Change</a>
+                        <a class="nav-link" href="http://localhost:8080/manager/changeAvailabilityManager/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Change availability</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-briefcase icon"></i> Management </a>
-                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-right" aria-labelledby="navbarScrollingDropdown">
-                            <li><a class="dropdown-item" href="http://localhost:8080/addEmployee"><i class="fa-solid fa-user-plus icon"></i> Add Employee</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/removeEmployee"><i class="fa-solid fa-user-minus icon"></i> Remove Employee</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/addManager"><i class="fa-solid fa-user-plus icon"></i> Add Manager</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/removeManager"><i class="fa-solid fa-user-minus icon"></i> Remove Manager</a></li>
+                        <a class="nav-link dropdown-toggle" href="http://localhost:8080/manager/addEmployee/<%= id %>"
+                            id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false"><i class="fa-solid fa-briefcase icon"></i>
+                            Management </a>
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-right"
+                            aria-labelledby="navbarScrollingDropdown">
+                            <li><a class="dropdown-item" href="http://localhost:8080/manager/addEmployee/<%= id %>"><i
+                                        class="fa-solid fa-user-plus icon"></i> Add Employee</a></li>
+                            <li><a class="dropdown-item" href="http://localhost:8080/manager/removeEmployee/<%= id %>"><i
+                                        class="fa-solid fa-user-minus icon"></i> Remove Employee</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
-    
+
             <div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
                 <ul class="navbar-nav ms-auto buttons">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="http://localhost:8080/manager/managerEdit/<%= id %>">
                             <button class="btn btn-sm btn-primary prof-btn" type="submit">My Profile</button>
                         </a>
                     </li>
@@ -80,6 +95,7 @@
             </div>
         </div>
     </nav>
+
 
     <div class="container" id="container2">
         <div class="header">
@@ -266,7 +282,7 @@
                             <small id="err">Error message</small>
                         </div>
                         <div class="modal-footer justify-content-center">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" id="closeBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" id="passBtn" class="btn btn-primary"">Change Password</button>
                         </div>
                     </form>
@@ -277,19 +293,19 @@
 
     <div id="modalPass" class="modal fade">
         <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-                <div class="modal-header justify-content-center">
-                    <div class="icon-box">
+            <div class="modal-content" id="pass">
+                <div class="modal-header justify-content-center" id="passHead">
+                    <div class="icon-box" id="icon-box-pass">
                         <i class="fa-solid fa-circle-check" id="checkMark"></i>
                     </div>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn"><i class="fa-solid fa-xmark"></i></button>
+                    <button type="button" class="close" onclick="resetPass()" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="modal-body text-center">
                     <h4>Successful!</h4>
                     <p class="text-center" id="test"></p>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-success btn-block" data-bs-dismiss="modal" id="dismiss"><span>Dismiss</span><i class="fa-solid fa-circle-xmark"></i></button>
+                    <button type="button" class="btn btn-success btn-block" onclick="resetPass()" data-bs-dismiss="modal" id="dismiss"><span>Dismiss</span><i class="fa-solid fa-circle-xmark" id="dismissIcon"></i></button>
                 </div>
             </div>
         </div>
@@ -297,19 +313,19 @@
 
     <div id="modalFail" class="modal fade">
         <div class="modal-dialog modal-confirm">
-            <div class="modal-content">
-                <div class="modal-header justify-content-center" id="head">
-                    <div class="icon-box">
-                        <i class="fa-solid fa-circle-check" id="checkMark"></i>
+            <div class="modal-content" id="fail">
+                <div class="modal-header justify-content-center" id="failHead">
+                    <div class="icon-box" id="icon-box-fail">
+                        <i class="fa-solid fa-circle-check" id="crossMark"></i>
                     </div>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true" id="closingBtn1"><i class="fa-solid fa-xmark"></i></button>
+                    <button type="button" class="close" data-bs-dismiss="modal" onclick="resetPass()" aria-hidden="true" id="closingBtn"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="modal-body text-center">
                     <h4>Unsuccessful!</h4>
-                    <p class="text-center" id="test"></p>
+                    <p class="text-center" id="failMsg"></p>
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-success btn-block" id="retry" data-bs-dismiss="modal"><span>Retry</span><i class="fa-solid fa-check" id="okIcon"></i></button>
+                    <button type="button" class="btn btn-success btn-block" onclick="resetPass()" id="retry" data-bs-dismiss="modal"><span>Retry</span><i class="fa-solid fa-arrow-rotate-right" id="okIcon"></i></button>
                 </div>
             </div>
         </div>
@@ -584,7 +600,9 @@
     curPass.addEventListener("input", function (event) {
         if (this.value === '') {
             setErrorFor(curPass, "Current password cannot be blank");
-        } else {
+        } else if(this.value === newPass.value){
+            setErrorFor(newPass, "Can't be the same as current password");
+        }else {
             setSuccessFor(curPass);
         }
     })
@@ -592,7 +610,9 @@
     newPass.addEventListener("input", function (event) {
         if (this.value === '') {
             setErrorFor(newPass, "New password cannot be blank");
-        } else {
+        } else if(this.value === curPass.value){
+            setErrorFor(newPass, "Can't be the same as current password");
+        }else {
             setSuccessFor(newPass);
         }
     })
@@ -616,6 +636,9 @@
         if (curValue === '') {
             setErrorFor(curPass, "Current password cannot be blank");
             success = false;
+        } else if(this.value === newPass.value){
+            setErrorFor(newPass, "Can't be the same as current password");
+            success = false;
         } else {
             setSuccessFor(curPass);
             success = true;
@@ -623,6 +646,9 @@
         
         if (newValue === '') {
             setErrorFor(newPass, "New password cannot be blank");
+            success = false;
+        } else if(this.value === curValue){
+            setErrorFor(newPass, "Can't be the same as current password");
             success = false;
         } else {
             setSuccessFor(newPass);
@@ -654,9 +680,6 @@
 
         const curValue = curPass.value.trim();
         const newValue = newPass.value.trim();
-
-        console.log(curValue);
-        console.log(newValue);
         const data = {
             curPassword: curValue,
             newPassword: newValue,
@@ -672,9 +695,8 @@
                     document.getElementById("passForm").reset();
                 }
                 else{
-                    let modal = document.getElementById("#myModal");
                     let message = result.data;
-                    document.getElementById("test").innerText = `${message}`;
+                    document.getElementById("failMsg").innerText = `${message}`;
                     $("#myModal").modal('hide');
                     $("#modalFail").modal('show');
                     document.getElementById('retry').onclick = function() {

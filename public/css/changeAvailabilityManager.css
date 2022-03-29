@@ -49,8 +49,8 @@
   }
   
   .navbar .nav-item.current {
-    border-left: #750e13 5px solid;
-    border-left-width: 5px;
+    border-bottom: #a2191f 5px solid;
+    border-bottom-width: 5px;
     color: white;
     font-weight: bold;
   }

@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- Custom CSS link -->
-    <link rel="stylesheet" type="text/css" href="/css/ownerHome.css">
+    <link rel="stylesheet" type="text/css" href="/css/managerHome.css">
 </head>
 
 <style>
@@ -54,11 +54,10 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="http://localhost:8080/manager/team/<%= id %>"><i
-                                class="fa fa-user-group icon"></i> Team</a>
+                        <a class="nav-link" href="http://localhost:8080/manager/approveTimeoff/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Approve Shift Change</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="http://localhost:8080/manager/ApproveTimeoff/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Approve Shift Change</a>
+                        <a class="nav-link" href="http://localhost:8080/manager/changeAvailabilityManager/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Change availability</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="http://localhost:8080/manager/addEmployee/<%= id %>"
