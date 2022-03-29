@@ -528,8 +528,7 @@
         const bankAccountValue = bankAccount.value.trim();
 
         if(fNameValue === '' || lNameValue === '' || addressValue === '' || phoneValue === null || dobValue === null || emailValue === '' || bankAccountValue === null){
-            let message = result.data;
-            document.getElementById("failMsg").innerText = "Error can't leave details blank";
+            document.getElementById("failMsg").innerText = "Can't leave details blank";
             $("#modalFail").modal('show');
             return
         }
