@@ -226,13 +226,13 @@ function checkInputs() {
         setSuccessFor(bankAccount);
         success = true;
     }
+    
     if (sinNumberValue === '') {
         setErrorFor(sinNumber, "SIN number can't be blank");
         success = false;
     } else if (!sinNumberValue.match(/^\d{9}$/)) {
         setErrorFor(sinNumber, "SIN number has to be 9 digit");
-    }
-    else {
+    } else {
         setSuccessFor(sinNumber);
         success = true;
     }

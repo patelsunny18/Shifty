@@ -28,45 +28,36 @@
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="container-fluid">
-            <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse" data-bs-target=".dual-collapse2">
+            <button class="navbar-toggler flex-grow-sm-1 flex-grow-0 me-2" type="button" data-bs-toggle="collapse"
+                data-bs-target=".dual-collapse2">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
+
             <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#"><i class="fa fa-house icon"></i> Home</a>
+                        <a class="nav-link" href="http://localhost:8080/employee/home/<%= id %>"><i class="fa fa-house icon"></i> Home</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-calendar icon"></i> Schedule </a>
-                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-right" id="drop1" aria-labelledby="navbarScrollingDropdown">
-                            <li><a class="dropdown-item" href="http://localhost:8080/createSchedule"><i class="fa-solid fa-calendar-plus icon"></i> Create Schedule</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/editSchedule"><i class="fa-solid fa-pen-to-square icon"></i> Edit Schedule</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/viewSchedule"><i class="fa fa-eye icon"></i> View Schedule</a></li>
-                        </ul>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="http://localhost:8080/employee/viewSchedule/<%= id %>"><i class="fa fa-eye icon"></i> View Schedule</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa fa-user-group icon"></i> Team</a>
+                        <a class="nav-link" href="http://localhost:8080/employee/availableShifts/<%= id %>"><i class="fas fa-arrow-right-arrow-left icon"></i> Available Shifts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-arrow-right-arrow-left icon"></i> Shift Change</a>
+                        <a class="nav-link" href="http://localhost:8080/employee/changeAvailability/<%= id %>"><i class="fa-solid fa-pen-to-square icon"></i> Change
+                            Availability</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-briefcase icon"></i> Management </a>
-                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-right" aria-labelledby="navbarScrollingDropdown">
-                            <li><a class="dropdown-item" href="http://localhost:8080/addEmployee"><i class="fa-solid fa-user-plus icon"></i> Add Employee</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/removeEmployee"><i class="fa-solid fa-user-minus icon"></i> Remove Employee</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/addManager"><i class="fa-solid fa-user-plus icon"></i> Add Manager</a></li>
-                            <li><a class="dropdown-item" href="http://localhost:8080/removeManager"><i class="fa-solid fa-user-minus icon"></i> Remove Manager</a></li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://localhost:8080/employee/requestTimeoff/<%= id %>"><i class="fa-solid fa-calendar-minus"></i> Request TimeOff</a>
                     </li>
                 </ul>
             </div>
-    
+
             <div class="navbar-collapse collapse w-25 order-3 dual-collapse2">
                 <ul class="navbar-nav ms-auto buttons">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="http://localhost:8080/employee/edit/<%= id %>">
                             <button class="btn btn-sm btn-primary prof-btn" type="submit">My Profile</button>
                         </a>
                     </li>

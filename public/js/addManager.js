@@ -107,8 +107,8 @@ address.addEventListener("input", function (event) {
 phone.addEventListener("input", function (event) {
     if (this.value === '') {
         setErrorFor(phone, "Phone can't be blank");
-    } else if (!this.value.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)) {
-        setErrorFor(phone, "Incorrect phone number");
+    } else if (!this.value.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4}$/im)) {
+        setErrorFor(phone, "Phone number has to be 10 digits");
     } else {
         setSuccessFor(phone);
     }
@@ -142,6 +142,8 @@ bankAccount.addEventListener("input", function (event) {
 sinNumber.addEventListener("input", function (event) {
     if (this.value === '') {
         setErrorFor(sinNumber, "SIN number can't be blank");
+    } else if (!this.value.match(/^\d{9}$/)) {
+        setErrorFor(sinNumber, "SIN number has to be 9 digit");
     } else {
         setSuccessFor(sinNumber);
     }
@@ -188,7 +190,7 @@ function checkInputs() {
     if (phoneValue === '') {
         setErrorFor(phone, "Phone can't be blank");
     } else if (!phoneValue.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)) {
-        setErrorFor(phone, "Incorrect phone number");
+        setErrorFor(phone, "Phone number has to be 10 digits");
     } else {
         setSuccessFor(phone);
     }
@@ -220,6 +222,8 @@ function checkInputs() {
     if (sinNumberValue === '') {
         setErrorFor(sinNumber, "SIN number can't be blank");
         success = false;
+    } else if (!sinNumberValue.match(/^\d{9}$/)) {
+        setErrorFor(sinNumber, "SIN number has to be 9 digit");
     } else {
         setSuccessFor(sinNumber);
         success = true;

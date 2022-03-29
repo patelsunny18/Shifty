@@ -53,8 +53,15 @@ body {
     display: block !important;
 }
 
-.navbar .nav-item.current {
+.navbar .nav-item.current1 {
     border-bottom: #da1e28 5px solid;
+    border-bottom-width: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.navbar .nav-item.current {
+    border-bottom: #750e13 5px solid;
     border-bottom-width: 5px;
     color: white;
     font-weight: bold;
